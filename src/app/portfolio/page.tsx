@@ -13,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 // Icons for feature cards (as inline SVGs for simplicity)
 const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
-const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
+const CheckoutIcon = () => <svg xmlns="http://www_w3_org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
 const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
 
 const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
@@ -138,7 +138,7 @@ export default function PublicPortfolioPage() {
                     </div>
                      <div className="relative">
                         <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30" style={{background: `radial-gradient(600px 200px at 70% 10%, ${theme.accentColor}, transparent), radial-gradient(400px 120px at 10% 80%, ${theme.primaryColor}, transparent)`}}></div>
-                        <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />
+                         {portfolio.imageUrl && <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />}
                     </div>
                 </div>
             </div>
@@ -182,7 +182,7 @@ export default function PublicPortfolioPage() {
                         </ol>
                     </div>
                     <div className="relative">
-                        <Image src={portfolio.howItWorksImageUrl} width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />
+                        {portfolio.howItWorksImageUrl && <Image src={portfolio.howItWorksImageUrl} width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />}
                     </div>
                 </div>
             </div>
@@ -246,4 +246,5 @@ export default function PublicPortfolioPage() {
     </footer>
     </div>
   );
-}
+
+    
