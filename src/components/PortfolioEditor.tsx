@@ -10,18 +10,17 @@ import { PlusCircle, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
+import { cn } from '@/lib/utils';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
   onPortfolioChange: (newPortfolio: Portfolio) => void;
 }
 
-const ctaIcons = Object.entries(ctaIconsMap).map(([value, {label}]) => ({value, label}));
-const featureIcons = Object.entries(featureIconsMap).map(([value, {label}]) => ({value, label}));
-
+const ctaIcons = Object.entries(ctaIconsMap);
+const featureIcons = Object.entries(featureIconsMap);
 
 export default function PortfolioEditor({ portfolio, onPortfolioChange }: PortfolioEditorProps) {
 
@@ -38,7 +37,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
     onPortfolioChange({ ...portfolio, [name]: value });
   }
 
-  const handleSelectChange = (name: keyof Portfolio | `features.${number}.icon`, value: string) => {
+  const handleIconChange = (name: keyof Portfolio | `features.${number}.icon`, value: string) => {
      if (name.startsWith('features.')) {
       const parts = name.split('.');
       const index = parseInt(parts[1], 10);
@@ -165,17 +164,20 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="ctaButtonIcon">Ícone do Botão (CTA)</Label>
-                  <Select name="ctaButtonIcon" onValueChange={(value) => handleSelectChange('ctaButtonIcon', value)} value={portfolio.ctaButtonIcon || 'arrowRight'}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um ícone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ctaIcons.map(icon => (
-                        <SelectItem key={icon.value} value={icon.value}>{icon.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>Ícone do Botão (CTA)</Label>
+                  <div className="grid grid-cols-6 gap-2">
+                    {ctaIcons.map(([key, {component: Icon, label}]) => (
+                      <Button 
+                        key={key} 
+                        variant="outline" 
+                        className={cn("h-12 flex flex-col items-center justify-center gap-1", portfolio.ctaButtonIcon === key && "ring-2 ring-primary")}
+                        onClick={() => handleIconChange('ctaButtonIcon', key)}
+                        title={label}
+                      >
+                          <Icon />
+                      </Button>
+                    ))}
+                  </div>
                 </div>
             </div>
 
@@ -193,16 +195,19 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                       <Label>Card de Benefício #{index+1}</Label>
                        <div className="space-y-2">
                         <Label className="text-xs">Ícone</Label>
-                        <Select onValueChange={(value) => handleSelectChange(`features.${index}.icon`, value)} value={feature.icon || 'seller'}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione um ícone" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {featureIcons.map(icon => (
-                              <SelectItem key={icon.value} value={icon.value}>{icon.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <div className="grid grid-cols-6 gap-2">
+                           {featureIcons.map(([key, {component: Icon, label}]) => (
+                            <Button 
+                              key={key} 
+                              variant="outline" 
+                              className={cn("h-12 flex items-center justify-center", feature.icon === key && "ring-2 ring-primary")}
+                              onClick={() => handleIconChange(`features.${index}.icon`, key)}
+                              title={label}
+                            >
+                                <Icon />
+                            </Button>
+                          ))}
+                        </div>
                       </div>
                       <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
                       <Textarea placeholder="Descrição do Card" value={feature.description} onChange={(e) => handleFeatureChange(index, 'description', e.target.value)} />
@@ -314,3 +319,5 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
     </div>
   );
 }
+
+    
