@@ -186,7 +186,7 @@ export default function PortfolioPreview({
                         <CarouselItem key={project.id} className="pl-1 basis-1/2">
                            <Card className="overflow-hidden rounded-md">
                             <CardContent className="p-0 aspect-square relative">
-                                {project.imageUrl && <Image src={project.imageUrl} alt={project.title} fill object-cover/>}
+                                {project.imageUrl && <Image src={project.imageUrl} alt={project.title} fill className="object-cover"/>}
                                 <div className="absolute bottom-0 w-full p-1 bg-gradient-to-t from-black/80 to-transparent">
                                   <h3 className="font-bold text-white text-[7px]">{project.title}</h3>
                                 </div>
