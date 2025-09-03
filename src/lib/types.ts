@@ -42,6 +42,7 @@ export interface Portfolio {
   imageUrl: string;
   ctaButtonText: string;
   ctaButtonUrl: string;
+  ctaButtonIcon?: string;
   
   isFeaturesEnabled: boolean;
   features: PortfolioFeature[];

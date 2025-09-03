@@ -26,6 +26,50 @@ const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" hei
 
 const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
 
+const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    <path d="M14.05 14.05a2 2 0 0 1 0 2.83l-1.42 1.42a2 2 0 0 1-2.83 0L8.4 17.9a2 2 0 0 1 0-2.83l1.42-1.42a2 2 0 0 1 2.83 0z" />
+  </svg>
+);
+
+const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M22 2 11 13" />
+    <path d="m22 2-7 20-4-9-9-4 20-7z" />
+  </svg>
+);
+
+const ctaIcons: {[key: string]: React.ElementType} = {
+  whatsapp: WhatsappIcon,
+  telegram: TelegramIcon,
+  arrowRight: ArrowRight,
+  none: () => null,
+};
+
+
 export default function PublicPortfolioPage() {
   const [data, setData] = useState<{ portfolio: Portfolio; theme: PageTheme } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,6 +119,8 @@ export default function PublicPortfolioPage() {
   }
 
   const { portfolio, theme } = data;
+  const CtaIcon = ctaIcons[portfolio.ctaButtonIcon || 'arrowRight'];
+
 
   const customStyle = {
     '--custom-primary-hsl': theme.primaryColor.startsWith('hsl') ? theme.primaryColor.replace('hsl(','').replace(')','') : '199 76% 52%',
@@ -135,7 +181,10 @@ export default function PublicPortfolioPage() {
                         </p>
                         <div className="mt-6 flex flex-col sm:flex-row gap-3">
                             <Button asChild size="lg" className="px-6 py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: 'var(--custom-primary)'}}>
-                                <a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a>
+                                <a href={portfolio.ctaButtonUrl}>
+                                  {portfolio.ctaButtonText}
+                                  <CtaIcon className="ml-2 h-5 w-5" />
+                                </a>
                             </Button>
                         </div>
                         <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">

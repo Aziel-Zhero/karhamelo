@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2, ArrowRight } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
@@ -25,6 +26,10 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   
   const handleSwitchChange = (name: keyof Portfolio, checked: boolean) => {
     onPortfolioChange({ ...portfolio, [name]: checked });
+  }
+
+  const handleSelectChange = (name: keyof Portfolio, value: string) => {
+    onPortfolioChange({ ...portfolio, [name]: value });
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +78,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
         <CardHeader>
           <CardTitle>Edite sua LP de Portfólio</CardTitle>
           <CardDescription>
-            Personalize o conteúdo da sua página de destino. As alterações são salvas automaticamente.
+            Personalize o conteúdo da sua página de destino. As alterações são refletidas em tempo real.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -91,9 +96,8 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="imageUrl">Imagem Principal</Label>
-                   <p className="text-xs text-muted-foreground">Recomendado: 1200x800 pixels.</p>
+                  <p className="text-xs text-muted-foreground">Recomendado: 1200x800 pixels.</p>
                   <Input id="imageUrl" name="imageUrl" type="file" accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
-                  {portfolio.imageUrl && <img src={portfolio.imageUrl} alt="Preview" className="mt-2 rounded-md max-h-40" />}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -104,6 +108,20 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                       <Label htmlFor="ctaButtonUrl">URL do Botão (CTA)</Label>
                       <Input id="ctaButtonUrl" name="ctaButtonUrl" type="url" placeholder="#contato" value={portfolio.ctaButtonUrl} onChange={handleInputChange} required />
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ctaButtonIcon">Ícone do Botão (CTA)</Label>
+                  <Select name="ctaButtonIcon" onValueChange={(value) => handleSelectChange('ctaButtonIcon', value)} value={portfolio.ctaButtonIcon || 'arrowRight'}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um ícone" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="arrowRight">Seta</SelectItem>
+                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                      <SelectItem value="telegram">Telegram</SelectItem>
+                      <SelectItem value="none">Nenhum</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
             </div>
 
@@ -116,7 +134,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                   <Switch id='isFeaturesEnabled' checked={portfolio.isFeaturesEnabled} onCheckedChange={(checked) => handleSwitchChange('isFeaturesEnabled', checked)} />
                 </div>
               </div>
-              {portfolio.isFeaturesEnabled && portfolio.features && portfolio.features.map((feature, index) => (
+              {portfolio.isFeaturesEnabled && Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
                   <div key={index} className="space-y-3 p-3 border rounded-md relative">
                       <Label>Card de Benefício #{index+1}</Label>
                       <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
@@ -144,13 +162,13 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                     <Textarea name="howItWorksDescription" placeholder="Descrição da seção" value={portfolio.howItWorksDescription} onChange={handleInputChange} />
                   </div>
                   <div className="space-y-2">
-                    <Label>URL da Imagem</Label>
+                    <Label>Imagem da Seção</Label>
                     <p className="text-xs text-muted-foreground">Recomendado: 1200x1000 pixels.</p>
-                    <Input name="howItWorksImageUrl" type="url" placeholder="https://exemplo.com/imagem.png" value={portfolio.howItWorksImageUrl} onChange={handleInputChange}/>
+                    <Input id="howItWorksImageUrl" name="howItWorksImageUrl" type="file" accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
                   </div>
                   <Separator />
                   <Label>Passos</Label>
-                  {portfolio.steps && portfolio.steps.map((step, index) => (
+                  {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
                     <div key={index} className="space-y-2 p-3 border rounded-md">
                         <Label>Passo #{index+1}</Label>
                         <Input placeholder="Título do Passo" value={step.title} onChange={(e) => handleStepChange(index, 'title', e.target.value)} />
