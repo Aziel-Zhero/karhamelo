@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import { Save, Trash2, PlusCircle } from 'lucide-react';
+import { Save, Trash2, PlusCircle, Upload } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 
@@ -24,6 +24,18 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setEditedPortfolio(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        const dataUri = loadEvent.target?.result as string;
+        setEditedPortfolio(prev => ({ ...prev, [name]: dataUri }));
+      };
+      reader.readAsDataURL(files[0]);
+    }
   };
   
   const handleFeatureChange = (index: number, field: keyof PortfolioFeature, value: string) => {
@@ -46,7 +58,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   };
 
   const addProject = () => {
-    const newProject: PortfolioProject = { id: crypto.randomUUID(), title: '', imageUrl: '' };
+    const newProject: PortfolioProject = { id: crypto.randomUUID(), title: '', imageUrl: 'https://picsum.photos/800/600' };
     setEditedPortfolio(prev => ({ ...prev, projects: [...(prev.projects || []), newProject] }));
   };
 
@@ -67,7 +79,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   return (
     <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>Edite sua Landing Page de Portfólio</CardTitle>
+        <CardTitle>Edite sua LP de Portfólio</CardTitle>
         <CardDescription>
           Personalize o conteúdo da sua página de destino pessoal.
         </CardDescription>
@@ -87,8 +99,9 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                 <Textarea id="description" name="description" placeholder="Uma descrição curta e impactante." value={editedPortfolio.description} onChange={handleInputChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="imageUrl">URL da Imagem Principal</Label>
-                <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://exemplo.com/imagem.png" value={editedPortfolio.imageUrl} onChange={handleInputChange} required />
+                <Label htmlFor="imageUrl">Imagem Principal</Label>
+                <Input id="imageUrl" name="imageUrl" type="file" accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                {editedPortfolio.imageUrl && <img src={editedPortfolio.imageUrl} alt="Preview" className="mt-2 rounded-md max-h-40" />}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -97,7 +110,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="ctaButtonUrl">URL do Botão (CTA)</Label>
-                    <Input id="ctaButtonUrl" name="ctaButtonUrl" type="url" placeholder="https://exemplo.com/contato" value={editedPortfolio.ctaButtonUrl} onChange={handleInputChange} required />
+                    <Input id="ctaButtonUrl" name="ctaButtonUrl" type="url" placeholder="#contato" value={editedPortfolio.ctaButtonUrl} onChange={handleInputChange} required />
                 </div>
               </div>
           </div>
