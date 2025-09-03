@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -8,6 +9,7 @@ import { Github, Linkedin, Link2 as LinkIcon, Twitter } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
+import ProfileEditor from '@/components/ProfileEditor';
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile>({
@@ -59,6 +61,7 @@ export default function Home() {
       <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-3 space-y-8">
+            <ProfileEditor profile={profile} onProfileChange={setProfile} />
             <LinkEditor onAddLink={addLink} />
             <LinkList
               links={links}
