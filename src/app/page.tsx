@@ -41,6 +41,7 @@ export default function Home() {
     primaryColor: 'hsl(199 76% 52%)',
     backgroundColor: 'hsl(216 28% 95%)',
     accentColor: 'hsl(207 88% 68%)',
+    backgroundPattern: 'none',
   });
 
   const addLink = (link: Omit<Link, 'id'>) => {

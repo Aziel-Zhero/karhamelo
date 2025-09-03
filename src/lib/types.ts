@@ -17,4 +17,5 @@ export interface PageTheme {
   primaryColor: string;
   backgroundColor: string;
   accentColor: string;
+  backgroundPattern?: string;
 }
