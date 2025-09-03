@@ -144,7 +144,7 @@ export default function PortfolioPreview({
                     </div>
                     <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => {
-                        const Icon = featureIconsMap[feature.icon || 'seller']?.component || featureIconsMap['seller'].component;
+                        const Icon = featureIconsMap[feature.icon || 'zap']?.component || featureIconsMap['zap'].component;
                         return (
                           <Card key={index} className="bg-background/80">
                             <CardContent className="p-6">
