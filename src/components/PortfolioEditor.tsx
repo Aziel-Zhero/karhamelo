@@ -1,14 +1,14 @@
 
 'use client';
 
-import type { Portfolio, PortfolioFeature, PortfolioStep } from '@/lib/types';
+import type { Portfolio, PortfolioFeature, PortfolioStep, PortfolioProject } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import { Save } from 'lucide-react';
+import { Save, Trash2, PlusCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 
@@ -27,16 +27,33 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   };
   
   const handleFeatureChange = (index: number, field: keyof PortfolioFeature, value: string) => {
-    const newFeatures = [...editedPortfolio.features];
+    const newFeatures = [...(editedPortfolio.features || [])];
     newFeatures[index][field] = value;
     setEditedPortfolio(prev => ({...prev, features: newFeatures}));
   }
 
   const handleStepChange = (index: number, field: keyof PortfolioStep, value: string) => {
-    const newSteps = [...editedPortfolio.steps];
+    const newSteps = [...(editedPortfolio.steps || [])];
     newSteps[index][field] = value;
     setEditedPortfolio(prev => ({...prev, steps: newSteps}));
   }
+
+  const handleProjectChange = (index: number, field: keyof PortfolioProject, value: string) => {
+    const newProjects = [...(editedPortfolio.projects || [])];
+    const projectToUpdate = { ...newProjects[index], [field]: value };
+    newProjects[index] = projectToUpdate;
+    setEditedPortfolio(prev => ({ ...prev, projects: newProjects }));
+  };
+
+  const addProject = () => {
+    const newProject: PortfolioProject = { id: crypto.randomUUID(), title: '', imageUrl: '' };
+    setEditedPortfolio(prev => ({ ...prev, projects: [...(prev.projects || []), newProject] }));
+  };
+
+  const deleteProject = (id: string) => {
+    setEditedPortfolio(prev => ({ ...prev, projects: (prev.projects || []).filter(p => p.id !== id) }));
+  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +105,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
           {/* Seção de Benefícios */}
           <div className='space-y-4 p-4 border rounded-lg'>
             <h3 className="font-semibold text-lg">Seção de Benefícios</h3>
-            {editedPortfolio.features.map((feature, index) => (
+            {editedPortfolio.features && editedPortfolio.features.map((feature, index) => (
                 <div key={index} className="space-y-3 p-3 border rounded-md relative">
                     <Label>Card de Benefício #{index+1}</Label>
                     <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
@@ -114,13 +131,41 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
               </div>
               <Separator />
               <Label>Passos</Label>
-               {editedPortfolio.steps.map((step, index) => (
+               {editedPortfolio.steps && editedPortfolio.steps.map((step, index) => (
                 <div key={index} className="space-y-2 p-3 border rounded-md">
                     <Label>Passo #{index+1}</Label>
                     <Input placeholder="Título do Passo" value={step.title} onChange={(e) => handleStepChange(index, 'title', e.target.value)} />
                     <Input placeholder="Descrição do Passo" value={step.description} onChange={(e) => handleStepChange(index, 'description', e.target.value)} />
                 </div>
             ))}
+          </div>
+
+          {/* Seção Galeria */}
+          <div className='space-y-4 p-4 border rounded-lg'>
+            <h3 className="font-semibold text-lg">Seção de Galeria (Carrossel)</h3>
+            <div className="space-y-2">
+                <Label>Título da Galeria</Label>
+                <Input name="galleryTitle" placeholder="Título da Seção de Galeria" value={editedPortfolio.galleryTitle || ''} onChange={handleInputChange}/>
+            </div>
+            <div className="space-y-2">
+                <Label>Descrição da Galeria</Label>
+                <Textarea name="galleryDescription" placeholder="Descrição da Seção de Galeria" value={editedPortfolio.galleryDescription || ''} onChange={handleInputChange} />
+            </div>
+            <Separator />
+            <Label>Projetos da Galeria</Label>
+            {(editedPortfolio.projects || []).map((project, index) => (
+              <div key={project.id} className="space-y-2 p-3 border rounded-md relative">
+                <Label>Projeto #{index + 1}</Label>
+                 <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => deleteProject(project.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+                <Input placeholder="Título do Projeto" value={project.title} onChange={(e) => handleProjectChange(index, 'title', e.target.value)} />
+                <Input type="url" placeholder="URL da Imagem do Projeto" value={project.imageUrl} onChange={(e) => handleProjectChange(index, 'imageUrl', e.target.value)} />
+              </div>
+            ))}
+            <Button type="button" variant="outline" onClick={addProject} className="w-full">
+              <PlusCircle className="mr-2" /> Adicionar Projeto
+            </Button>
           </div>
 
            {/* Seção do Banner CTA */}

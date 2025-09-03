@@ -30,6 +30,12 @@ export interface PortfolioStep {
   description: string;
 }
 
+export interface PortfolioProject {
+  id: string;
+  title: string;
+  imageUrl: string;
+}
+
 export interface Portfolio {
   title: string;
   description: string;
@@ -41,6 +47,9 @@ export interface Portfolio {
   howItWorksDescription: string;
   steps: PortfolioStep[];
   howItWorksImageUrl: string;
+  galleryTitle?: string;
+  galleryDescription?: string;
+  projects?: PortfolioProject[];
   ctaBannerTitle: string;
   ctaBannerDescription: string;
   ctaBannerButtonText: string;

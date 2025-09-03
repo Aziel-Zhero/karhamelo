@@ -10,6 +10,14 @@ import { Mail, ArrowRight, Check, Menu, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
 
 // Icons for feature cards (as inline SVGs for simplicity)
 const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
@@ -188,8 +196,48 @@ export default function PublicPortfolioPage() {
             </div>
         </section>
 
+        {/* Gallery Carousel */}
+        {portfolio.projects && portfolio.projects.length > 0 && (
+          <section id="gallery" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center max-w-3xl mx-auto">
+                      <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.galleryTitle}</h2>
+                      <p className="mt-3 text-muted-foreground">{portfolio.galleryDescription}</p>
+                  </div>
+                  <div className="mt-10">
+                      <Carousel
+                        opts={{
+                          align: "start",
+                          loop: true,
+                        }}
+                        className="w-full"
+                      >
+                        <CarouselContent>
+                          {portfolio.projects.map((project) => (
+                            <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
+                              <div className="p-1">
+                                <Card>
+                                  <CardContent className="flex flex-col aspect-square items-center justify-center p-0 rounded-lg overflow-hidden">
+                                     <Image src={project.imageUrl} alt={project.title} width={800} height={600} className="w-full h-full object-cover"/>
+                                     <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
+                                        <h3 className="text-lg font-bold text-white">{project.title}</h3>
+                                     </div>
+                                  </CardContent>
+                                </Card>
+                              </div>
+                            </CarouselItem>
+                          ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                      </Carousel>
+                  </div>
+              </div>
+          </section>
+        )}
+
         {/* CTA banner */}
-        <section id="cta" className="py-12" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+        <section id="cta" className="py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}>
                     <div>
@@ -246,5 +294,4 @@ export default function PublicPortfolioPage() {
     </footer>
     </div>
   );
-
-    
+}
