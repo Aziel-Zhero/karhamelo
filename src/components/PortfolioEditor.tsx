@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { Portfolio, PortfolioFeature, PortfolioStep, PortfolioProject } from '@/lib/types';
@@ -12,15 +13,12 @@ import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
-import { cn } from '@/lib/utils';
+import { IconPicker } from './IconPicker';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
   onPortfolioChange: (newPortfolio: Portfolio) => void;
 }
-
-const ctaIcons = Object.entries(ctaIconsMap);
-const featureIcons = Object.entries(featureIconsMap);
 
 export default function PortfolioEditor({ portfolio, onPortfolioChange }: PortfolioEditorProps) {
 
@@ -45,7 +43,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
       newFeatures[index] = {...newFeatures[index], icon: value};
       onPortfolioChange({...portfolio, features: newFeatures});
     } else {
-      onPortfolioChange({ ...portfolio, [name]: value });
+      onPortfolioChange({ ...portfolio, [name]: value as keyof typeof ctaIconsMap });
     }
   }
 
@@ -165,19 +163,12 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                 </div>
                 <div className="space-y-2">
                   <Label>Ícone do Botão (CTA)</Label>
-                  <div className="grid grid-cols-6 gap-2">
-                    {ctaIcons.map(([key, {component: Icon, label}]) => (
-                      <Button 
-                        key={key} 
-                        variant="outline" 
-                        className={cn("h-12 flex flex-col items-center justify-center gap-1", portfolio.ctaButtonIcon === key && "ring-2 ring-primary")}
-                        onClick={() => handleIconChange('ctaButtonIcon', key)}
-                        title={label}
-                      >
-                          <Icon />
-                      </Button>
-                    ))}
-                  </div>
+                  <IconPicker
+                    iconKeys={Object.keys(ctaIconsMap)}
+                    iconMap={ctaIconsMap}
+                    selectedIcon={portfolio.ctaButtonIcon || 'arrowRight'}
+                    onIconSelect={(iconKey) => handleIconChange('ctaButtonIcon', iconKey)}
+                  />
                 </div>
             </div>
 
@@ -195,19 +186,12 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                       <Label>Card de Benefício #{index+1}</Label>
                        <div className="space-y-2">
                         <Label className="text-xs">Ícone</Label>
-                        <div className="grid grid-cols-6 gap-2">
-                           {featureIcons.map(([key, {component: Icon, label}]) => (
-                            <Button 
-                              key={key} 
-                              variant="outline" 
-                              className={cn("h-12 flex items-center justify-center", feature.icon === key && "ring-2 ring-primary")}
-                              onClick={() => handleIconChange(`features.${index}.icon`, key)}
-                              title={label}
-                            >
-                                <Icon />
-                            </Button>
-                          ))}
-                        </div>
+                        <IconPicker
+                            iconKeys={Object.keys(featureIconsMap)}
+                            iconMap={featureIconsMap}
+                            selectedIcon={feature.icon || 'zap'}
+                            onIconSelect={(iconKey) => handleIconChange(`features.${index}.icon`, iconKey)}
+                         />
                       </div>
                       <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
                       <Textarea placeholder="Descrição do Card" value={feature.description} onChange={(e) => handleFeatureChange(index, 'description', e.target.value)} />
@@ -319,5 +303,3 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
     </div>
   );
 }
-
-    
