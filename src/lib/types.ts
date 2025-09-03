@@ -59,6 +59,7 @@ export interface Portfolio {
   galleryDescription?: string;
   projects?: PortfolioProject[];
   
+  isCtaBannerEnabled: boolean;
   ctaBannerTitle: string;
   ctaBannerDescription: string;
   ctaBannerButtonText: string;

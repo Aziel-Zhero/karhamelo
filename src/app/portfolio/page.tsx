@@ -6,8 +6,7 @@ import type { Portfolio, PageTheme } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
-import { Mail, ArrowRight, Check, Menu, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { ArrowRight, Check, Menu, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -94,7 +93,7 @@ export default function PublicPortfolioPage() {
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
                     {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a>}
                     {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a>}
-                    <a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a>
+                    {portfolio.isCtaBannerEnabled && <a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a>}
                 </nav>
                 <div className="hidden md:flex items-center gap-3">
                      <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
@@ -109,7 +108,7 @@ export default function PublicPortfolioPage() {
                     <nav className="flex flex-col gap-2 text-sm font-medium">
                        {portfolio.isFeaturesEnabled && <a href="#beneficios" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Benefícios</a>}
                         {portfolio.isHowItWorksEnabled && <a href="#como-funciona" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Como funciona</a>}
-                        <a href="#cta" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Começar</a>
+                        {portfolio.isCtaBannerEnabled && <a href="#cta" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Começar</a>}
                     </nav>
                 </div>
             )}
@@ -223,7 +222,7 @@ export default function PublicPortfolioPage() {
                               <div className="p-1">
                                 <Card>
                                   <CardContent className="flex flex-col aspect-square items-center justify-center p-0 rounded-lg overflow-hidden">
-                                     <Image src={project.imageUrl} alt={project.title} width={800} height={600} className="w-full h-full object-cover"/>
+                                     {project.imageUrl && <Image src={project.imageUrl} alt={project.title} width={800} height={600} className="w-full h-full object-cover"/>}
                                      <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
                                         <h3 className="text-lg font-bold text-white">{project.title}</h3>
                                      </div>
@@ -242,17 +241,19 @@ export default function PublicPortfolioPage() {
         )}
 
         {/* CTA banner */}
-        <section id="cta" className="py-12">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}>
-                    <div>
-                        <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
-                        <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
+        {portfolio.isCtaBannerEnabled && (
+            <section id="cta" className="py-12">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}>
+                        <div>
+                            <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
+                            <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
+                        </div>
+                        <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 font-semibold flex-shrink-0"><a href="#">{portfolio.ctaBannerButtonText} <ArrowRight className="ml-2"/></a></Button>
                     </div>
-                     <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 font-semibold flex-shrink-0"><a href="#">{portfolio.ctaBannerButtonText} <ArrowRight className="ml-2"/></a></Button>
                 </div>
-            </div>
-        </section>
+            </section>
+        )}
       </main>
 
       {/* Footer */}
@@ -269,9 +270,9 @@ export default function PublicPortfolioPage() {
                 <div>
                     <div className="font-semibold">Produto</div>
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="#beneficios" className="hover:text-[var(--custom-primary)]">Funcionalidades</a></li>
-                        <li><a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a></li>
-                        <li><a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a></li>
+                        {portfolio.isFeaturesEnabled && <li><a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a></li>}
+                        {portfolio.isHowItWorksEnabled && <li><a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a></li>}
+                        {portfolio.isCtaBannerEnabled && <li><a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a></li>}
                     </ul>
                 </div>
                  <div>

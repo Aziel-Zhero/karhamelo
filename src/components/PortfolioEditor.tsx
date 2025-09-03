@@ -6,25 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { PlusCircle, Trash2, ArrowRight } from 'lucide-react';
+import { PlusCircle, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { featureIconsMap } from '@/lib/icon-map';
+import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
   onPortfolioChange: (newPortfolio: Portfolio) => void;
 }
 
-const ctaIcons = [
-  { value: 'arrowRight', label: 'Seta' },
-  { value: 'whatsapp', label: 'WhatsApp' },
-  { value: 'telegram', label: 'Telegram' },
-  { value: 'none', label: 'Nenhum' },
-];
-
+const ctaIcons = Object.entries(ctaIconsMap).map(([value, {label}]) => ({value, label}));
 const featureIcons = Object.entries(featureIconsMap).map(([value, {label}]) => ({value, label}));
 
 
@@ -39,17 +33,35 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
     onPortfolioChange({ ...portfolio, [name]: checked });
   }
 
-  const handleSelectChange = (name: keyof Portfolio, value: string) => {
-    onPortfolioChange({ ...portfolio, [name]: value });
+  const handleSelectChange = (name: keyof Portfolio | `features.${number}.icon`, value: string) => {
+     if (name.startsWith('features.')) {
+      const parts = name.split('.');
+      const index = parseInt(parts[1], 10);
+      const newFeatures = [...(portfolio.features || [])];
+      newFeatures[index] = {...newFeatures[index], icon: value};
+      onPortfolioChange({...portfolio, features: newFeatures});
+    } else {
+      onPortfolioChange({ ...portfolio, [name]: value });
+    }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName?: string) => {
     const { name, files } = e.target;
+    const finalName = fieldName || name;
+    
     if (files && files[0]) {
       const reader = new FileReader();
       reader.onload = (loadEvent) => {
         const dataUri = loadEvent.target?.result as string;
-        onPortfolioChange({ ...portfolio, [name]: dataUri });
+         if (finalName.startsWith('projects.')) {
+          const [, indexStr, field] = finalName.split('.');
+          const index = parseInt(indexStr, 10);
+          const newProjects = [...(portfolio.projects || [])];
+          newProjects[index] = {...newProjects[index], [field]: dataUri};
+          onPortfolioChange({...portfolio, projects: newProjects});
+        } else {
+          onPortfolioChange({ ...portfolio, [finalName]: dataUri });
+        }
       };
       reader.readAsDataURL(files[0]);
     }
@@ -149,7 +161,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                       <Label>Card de Benefício #{index+1}</Label>
                        <div className="space-y-2">
                         <Label className="text-xs">Ícone</Label>
-                        <Select onValueChange={(value) => handleFeatureChange(index, 'icon', value)} value={feature.icon || 'seller'}>
+                        <Select onValueChange={(value) => handleSelectChange(`features.${index}.icon`, value)} value={feature.icon || 'seller'}>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione um ícone" />
                           </SelectTrigger>
@@ -229,7 +241,10 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                         <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                     <Input placeholder="Título do Projeto" value={project.title} onChange={(e) => handleProjectChange(index, 'title', e.target.value)} />
-                    <Input type="url" placeholder="URL da Imagem do Projeto" value={project.imageUrl} onChange={(e) => handleProjectChange(index, 'imageUrl', e.target.value)} />
+                    <div className="space-y-2">
+                        <Label htmlFor={`project-image-${index}`} className='text-xs'>Imagem do Projeto</Label>
+                        <Input id={`project-image-${index}`} name={`projects.${index}.imageUrl`} type="file" accept="image/*" onChange={(e) => handleFileChange(e, `projects.${index}.imageUrl`)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                    </div>
                   </div>
                 ))}
                 <Button type="button" variant="outline" onClick={addProject} className="w-full">
@@ -239,20 +254,28 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
             </div>
 
              {/* Seção do Banner CTA */}
-             <div className='space-y-4 p-4 border rounded-lg'>
-               <h3 className="font-semibold text-lg">Seção do Banner de CTA</h3>
-               <div className="space-y-2">
-                  <Label>Título do Banner</Label>
-                  <Input name="ctaBannerTitle" placeholder="Título do Banner" value={portfolio.ctaBannerTitle} onChange={handleInputChange}/>
+            <div className='space-y-4 p-4 border rounded-lg'>
+                <div className='flex items-center justify-between'>
+                    <h3 className="font-semibold text-lg">Seção do Banner de CTA</h3>
+                    <div className='flex items-center gap-2'>
+                        <Label htmlFor='isCtaBannerEnabled' className='text-sm'>Ativar</Label>
+                        <Switch id='isCtaBannerEnabled' checked={portfolio.isCtaBannerEnabled} onCheckedChange={(checked) => handleSwitchChange('isCtaBannerEnabled', checked)} />
+                    </div>
                 </div>
+               {portfolio.isCtaBannerEnabled && (<>
                 <div className="space-y-2">
-                  <Label>Descrição do Banner</Label>
-                  <Textarea name="ctaBannerDescription" placeholder="Descrição do banner" value={portfolio.ctaBannerDescription} onChange={handleInputChange} />
-                </div>
-                 <div className="space-y-2">
-                  <Label>Texto do Botão do Banner</Label>
-                  <Input name="ctaBannerButtonText" placeholder="Texto do Botão" value={portfolio.ctaBannerButtonText} onChange={handleInputChange}/>
-                </div>
+                    <Label>Título do Banner</Label>
+                    <Input name="ctaBannerTitle" placeholder="Título do Banner" value={portfolio.ctaBannerTitle} onChange={handleInputChange}/>
+                    </div>
+                    <div className="space-y-2">
+                    <Label>Descrição do Banner</Label>
+                    <Textarea name="ctaBannerDescription" placeholder="Descrição do banner" value={portfolio.ctaBannerDescription} onChange={handleInputChange} />
+                    </div>
+                    <div className="space-y-2">
+                    <Label>Texto do Botão do Banner</Label>
+                    <Input name="ctaBannerButtonText" placeholder="Texto do Botão" value={portfolio.ctaBannerButtonText} onChange={handleInputChange}/>
+                    </div>
+                </>)}
             </div>
         </CardContent>
       </Card>
