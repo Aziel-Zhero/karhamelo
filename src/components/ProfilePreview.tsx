@@ -1,12 +1,19 @@
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Github, Linkedin, Twitter } from 'lucide-react';
 
 interface ProfilePreviewProps {
   profile: Profile;
   links: Link[];
   theme: PageTheme;
 }
+
+const socialIconsMap: { [key: string]: React.ElementType } = {
+  github: Github,
+  linkedin: Linkedin,
+  twitter: Twitter,
+};
 
 export default function ProfilePreview({
   profile,
@@ -19,6 +26,12 @@ export default function ProfilePreview({
     '--preview-accent': theme.accentColor,
     '--preview-primary-fg': '#ffffff', // Assuming primary is dark enough for white text
   } as React.CSSProperties;
+
+  const socialLinks = links.filter((link) =>
+    Object.keys(socialIconsMap).some((social) =>
+      link.url.toLowerCase().includes(social)
+    )
+  );
 
   return (
     <div
@@ -43,6 +56,26 @@ export default function ProfilePreview({
               {profile.name}
             </h1>
             <p className="text-sm text-muted-foreground">{profile.bio}</p>
+          </div>
+           <div className="flex items-center gap-4 pt-2">
+            {socialLinks.map((link) => {
+              const socialName = Object.keys(socialIconsMap).find((social) =>
+                link.url.toLowerCase().includes(social)
+              );
+              if (!socialName) return null;
+              const Icon = socialIconsMap[socialName];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Icon className="h-6 w-6" />
+                </a>
+              );
+            })}
           </div>
           <div className="w-full space-y-3 pt-4">
             {links.map((link) => {

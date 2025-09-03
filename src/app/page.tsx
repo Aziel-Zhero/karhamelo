@@ -10,6 +10,8 @@ import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import ProfileEditor from '@/components/ProfileEditor';
+import Footer from '@/components/Footer';
+import { KLogo } from '@/components/KLogo';
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile>({
@@ -85,6 +87,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

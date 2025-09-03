@@ -8,12 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-const KLogo = () => (
-  <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-    <span className="font-bold text-xl text-primary-foreground">K</span>
-  </div>
-);
+import { KLogo } from './KLogo';
 
 export default function Header() {
   return (
@@ -21,7 +16,7 @@ export default function Header() {
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <KLogo />
-          <span className="font-bold text-xl tracking-tight">Karhamelo</span>
+          <span className="font-bold text-xl tracking-tight">Link Customizer</span>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
