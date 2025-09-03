@@ -57,10 +57,20 @@ export default function Home() {
   const deleteLink = (id: string) => {
     setLinks((prev) => prev.filter((link) => link.id !== id));
   };
+  
+  const handleViewPage = () => {
+    const pageData = {
+      profile,
+      links,
+      theme,
+    };
+    localStorage.setItem('karhamelo-page-data', JSON.stringify(pageData));
+    window.open('/profile/preview', '_blank');
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Header onViewPage={handleViewPage} />
       <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-3 space-y-8">

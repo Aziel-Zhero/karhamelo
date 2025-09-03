@@ -9,8 +9,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
+import { Eye } from 'lucide-react';
 
-export default function Header() {
+interface HeaderProps {
+  onViewPage: () => void;
+}
+
+export default function Header({ onViewPage }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
@@ -19,6 +24,10 @@ export default function Header() {
           <span className="font-bold text-xl tracking-tight">Link Customizer</span>
         </div>
         <div className="flex items-center gap-2">
+           <Button variant="outline" onClick={onViewPage}>
+            <Eye className="mr-2 h-4 w-4" />
+            Ver Página
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
