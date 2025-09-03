@@ -6,15 +6,21 @@ import type { Portfolio, PageTheme } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
-import { Mail, ArrowRight } from 'lucide-react';
+import { Mail, ArrowRight, Check, Menu, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
+
+// Icons for feature cards (as inline SVGs for simplicity)
+const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
+const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
+
 
 export default function PublicPortfolioPage() {
   const [data, setData] = useState<{ portfolio: Portfolio; theme: PageTheme } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -30,11 +36,13 @@ export default function PublicPortfolioPage() {
     setIsLoading(false);
   }, []);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email');
     toast({
-        title: 'Message Sent!',
-        description: "Thanks for reaching out. I'll get back to you soon.",
+        title: 'Obrigado!',
+        description: `Enviaremos o acesso para: ${email}`,
     });
     (e.target as HTMLFormElement).reset();
   };
@@ -60,88 +68,200 @@ export default function PublicPortfolioPage() {
   const { portfolio, theme } = data;
 
   const customStyle = {
+    '--custom-primary-hsl': theme.primaryColor.startsWith('hsl') ? theme.primaryColor.replace('hsl(','').replace(')','') : '199 76% 52%',
     '--custom-primary': theme.primaryColor,
     '--custom-bg': theme.backgroundColor,
   } as React.CSSProperties;
 
+  const primaryColorForGradient = `hsl(var(--custom-primary-hsl))`;
+
   return (
-    <div style={customStyle} className="bg-[var(--custom-bg)] text-foreground">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
-        <KLogo />
-        <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}>
-            <a href={portfolio.ctaButtonUrl}>
-                {portfolio.ctaButtonText} <ArrowRight className="ml-2" />
-            </a>
-        </Button>
+    <div style={customStyle} className="bg-background text-foreground antialiased">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b border-border">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 items-center justify-between">
+                <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: primaryColorForGradient}}>K</span>
+                    <span>Karhamelo</span>
+                </a>
+                <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="#beneficios" className="hover:text-primary">Benefícios</a>
+                    <a href="#como-funciona" className="hover:text-primary">Como funciona</a>
+                    <a href="#cta" className="hover:text-primary">Começar</a>
+                </nav>
+                <div className="hidden md:flex items-center gap-3">
+                    <Button variant="outline" asChild><a href={portfolio.ctaButtonUrl}>Entrar</a></Button>
+                     <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
+                </div>
+                 <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="ghost" size="icon" className="md:hidden">
+                    {isMenuOpen ? <X /> : <Menu />}
+                    <span className="sr-only">Abrir menu</span>
+                </Button>
+            </div>
+             {isMenuOpen && (
+                <div className="md:hidden pb-4">
+                    <nav className="flex flex-col gap-2 text-sm font-medium">
+                       <a href="#beneficios" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Benefícios</a>
+                        <a href="#como-funciona" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Como funciona</a>
+                        <a href="#cta" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Começar</a>
+                    </nav>
+                </div>
+            )}
+        </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main>
         {/* Hero Section */}
-        <section className="text-center py-20 lg:py-32">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-            {portfolio.title}
-          </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-            {portfolio.description}
-          </p>
-          <div className="mt-10">
-            <Button size="lg" asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}>
-              <a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a>
-            </Button>
-          </div>
-        </section>
-
-        {/* Image Section */}
-        <section className="py-12">
-            <div className="aspect-video w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl">
-            <Image
-                src={portfolio.imageUrl}
-                alt={portfolio.title}
-                width={1200}
-                height={675}
-                className="w-full h-full object-cover"
-                data-ai-hint="website product screenshot"
-            />
-            </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="py-20 lg:py-24">
-            <div className="max-w-2xl mx-auto">
-                <Card>
-                    <CardContent className="p-8">
-                        <h2 className="text-3xl font-bold text-center mb-2">Entre em contato</h2>
-                        <p className="text-center text-muted-foreground mb-8">Envie uma mensagem e vamos conversar.</p>
-                        <form onSubmit={handleContactSubmit} className="space-y-4">
-                            <Input type="text" placeholder="Seu Nome" required />
-                            <Input type="email" placeholder="Seu E-mail" required />
-                            <Textarea placeholder="Sua Mensagem" required rows={5} />
-                            <Button type="submit" className="w-full" style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}>
-                                <Mail className="mr-2"/> Enviar Mensagem
+        <section className="relative overflow-hidden bg-background/50">
+            <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}/>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative">
+                 <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                            {portfolio.title}
+                        </h1>
+                        <p className="mt-4 text-muted-foreground text-lg">
+                           {portfolio.description}
+                        </p>
+                        <form onSubmit={handleContactSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">
+                            <Input required type="email" name="email" placeholder="Seu melhor e-mail" className="w-full sm:w-80 px-4 py-3 rounded-xl border-border focus:outline-none focus:ring-2 focus:ring-ring" />
+                            <Button type="submit" className="px-6 py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: 'var(--custom-primary)'}}>
+                                {portfolio.ctaButtonText}
                             </Button>
                         </form>
-                    </CardContent>
-                </Card>
+                        <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> Checkout Rápido</div>
+                            <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> 100% Customizável</div>
+                            <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> Analytics</div>
+                        </div>
+                    </div>
+                     <div className="relative">
+                        <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30" style={{background: `radial-gradient(600px 200px at 70% 10%, ${theme.accentColor}, transparent), radial-gradient(400px 120px at 10% 80%, ${theme.primaryColor}, transparent)`}}></div>
+                        <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        {/* Benefícios / Cards */}
+        <section id="beneficios" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center max-w-3xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-extrabold">Tudo que você precisa</h2>
+                    <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
+                </div>
+                <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <Card className="bg-background/80">
+                        <CardContent className="p-6">
+                             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><SellerIcon/></div>
+                            <h3 className="mt-4 font-bold text-lg">Mostre seu Trabalho</h3>
+                            <p className="mt-2 text-muted-foreground">Convide, aprove e gerencie lojistas com comissões, estoque e contratos.</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-background/80">
+                        <CardContent className="p-6">
+                            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><CheckoutIcon/></div>
+                            <h3 className="mt-4 font-bold text-lg">Checkout Ultra-rápido</h3>
+                            <p className="mt-2 text-muted-foreground">Pix, cartão e boleto com antifraude e split de pagamento automático.</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-background/80">
+                        <CardContent className="p-6">
+                            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><CatalogIcon/></div>
+                            <h3 className="mt-4 font-bold text-lg">Catálogo Inteligente</h3>
+                            <p className="mt-2 text-muted-foreground">Variações, kits, SEO automático e vitrines personalizáveis por seller.</p>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </section>
 
+        {/* Como Funciona */}
+        <section id="como-funciona" className="py-16 lg:py-24 bg-background">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-extrabold">Comece em 3 passos</h2>
+                        <p className="mt-3 text-muted-foreground">Um fluxo simples para tirar sua ideia do papel rapidamente.</p>
+                        <ol className="mt-6 space-y-4">
+                            <li className="flex gap-4">
+                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>1</div>
+                                <div><h3 className="font-bold">Crie sua Conta</h3><p className="text-muted-foreground">Personalize sua marca e detalhes.</p></div>
+                            </li>
+                            <li className="flex gap-4">
+                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>2</div>
+                                <div><h3 className="font-bold">Adicione seu Conteúdo</h3><p className="text-muted-foreground">Faça upload de projetos, links e informações.</p></div>
+                            </li>
+                            <li className="flex gap-4">
+                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>3</div>
+                                <div><h3 className="font-bold">Publique e Divulgue</h3><p className="text-muted-foreground">Compartilhe sua nova página com o mundo.</p></div>
+                            </li>
+                        </ol>
+                    </div>
+                    <div className="relative">
+                        <Image src="https://picsum.photos/seed/workflow/1200/1000" width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* CTA banner */}
+        <section id="cta" className="py-12" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}>
+                    <div>
+                        <h3 className="text-2xl md:text-3xl font-extrabold">Pronto para criar seu espaço?</h3>
+                        <p className="mt-2 text-white/90">Crie sua conta em menos de 2 minutos e comece a divulgar.</p>
+                    </div>
+                     <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 font-semibold flex-shrink-0"><a href="#">Começar agora <ArrowRight className="ml-2"/></a></Button>
+                </div>
+            </div>
+        </section>
       </main>
 
-      <footer className="w-full py-6 mt-auto">
-        <div className="container mx-auto text-center text-muted-foreground/80">
-          <p>
-            Powered by{' '}
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold text-primary/80 hover:underline"
-            >
-              Karhamelo
-            </a>
-          </p>
+      {/* Footer */}
+       <footer className="border-t border-border bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid md:grid-cols-4 gap-8">
+                <div>
+                     <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: primaryColorForGradient}}>K</span>
+                        <span>Karhamelo</span>
+                    </a>
+                    <p className="mt-3 text-sm text-muted-foreground">A forma mais doce de criar seu espaço na web. Simples, seguro e escalável.</p>
+                </div>
+                <div>
+                    <div className="font-semibold">Produto</div>
+                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#beneficios" className="hover:text-primary">Funcionalidades</a></li>
+                        <li><a href="#como-funciona" className="hover:text-primary">Como funciona</a></li>
+                        <li><a href="#cta" className="hover:text-primary">Começar</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <div className="font-semibold">Recursos</div>
+                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" className="hover:text-primary">Documentação</a></li>
+                        <li><a href="#" className="hover:text-primary">Status</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div className="font-semibold">Fale conosco</div>
+                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                        <li><a href="mailto:contato@karhamelo.app" className="hover:text-primary">contato@karhamelo.app</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+                <p>© {new Date().getFullYear()} Karhamelo — Todos os direitos reservados.</p>
+                <div className="flex items-center gap-4">
+                    <a href="#" className="hover:text-primary">Termos</a>
+                    <a href="#" className="hover:text-primary">Privacidade</a>
+                </div>
+            </div>
         </div>
-      </footer>
+    </footer>
     </div>
   );
 }
