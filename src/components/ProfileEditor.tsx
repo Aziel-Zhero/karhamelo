@@ -28,44 +28,44 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
     e.preventDefault();
     onProfileChange(editedProfile);
     toast({
-      title: 'Profile Updated!',
-      description: 'Your profile details have been saved.',
+      title: 'Perfil Atualizado!',
+      description: 'Os detalhes do seu perfil foram salvos.',
     });
   };
 
   return (
     <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>Edit Your Profile</CardTitle>
+        <CardTitle>Edite seu Perfil</CardTitle>
         <CardDescription>
-          Update your name, bio, and avatar. The bio is optional.
+          Atualize seu nome, biografia e avatar. A biografia é opcional.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             name="name"
-            placeholder="Your Name"
+            placeholder="Seu Nome"
             value={editedProfile.name}
             onChange={handleInputChange}
             required
           />
           <Textarea
             name="bio"
-            placeholder="Your Bio (optional)"
+            placeholder="Sua Biografia (opcional)"
             value={editedProfile.bio}
             onChange={handleInputChange}
           />
           <Input
             name="avatarUrl"
             type="url"
-            placeholder="https://example.com/avatar.png"
+            placeholder="https://exemplo.com/avatar.png"
             value={editedProfile.avatarUrl}
             onChange={handleInputChange}
             required
           />
           <Button type="submit" className="w-full">
-            <Save className="mr-2" /> Save Profile
+            <Save className="mr-2" /> Salvar Perfil
           </Button>
         </form>
       </CardContent>

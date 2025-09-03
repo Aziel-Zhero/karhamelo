@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,7 +25,7 @@ export default function Header({ onViewPage }: HeaderProps) {
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <KLogo />
-          <span className="font-bold text-xl tracking-tight">Link Customizer</span>
+          <span className="font-bold text-xl tracking-tight">Editor de Links</span>
         </div>
         <div className="flex items-center gap-2">
            <DropdownMenu>
@@ -41,7 +42,7 @@ export default function Header({ onViewPage }: HeaderProps) {
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onViewPage('portfolio')}>
                 <Briefcase className="mr-2 h-4 w-4" />
-                Página de Portfólio
+                LP de Portfólio
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -72,11 +73,11 @@ export default function Header({ onViewPage }: HeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Perfil</DropdownMenuItem>
+              <DropdownMenuItem>Faturamento</DropdownMenuItem>
+              <DropdownMenuItem>Configurações</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem>Sair</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

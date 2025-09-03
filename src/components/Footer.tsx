@@ -1,9 +1,10 @@
+
 export default function Footer() {
   return (
     <footer className="w-full py-6 mt-auto">
       <div className="container mx-auto text-center text-muted-foreground">
         <p>
-          Powered by{' '}
+          Desenvolvido por{' '}
           <a
             href="#"
             target="_blank"

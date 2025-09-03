@@ -103,7 +103,7 @@ export default function PublicProfilePage() {
         const hydratedLinks = hydrateLinks(parsedData.links);
         setData({ ...parsedData, links: hydratedLinks });
       } catch (error) {
-        console.error("Failed to parse page data from localStorage", error);
+        console.error("Falha ao analisar dados da página do localStorage", error);
       }
     }
     setIsLoading(false);
@@ -224,7 +224,7 @@ export default function PublicProfilePage() {
       <footer className="w-full py-6 mt-auto">
         <div className="container mx-auto text-center text-muted-foreground/80">
           <p>
-            Powered by{' '}
+            Desenvolvido por{' '}
             <a
               href="#"
               target="_blank"

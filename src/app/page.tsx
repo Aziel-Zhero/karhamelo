@@ -19,14 +19,14 @@ import PortfolioPreview from '@/components/PortfolioPreview';
 export default function Home() {
   const [profile, setProfile] = useState<Profile>({
     name: 'Karhamelo',
-    bio: 'Your one-page link hub, beautifully customized. Built with Next.js and ❤️.',
+    bio: 'Seu hub de links em uma única página, lindamente personalizado. Construído com Next.js e ❤️.',
     avatarUrl: 'https://picsum.photos/128/128',
   });
 
   const [links, setLinks] = useState<Link[]>([
     {
       id: '1',
-      title: 'My Website',
+      title: 'Meu Website',
       url: 'https://example.com',
       icon: LinkIcon,
     },
@@ -107,8 +107,8 @@ export default function Home() {
       <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8">
         <Tabs defaultValue="links" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="links">Links Page</TabsTrigger>
-            <TabsTrigger value="portfolio">Portfolio LP</TabsTrigger>
+            <TabsTrigger value="links">Página de Links</TabsTrigger>
+            <TabsTrigger value="portfolio">LP de Portfólio</TabsTrigger>
           </TabsList>
           <TabsContent value="links">
              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-4">
@@ -130,7 +130,7 @@ export default function Home() {
               <div className="lg:col-span-2">
                 <div className="lg:sticky lg:top-24">
                   <h2 className="text-2xl font-bold mb-6 text-center lg:text-left">
-                    Live Preview
+                    Pré-visualização Ao Vivo
                   </h2>
                   <ProfilePreview profile={profile} links={links} theme={theme} />
                 </div>
@@ -139,13 +139,13 @@ export default function Home() {
           </TabsContent>
           <TabsContent value="portfolio">
              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-4">
-              <div className="lg:col-span-3 space-y-8">
+              <div className="lg:col-span-3">
                  <PortfolioEditor portfolio={portfolio} onPortfolioChange={setPortfolio} />
               </div>
               <div className="lg:col-span-2">
                 <div className="lg:sticky lg:top-24">
                   <h2 className="text-2xl font-bold mb-6 text-center lg:text-left">
-                    Live Preview
+                    Pré-visualização Ao Vivo
                   </h2>
                   <PortfolioPreview portfolio={portfolio} theme={theme} />
                 </div>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -101,8 +102,8 @@ export default function AIStyleRecommender({
       console.error(error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to get AI recommendations. Please try again.',
+        title: 'Erro',
+        description: 'Falha ao obter recomendações da IA. Por favor, tente novamente.',
       });
     } finally {
       setIsLoading(false);
@@ -114,8 +115,8 @@ export default function AIStyleRecommender({
       onThemeApply(recommendation.theme);
       onOpenChange(false);
       toast({
-        title: 'Theme Applied!',
-        description: `The "${recommendation.themeSuggestion}" theme has been applied to your page.`,
+        title: 'Tema Aplicado!',
+        description: `O tema "${recommendation.themeSuggestion}" foi aplicado à sua página.`,
       });
     }
   };
@@ -126,16 +127,15 @@ export default function AIStyleRecommender({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            AI Style Recommender
+            Recomendador de Estilo com IA
           </DialogTitle>
           <DialogDescription>
-            Let our AI suggest a theme based on your content. Add some keywords
-            for themes you like.
+            Deixe nossa IA sugerir um tema com base no seu conteúdo. Adicione palavras-chave para temas que você gosta.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
           <Textarea
-            placeholder="e.g., minimalist, futuristic, retro, professional"
+            placeholder="ex: minimalista, futurista, retrô, profissional"
             value={preferredThemes}
             onChange={(e) => setPreferredThemes(e.target.value)}
           />
@@ -150,7 +150,7 @@ export default function AIStyleRecommender({
         {recommendation && !isLoading && (
           <div className="space-y-4 rounded-lg border p-4">
             <h4 className="font-semibold flex items-center gap-2">
-              <Paintbrush className="h-4 w-4" /> Suggested Theme:{' '}
+              <Paintbrush className="h-4 w-4" /> Tema Sugerido:{' '}
               {recommendation.themeSuggestion}
             </h4>
             <div className="flex gap-2 w-full">
@@ -158,26 +158,26 @@ export default function AIStyleRecommender({
                 className="w-1/3 rounded p-2 text-center text-xs text-white"
                 style={{ backgroundColor: recommendation.theme.primaryColor }}
               >
-                Primary
+                Primária
               </div>
               <div
                 className="w-1/3 rounded p-2 text-center text-xs border"
                 style={{ backgroundColor: recommendation.theme.backgroundColor }}
               >
-                BG
+                Fundo
               </div>
               <div
                 className="w-1/3 rounded p-2 text-center text-xs text-white"
                 style={{ backgroundColor: recommendation.theme.accentColor }}
               >
-                Accent
+                Destaque
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
               {recommendation.reasoning}
             </p>
             <Button className="w-full" onClick={handleApplyTheme}>
-              Apply this theme
+              Aplicar este tema
             </Button>
           </div>
         )}
@@ -194,7 +194,7 @@ export default function AIStyleRecommender({
             ) : (
               <Sparkles className="mr-2 h-4 w-4" />
             )}
-            Generate Suggestion
+            Gerar Sugestão
           </Button>
         </DialogFooter>
       </DialogContent>

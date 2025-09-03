@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -24,8 +25,8 @@ export default function LinkEditor({ onAddLink }: LinkEditorProps) {
       setTitle('');
       setUrl('');
       toast({
-        title: 'Link added!',
-        description: `"${title}" has been added to your profile.`,
+        title: 'Link adicionado!',
+        description: `"${title}" foi adicionado ao seu perfil.`,
       });
     }
   };
@@ -33,7 +34,7 @@ export default function LinkEditor({ onAddLink }: LinkEditorProps) {
   return (
     <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>Add a New Link</CardTitle>
+        <CardTitle>Adicionar Novo Link</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -41,7 +42,7 @@ export default function LinkEditor({ onAddLink }: LinkEditorProps) {
           className="flex flex-col md:flex-row gap-4"
         >
           <Input
-            placeholder="Link Title"
+            placeholder="Título do Link"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -49,13 +50,13 @@ export default function LinkEditor({ onAddLink }: LinkEditorProps) {
           />
           <Input
             type="url"
-            placeholder="https://example.com"
+            placeholder="https://exemplo.com"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             required
             className="flex-1"
           />
-          <Button type="submit">Add Link</Button>
+          <Button type="submit">Adicionar Link</Button>
         </form>
       </CardContent>
     </Card>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { PageTheme, Profile, Link } from '@/lib/types';
@@ -31,7 +32,7 @@ interface ThemeCustomizerProps {
 
 const presetThemes: { name: string; theme: PageTheme }[] = [
   {
-    name: 'Default',
+    name: 'Padrão',
     theme: {
       primaryColor: 'hsl(199 76% 52%)',
       backgroundColor: 'hsl(216 28% 95%)',
@@ -39,7 +40,7 @@ const presetThemes: { name: string; theme: PageTheme }[] = [
     },
   },
   {
-    name: 'Forest',
+    name: 'Floresta',
     theme: {
       primaryColor: 'hsl(158 36% 52%)',
       backgroundColor: 'hsl(155 26% 95%)',
@@ -47,7 +48,7 @@ const presetThemes: { name: string; theme: PageTheme }[] = [
     },
   },
   {
-    name: 'Ocean',
+    name: 'Oceano',
     theme: {
       primaryColor: 'hsl(210 55% 55%)',
       backgroundColor: 'hsl(210 50% 98%)',
@@ -55,7 +56,7 @@ const presetThemes: { name: string; theme: PageTheme }[] = [
     },
   },
   {
-    name: 'Sunset',
+    name: 'Pôr do Sol',
     theme: {
       primaryColor: 'hsl(25 85% 58%)',
       backgroundColor: 'hsl(25 50% 98%)',
@@ -90,14 +91,14 @@ export default function ThemeCustomizer({
     <div className="space-y-4">
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle>Customize Your Page</CardTitle>
+          <CardTitle>Personalize Sua Página</CardTitle>
           <CardDescription>
-            Pick a preset theme, choose a background pattern, or set your own custom colors.
+            Escolha um tema predefinido, um padrão de fundo ou defina suas próprias cores.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <Label className='mb-2 block'>Preset Themes</Label>
+            <Label className='mb-2 block'>Temas Predefinidos</Label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {presetThemes.map(({ name, theme }) => (
                 <button
@@ -126,10 +127,10 @@ export default function ThemeCustomizer({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="background-pattern">Background Pattern</Label>
+            <Label htmlFor="background-pattern">Padrão de Fundo</Label>
             <Select onValueChange={handlePatternChange} value={currentTheme.backgroundPattern || 'none'}>
               <SelectTrigger id="background-pattern">
-                <SelectValue placeholder="Select a pattern" />
+                <SelectValue placeholder="Selecione um padrão" />
               </SelectTrigger>
               <SelectContent>
                 {heroPatterns.map((pattern) => (
@@ -142,26 +143,26 @@ export default function ThemeCustomizer({
           </div>
 
           <div className="space-y-4">
-            <Label>Custom Colors</Label>
+            <Label>Cores Personalizadas</Label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex items-center gap-2">
                 <Input type="color" value={currentTheme.primaryColor.startsWith('hsl') ? '#000000' : currentTheme.primaryColor} onChange={(e) => handleColorChange('primaryColor', e.target.value)} className="p-1 h-10 w-14" />
                 <div className='flex-1'>
-                  <Label htmlFor="primaryColor" className="text-xs">Primary</Label>
+                  <Label htmlFor="primaryColor" className="text-xs">Primária</Label>
                   <Input id="primaryColor" value={currentTheme.primaryColor} onChange={(e) => handleColorChange('primaryColor', e.target.value)} placeholder="#29ABE2"/>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Input type="color" value={currentTheme.backgroundColor.startsWith('hsl') ? '#ffffff' : currentTheme.backgroundColor} onChange={(e) => handleColorChange('backgroundColor', e.target.value)} className="p-1 h-10 w-14" />
                 <div className='flex-1'>
-                  <Label htmlFor="backgroundColor" className="text-xs">Background</Label>
+                  <Label htmlFor="backgroundColor" className="text-xs">Fundo</Label>
                   <Input id="backgroundColor" value={currentTheme.backgroundColor} onChange={(e) => handleColorChange('backgroundColor', e.target.value)} placeholder="#F0F2F5" />
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Input type="color" value={currentTheme.accentColor.startsWith('hsl') ? '#000000' : currentTheme.accentColor} onChange={(e) => handleColorChange('accentColor', e.target.value)} className="p-1 h-10 w-14" />
                 <div className='flex-1'>
-                  <Label htmlFor="accentColor" className="text-xs">Accent</Label>
+                  <Label htmlFor="accentColor" className="text-xs">Destaque</Label>
                   <Input id="accentColor" value={currentTheme.accentColor} onChange={(e) => handleColorChange('accentColor', e.target.value)} placeholder="#64B5F6"/>
                 </div>
               </div>
@@ -174,7 +175,7 @@ export default function ThemeCustomizer({
             size="lg"
           >
             <Sparkles className="mr-2 h-4 w-4" />
-            Get AI Style Recommendations
+            Obter Recomendações com IA
           </Button>
         </CardContent>
       </Card>

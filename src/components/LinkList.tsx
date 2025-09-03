@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Link } from '@/lib/types';
@@ -48,7 +49,7 @@ export default function LinkList({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Your Links</h3>
+      <h3 className="text-xl font-semibold">Seus Links</h3>
       <Card className="shadow-md">
         <CardContent className="p-4 space-y-3">
           {links.map((link) => (
@@ -63,7 +64,7 @@ export default function LinkList({
                     <Input
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      placeholder="Title"
+                      placeholder="Título"
                     />
                     <Input
                       value={editedUrl}
@@ -118,7 +119,7 @@ export default function LinkList({
           ))}
           {links.length === 0 && (
             <p className="text-center text-muted-foreground py-8">
-              No links yet. Add one above to get started!
+              Nenhum link ainda. Adicione um acima para começar!
             </p>
           )}
         </CardContent>

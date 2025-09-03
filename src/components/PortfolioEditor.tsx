@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import { Save, PlusCircle, Trash2 } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 
@@ -42,106 +42,107 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
     e.preventDefault();
     onPortfolioChange(editedPortfolio);
     toast({
-      title: 'Portfolio Updated!',
-      description: 'Your portfolio details have been saved.',
+      title: 'Portfólio Atualizado!',
+      description: 'Os detalhes do seu portfólio foram salvos.',
     });
   };
 
   return (
     <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>Edit Your Portfolio LP</CardTitle>
+        <CardTitle>Edite sua Landing Page de Portfólio</CardTitle>
         <CardDescription>
-          Customize the content of your personal landing page.
+          Personalize o conteúdo da sua página de destino pessoal.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-8">
           
-          {/* Hero Section */}
+          {/* Seção Hero */}
           <div className='space-y-4 p-4 border rounded-lg'>
-             <h3 className="font-semibold text-lg">Hero Section</h3>
+             <h3 className="font-semibold text-lg">Seção Principal (Hero)</h3>
              <div className="space-y-2">
-                <Label htmlFor="title">Headline Title</Label>
-                <Input id="title" name="title" placeholder="Your Awesome Title" value={editedPortfolio.title} onChange={handleInputChange} required />
+                <Label htmlFor="title">Título Principal</Label>
+                <Input id="title" name="title" placeholder="O Título da Sua Página" value={editedPortfolio.title} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" placeholder="A short and catchy description." value={editedPortfolio.description} onChange={handleInputChange} />
+                <Label htmlFor="description">Descrição</Label>
+                <Textarea id="description" name="description" placeholder="Uma descrição curta e impactante." value={editedPortfolio.description} onChange={handleInputChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="imageUrl">Main Image URL</Label>
-                <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://example.com/image.png" value={editedPortfolio.imageUrl} onChange={handleInputChange} required />
+                <Label htmlFor="imageUrl">URL da Imagem Principal</Label>
+                <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://exemplo.com/imagem.png" value={editedPortfolio.imageUrl} onChange={handleInputChange} required />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="ctaButtonText">CTA Button Text</Label>
-                    <Input id="ctaButtonText" name="ctaButtonText" placeholder="Get Started" value={editedPortfolio.ctaButtonText} onChange={handleInputChange} required />
+                    <Label htmlFor="ctaButtonText">Texto do Botão (CTA)</Label>
+                    <Input id="ctaButtonText" name="ctaButtonText" placeholder="Começar" value={editedPortfolio.ctaButtonText} onChange={handleInputChange} required />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="ctaButtonUrl">CTA Button URL</Label>
-                    <Input id="ctaButtonUrl" name="ctaButtonUrl" type="url" placeholder="https://example.com/contact" value={editedPortfolio.ctaButtonUrl} onChange={handleInputChange} required />
+                    <Label htmlFor="ctaButtonUrl">URL do Botão (CTA)</Label>
+                    <Input id="ctaButtonUrl" name="ctaButtonUrl" type="url" placeholder="https://exemplo.com/contato" value={editedPortfolio.ctaButtonUrl} onChange={handleInputChange} required />
                 </div>
               </div>
           </div>
 
-          {/* Features Section */}
+          {/* Seção de Benefícios */}
           <div className='space-y-4 p-4 border rounded-lg'>
-            <h3 className="font-semibold text-lg">Features Section (Benefits)</h3>
+            <h3 className="font-semibold text-lg">Seção de Benefícios</h3>
             {editedPortfolio.features.map((feature, index) => (
                 <div key={index} className="space-y-3 p-3 border rounded-md relative">
-                    <Label>Feature Card #{index+1}</Label>
-                    <Input placeholder="Card Title" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
-                    <Textarea placeholder="Card Description" value={feature.description} onChange={(e) => handleFeatureChange(index, 'description', e.target.value)} />
+                    <Label>Card de Benefício #{index+1}</Label>
+                    <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
+                    <Textarea placeholder="Descrição do Card" value={feature.description} onChange={(e) => handleFeatureChange(index, 'description', e.target.value)} />
                 </div>
             ))}
           </div>
 
-          {/* How It Works Section */}
+          {/* Seção Como Funciona */}
           <div className='space-y-4 p-4 border rounded-lg'>
-             <h3 className="font-semibold text-lg">"How It Works" Section</h3>
+             <h3 className="font-semibold text-lg">Seção "Como Funciona"</h3>
              <div className="space-y-2">
-                <Label>Section Title</Label>
-                <Input name="howItWorksTitle" placeholder="Section title" value={editedPortfolio.howItWorksTitle} onChange={handleInputChange}/>
+                <Label>Título da Seção</Label>
+                <Input name="howItWorksTitle" placeholder="Título da seção" value={editedPortfolio.howItWorksTitle} onChange={handleInputChange}/>
               </div>
               <div className="space-y-2">
-                <Label>Section Description</Label>
-                <Textarea name="howItWorksDescription" placeholder="Section description" value={editedPortfolio.howItWorksDescription} onChange={handleInputChange} />
+                <Label>Descrição da Seção</Label>
+                <Textarea name="howItWorksDescription" placeholder="Descrição da seção" value={editedPortfolio.howItWorksDescription} onChange={handleInputChange} />
               </div>
                <div className="space-y-2">
-                <Label>Image URL</Label>
-                <Input name="howItWorksImageUrl" type="url" placeholder="https://example.com/image.png" value={editedPortfolio.howItWorksImageUrl} onChange={handleInputChange}/>
+                <Label>URL da Imagem</Label>
+                <Input name="howItWorksImageUrl" type="url" placeholder="https://exemplo.com/imagem.png" value={editedPortfolio.howItWorksImageUrl} onChange={handleInputChange}/>
               </div>
               <Separator />
-              <Label>Steps</Label>
+              <Label>Passos</Label>
                {editedPortfolio.steps.map((step, index) => (
                 <div key={index} className="space-y-2 p-3 border rounded-md">
-                    <Label>Step #{index+1}</Label>
-                    <Input placeholder="Step Title" value={step.title} onChange={(e) => handleStepChange(index, 'title', e.target.value)} />
-                    <Input placeholder="Step Description" value={step.description} onChange={(e) => handleStepChange(index, 'description', e.target.value)} />
+                    <Label>Passo #{index+1}</Label>
+                    <Input placeholder="Título do Passo" value={step.title} onChange={(e) => handleStepChange(index, 'title', e.target.value)} />
+                    <Input placeholder="Descrição do Passo" value={step.description} onChange={(e) => handleStepChange(index, 'description', e.target.value)} />
                 </div>
             ))}
           </div>
 
-           {/* CTA Banner Section */}
+           {/* Seção do Banner CTA */}
            <div className='space-y-4 p-4 border rounded-lg'>
-             <h3 className="font-semibold text-lg">CTA Banner Section</h3>
+             <h3 className="font-semibold text-lg">Seção do Banner de CTA</h3>
              <div className="space-y-2">
-                <Label>Banner Title</Label>
-                <Input name="ctaBannerTitle" placeholder="Banner Title" value={editedPortfolio.ctaBannerTitle} onChange={handleInputChange}/>
+                <Label>Título do Banner</Label>
+                <Input name="ctaBannerTitle" placeholder="Título do Banner" value={editedPortfolio.ctaBannerTitle} onChange={handleInputChange}/>
               </div>
               <div className="space-y-2">
-                <Label>Banner Description</Label>
-                <Textarea name="ctaBannerDescription" placeholder="Banner description" value={editedPortfolio.ctaBannerDescription} onChange={handleInputChange} />
+                <Label>Descrição do Banner</Label>
+                <Textarea name="ctaBannerDescription" placeholder="Descrição do banner" value={editedPortfolio.ctaBannerDescription} onChange={handleInputChange} />
               </div>
                <div className="space-y-2">
-                <Label>Banner Button Text</Label>
-                <Input name="ctaBannerButtonText" placeholder="Button Text" value={editedPortfolio.ctaBannerButtonText} onChange={handleInputChange}/>
+                <Label>Texto do Botão do Banner</Label>
+                <Input name="ctaBannerButtonText" placeholder="Texto do Botão" value={editedPortfolio.ctaBannerButtonText} onChange={handleInputChange}/>
               </div>
           </div>
 
+
           <Button type="submit" className="w-full" size="lg">
-            <Save className="mr-2" /> Save Portfolio
+            <Save className="mr-2" /> Salvar Portfólio
           </Button>
         </form>
       </CardContent>
