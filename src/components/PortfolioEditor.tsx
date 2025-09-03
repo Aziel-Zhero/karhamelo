@@ -48,8 +48,8 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   };
 
   return (
-    <Card className="shadow-md max-h-[80vh] overflow-y-auto">
-      <CardHeader className="sticky top-0 bg-card z-10">
+    <Card className="shadow-md">
+      <CardHeader>
         <CardTitle>Edit Your Portfolio LP</CardTitle>
         <CardDescription>
           Customize the content of your personal landing page.
@@ -140,7 +140,7 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
               </div>
           </div>
 
-          <Button type="submit" className="w-full sticky bottom-0" size="lg">
+          <Button type="submit" className="w-full" size="lg">
             <Save className="mr-2" /> Save Portfolio
           </Button>
         </form>
