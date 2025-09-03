@@ -152,7 +152,7 @@ export default function PublicPortfolioPage() {
                     <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
                 </div>
                 <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {portfolio.features.map((feature, index) => (
+                   {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
                      <Card key={index} className="bg-background/80">
                         <CardContent className="p-6">
                              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
@@ -173,7 +173,7 @@ export default function PublicPortfolioPage() {
                         <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.howItWorksTitle}</h2>
                         <p className="mt-3 text-muted-foreground">{portfolio.howItWorksDescription}</p>
                         <ol className="mt-6 space-y-4">
-                            {portfolio.steps.map((step, index) => (
+                            {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
                                 <li key={index} className="flex gap-4">
                                     <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>{index + 1}</div>
                                     <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
