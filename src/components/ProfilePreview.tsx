@@ -1,3 +1,4 @@
+
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -95,13 +96,13 @@ export default function ProfilePreview({
 
   return (
     <div
-      className="relative aspect-[9/19.5] w-full max-w-sm mx-auto rounded-[2.5rem] border-[10px] sm:border-[14px] border-black bg-[var(--preview-bg)] overflow-hidden shadow-2xl"
+      className="relative aspect-[9/19.5] w-full max-w-sm mx-auto rounded-[2rem] border-8 sm:border-[10px] border-black bg-[var(--preview-bg)] overflow-hidden shadow-2xl"
       style={customStyle}
     >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-5 sm:h-6 bg-black rounded-b-xl z-10"></div>
-      <div className="pt-12 sm:pt-16 pb-8 px-4 overflow-y-auto h-full text-center">
-        <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-24 w-24 border-4 border-[var(--preview-primary)]">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-4 sm:h-5 bg-black rounded-b-lg z-20"></div>
+      <div className="pt-8 sm:pt-10 pb-6 px-4 overflow-y-auto h-full text-center">
+        <div className="flex flex-col items-center space-y-3">
+          <Avatar className="h-20 w-20 border-4 border-[var(--preview-primary)]">
             <AvatarImage
               src={profile.avatarUrl}
               data-ai-hint="person portrait"
@@ -111,13 +112,13 @@ export default function ProfilePreview({
               {profile.name.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-foreground">
+          <div className="space-y-0.5">
+            <h1 className="text-xl font-bold text-foreground">
               {profile.name}
             </h1>
-            <p className="text-sm text-muted-foreground">{profile.bio}</p>
+            <p className="text-xs text-muted-foreground">{profile.bio}</p>
           </div>
-           <div className="flex items-center gap-4 pt-2">
+           <div className="flex items-center gap-4 pt-1">
             {socialLinks.map((link) => {
               const socialName = Object.keys(socialIconsMap).find((social) =>
                 link.url.toLowerCase().includes(social)
@@ -132,18 +133,18 @@ export default function ProfilePreview({
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-5 w-5" />
                 </a>
               );
             })}
           </div>
-          <div className="w-full space-y-3 pt-4">
+          <div className="w-full space-y-2 pt-2">
             {regularLinks.map((link) => {
               const Icon = link.icon;
               return (
                 <Button
                   key={link.id}
-                  className="w-full h-14 text-base font-semibold transition-transform duration-200 hover:scale-105 active:scale-100"
+                  className="w-full h-12 text-sm font-semibold transition-transform duration-200 hover:scale-[1.02] active:scale-100"
                   style={{
                     backgroundColor: 'var(--preview-primary)',
                     color: 'var(--preview-primary-fg)',
@@ -154,9 +155,9 @@ export default function ProfilePreview({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3"
+                    className="flex items-center justify-center gap-2.5"
                   >
-                    {Icon && <Icon className="h-5 w-5" />}
+                    {Icon && <Icon className="h-4 w-4" />}
                     <span>{link.title}</span>
                   </a>
                 </Button>
