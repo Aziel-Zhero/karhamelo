@@ -26,7 +26,7 @@ import {
   RotateCcw, RotateCw, Rss, Ruler, Save, Scale, Scissors, ScreenShare, Search, Send, SeparatorHorizontal, Server, Settings,
   Settings2, Share, Share2, Sheet, Shield, ShieldCheck, ShieldClose, ShieldOff, Shirt, ShoppingBag, ShoppingCart, Siren, Slash,
   Slice, Smartphone, Smile, Speaker, Star, Strikethrough, Sun, Sunrise, Sunset, Tablet, Tag, Target, Tent, Terminal, ThumbsDown,
-  ThumbsUp, ToggleLeft, ToggleRight, Tool, Trash, Trash2, TrendingDown, TrendingUp, Triangle, Truck, Tv, Twitch, Twitter, Type,
+  ThumbsUp, ToggleLeft, ToggleRight, Trash, Trash2, TrendingDown, TrendingUp, Triangle, Truck, Tv, Twitch, Twitter, Type,
   Underline, Undo, UnfoldHorizontal, UnfoldVertical, Unlink, Upload, User, UserCheck, UserCog, UserMinus, UserPlus, UserX, Users,
   Video, Voicemail, Volume, Volume1, Volume2, VolumeX, Wallet, Watch, Webcam, Wifi, Wind, Workflow, WrapText, X, Youtube, Zap
 } from 'lucide-react';
@@ -68,15 +68,6 @@ const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="m22 2-7 20-4-9-9-4 20-7z" />
   </svg>
 );
-
-// Ícone para Vendedor/Gestão
-const SellerIcon = () => <Users className="h-6 w-6 text-primary" />;
-
-// Ícone para Checkout
-const CheckoutIcon = () => <ShoppingCart className="h-6 w-6 text-primary" />;
-
-// Ícone para Catálogo
-const CatalogIcon = () => <Settings className="h-6 w-6 text-primary" />;
 
 export interface IconDefinition {
   component: React.ElementType;
@@ -405,7 +396,6 @@ export const allIconsMap: Record<string, IconDefinition> = {
   thumbsUp: { component: ThumbsUp, label: 'Thumbs Up' },
   toggleLeft: { component: ToggleLeft, label: 'Toggle Left' },
   toggleRight: { component: ToggleRight, label: 'Toggle Right' },
-  tool: { component: Tool, label: 'Tool' },
   trash: { component: Trash, label: 'Trash' },
   trash2: { component: Trash2, label: 'Trash 2' },
   trendingDown: { component: TrendingDown, label: 'Trending Down' },
