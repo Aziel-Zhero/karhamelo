@@ -7,12 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
-import { Eye } from 'lucide-react';
+import { Eye, Briefcase, Link as LinkIcon } from 'lucide-react';
 
 interface HeaderProps {
-  onViewPage: () => void;
+  onViewPage: (page: 'links' | 'portfolio') => void;
 }
 
 export default function Header({ onViewPage }: HeaderProps) {
@@ -24,10 +27,25 @@ export default function Header({ onViewPage }: HeaderProps) {
           <span className="font-bold text-xl tracking-tight">Link Customizer</span>
         </div>
         <div className="flex items-center gap-2">
-           <Button variant="outline" onClick={onViewPage}>
-            <Eye className="mr-2 h-4 w-4" />
-            Ver Página
-          </Button>
+           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Eye className="mr-2 h-4 w-4" />
+                Ver Página
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => onViewPage('links')}>
+                <LinkIcon className="mr-2 h-4 w-4" />
+                Página de Links
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onViewPage('portfolio')}>
+                <Briefcase className="mr-2 h-4 w-4" />
+                Página de Portfólio
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

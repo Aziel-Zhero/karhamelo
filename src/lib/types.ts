@@ -19,3 +19,11 @@ export interface PageTheme {
   accentColor: string;
   backgroundPattern?: string;
 }
+
+export interface Portfolio {
+  title: string;
+  description: string;
+  imageUrl: string;
+  ctaButtonText: string;
+  ctaButtonUrl: string;
+}
