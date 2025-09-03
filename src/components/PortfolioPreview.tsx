@@ -4,13 +4,8 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { ArrowRight, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
 
-// Mini-ícones para a pré-visualização
-const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
-const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
-const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
-
-const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
 
 interface PortfolioPreviewProps {
   portfolio: Portfolio;
@@ -28,7 +23,7 @@ export default function PortfolioPreview({
     '--preview-accent': theme.accentColor,
   } as React.CSSProperties;
 
-  const primaryColorForGradient = `hsl(var(--preview-primary-hsl))`;
+  const CtaIcon = ctaIconsMap[portfolio.ctaButtonIcon || 'arrowRight'].component;
 
 
   return (
@@ -60,7 +55,10 @@ export default function PortfolioPreview({
               <p className="mt-1 text-slate-600">{portfolio.description}</p>
               <div className="mt-2 flex gap-1">
                 <Button asChild className="h-auto px-2 py-1 rounded-md text-white font-semibold" style={{ backgroundColor: 'var(--preview-primary)'}}>
-                    <a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a>
+                    <a href={portfolio.ctaButtonUrl} className="flex items-center">
+                      {portfolio.ctaButtonText}
+                      <CtaIcon className="ml-1 h-2 w-2" />
+                    </a>
                 </Button>
               </div>
               <div className="mt-2 flex items-center gap-2 text-[6px] text-slate-500">
@@ -78,13 +76,18 @@ export default function PortfolioPreview({
                   <h2 className="text-lg sm:text-xl font-extrabold">Tudo que você precisa</h2>
               </div>
               <div className="mt-4 grid grid-cols-3 gap-1.5">
-                {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
-                  <Card key={index} className="bg-white/80 p-2 text-center">
-                      <div className="h-6 w-6 mx-auto rounded-md bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.1)`}}>{featureIcons[index % featureIcons.length]}</div>
-                      <h3 className="mt-1 font-bold text-[7px]">{feature.title}</h3>
-                      <p className="mt-1 text-slate-600 text-[6px] leading-tight">{feature.description}</p>
-                  </Card>
-                ))}
+                {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => {
+                  const Icon = featureIconsMap[feature.icon || 'seller']?.component || featureIconsMap['seller'].component;
+                  return (
+                    <Card key={index} className="bg-white/80 p-2 text-center">
+                        <div className="h-6 w-6 mx-auto rounded-md bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.1)`}}>
+                           <Icon className="h-4 w-4 text-primary" style={{color: 'var(--preview-primary)'}}/>
+                        </div>
+                        <h3 className="mt-1 font-bold text-[7px]">{feature.title}</h3>
+                        <p className="mt-1 text-slate-600 text-[6px] leading-tight">{feature.description}</p>
+                    </Card>
+                  )
+                })}
               </div>
           </section>
         }

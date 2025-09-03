@@ -21,6 +21,7 @@ export interface PageTheme {
 }
 
 export interface PortfolioFeature {
+  icon?: string;
   title: string;
   description: string;
 }

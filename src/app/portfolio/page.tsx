@@ -17,57 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-
-
-// Icons for feature cards (as inline SVGs for simplicity)
-const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
-const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
-const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
-
-const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
-
-const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-    <path d="M14.05 14.05a2 2 0 0 1 0 2.83l-1.42 1.42a2 2 0 0 1-2.83 0L8.4 17.9a2 2 0 0 1 0-2.83l1.42-1.42a2 2 0 0 1 2.83 0z" />
-  </svg>
-);
-
-const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22 2 11 13" />
-    <path d="m22 2-7 20-4-9-9-4 20-7z" />
-  </svg>
-);
-
-const ctaIcons: {[key: string]: React.ElementType} = {
-  whatsapp: WhatsappIcon,
-  telegram: TelegramIcon,
-  arrowRight: ArrowRight,
-  none: () => null,
-};
+import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
 
 
 export default function PublicPortfolioPage() {
@@ -119,7 +69,7 @@ export default function PublicPortfolioPage() {
   }
 
   const { portfolio, theme } = data;
-  const CtaIcon = ctaIcons[portfolio.ctaButtonIcon || 'arrowRight'];
+  const CtaIcon = ctaIconsMap[portfolio.ctaButtonIcon || 'arrowRight'].component;
 
 
   const customStyle = {
@@ -210,15 +160,17 @@ export default function PublicPortfolioPage() {
                         <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
                     </div>
                     <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
+                    {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => {
+                        const Icon = featureIconsMap[feature.icon || 'seller']?.component || featureIconsMap['seller'].component;
+                        return (
                         <Card key={index} className="bg-background/80">
                             <CardContent className="p-6">
-                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.1)`, color: `hsl(var(--custom-primary-hsl))`}}>{featureIcons[index % featureIcons.length]}</div>
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.1)`, color: `hsl(var(--custom-primary-hsl))`}}><Icon /></div>
                                 <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
                                 <p className="mt-2 text-muted-foreground">{feature.description}</p>
                             </CardContent>
                         </Card>
-                    ))}
+                    )})}
                     </div>
                 </div>
             </section>

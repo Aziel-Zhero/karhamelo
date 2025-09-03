@@ -11,11 +11,22 @@ import { Label } from '@/components/ui/label';
 import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { featureIconsMap } from '@/lib/icon-map';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
   onPortfolioChange: (newPortfolio: Portfolio) => void;
 }
+
+const ctaIcons = [
+  { value: 'arrowRight', label: 'Seta' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'telegram', label: 'Telegram' },
+  { value: 'none', label: 'Nenhum' },
+];
+
+const featureIcons = Object.entries(featureIconsMap).map(([value, {label}]) => ({value, label}));
+
 
 export default function PortfolioEditor({ portfolio, onPortfolioChange }: PortfolioEditorProps) {
 
@@ -116,10 +127,9 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
                       <SelectValue placeholder="Selecione um ícone" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="arrowRight">Seta</SelectItem>
-                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                      <SelectItem value="telegram">Telegram</SelectItem>
-                      <SelectItem value="none">Nenhum</SelectItem>
+                      {ctaIcons.map(icon => (
+                        <SelectItem key={icon.value} value={icon.value}>{icon.label}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -137,6 +147,19 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
               {portfolio.isFeaturesEnabled && Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
                   <div key={index} className="space-y-3 p-3 border rounded-md relative">
                       <Label>Card de Benefício #{index+1}</Label>
+                       <div className="space-y-2">
+                        <Label className="text-xs">Ícone</Label>
+                        <Select onValueChange={(value) => handleFeatureChange(index, 'icon', value)} value={feature.icon || 'seller'}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione um ícone" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {featureIcons.map(icon => (
+                              <SelectItem key={icon.value} value={icon.value}>{icon.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <Input placeholder="Título do Card" value={feature.title} onChange={(e) => handleFeatureChange(index, 'title', e.target.value)} />
                       <Textarea placeholder="Descrição do Card" value={feature.description} onChange={(e) => handleFeatureChange(index, 'description', e.target.value)} />
                   </div>
