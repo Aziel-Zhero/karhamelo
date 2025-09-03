@@ -48,11 +48,27 @@ export default function Home() {
   });
 
   const [portfolio, setPortfolio] = useState<Portfolio>({
-    title: 'Welcome to My Portfolio',
-    description: 'Discover my work and projects. I specialize in creating amazing web experiences.',
+    title: 'Venda tudo em um só lugar',
+    description: 'Lance seu marketplace com checkout rápido, gestão de sellers, vitrine moderna e integração simples.',
     imageUrl: 'https://picsum.photos/1200/800',
-    ctaButtonText: 'Get in Touch',
+    ctaButtonText: 'Criar minha conta',
     ctaButtonUrl: '#contact',
+    features: [
+      { title: 'Mostre seu Trabalho', description: 'Convide, aprove e gerencie lojistas com comissões, estoque e contratos.' },
+      { title: 'Checkout Ultra-rápido', description: 'Pix, cartão e boleto com antifraude e split de pagamento automático.' },
+      { title: 'Catálogo Inteligente', description: 'Variações, kits, SEO automático e vitrines personalizáveis por seller.' },
+    ],
+    howItWorksTitle: 'Comece em 3 passos',
+    howItWorksDescription: 'Um fluxo simples para tirar sua ideia do papel rapidamente.',
+    steps: [
+      { title: 'Crie sua Conta', description: 'Personalize sua marca e detalhes.' },
+      { title: 'Adicione seu Conteúdo', description: 'Faça upload de projetos, links e informações.' },
+      { title: 'Publique e Divulgue', description: 'Compartilhe sua nova página com o mundo.' },
+    ],
+    howItWorksImageUrl: 'https://picsum.photos/seed/workflow/1200/1000',
+    ctaBannerTitle: 'Pronto para criar seu espaço?',
+    ctaBannerDescription: 'Crie sua conta em menos de 2 minutos e comece a divulgar.',
+    ctaBannerButtonText: 'Começar agora',
   });
 
 

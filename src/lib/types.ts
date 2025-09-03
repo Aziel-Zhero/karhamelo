@@ -20,10 +20,28 @@ export interface PageTheme {
   backgroundPattern?: string;
 }
 
+export interface PortfolioFeature {
+  title: string;
+  description: string;
+}
+
+export interface PortfolioStep {
+  title: string;
+  description: string;
+}
+
 export interface Portfolio {
   title: string;
   description: string;
   imageUrl: string;
   ctaButtonText: string;
   ctaButtonUrl: string;
+  features: PortfolioFeature[];
+  howItWorksTitle: string;
+  howItWorksDescription: string;
+  steps: PortfolioStep[];
+  howItWorksImageUrl: string;
+  ctaBannerTitle: string;
+  ctaBannerDescription: string;
+  ctaBannerButtonText: string;
 }

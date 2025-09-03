@@ -16,6 +16,7 @@ const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" heig
 const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
 const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
 
+const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
 
 export default function PublicPortfolioPage() {
   const [data, setData] = useState<{ portfolio: Portfolio; theme: PageTheme } | null>(null);
@@ -91,7 +92,6 @@ export default function PublicPortfolioPage() {
                     <a href="#cta" className="hover:text-primary">Começar</a>
                 </nav>
                 <div className="hidden md:flex items-center gap-3">
-                    <Button variant="outline" asChild><a href={portfolio.ctaButtonUrl}>Entrar</a></Button>
                      <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
                 </div>
                  <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="ghost" size="icon" className="md:hidden">
@@ -152,27 +152,15 @@ export default function PublicPortfolioPage() {
                     <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
                 </div>
                 <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Card className="bg-background/80">
+                   {portfolio.features.map((feature, index) => (
+                     <Card key={index} className="bg-background/80">
                         <CardContent className="p-6">
-                             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><SellerIcon/></div>
-                            <h3 className="mt-4 font-bold text-lg">Mostre seu Trabalho</h3>
-                            <p className="mt-2 text-muted-foreground">Convide, aprove e gerencie lojistas com comissões, estoque e contratos.</p>
+                             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
+                            <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
+                            <p className="mt-2 text-muted-foreground">{feature.description}</p>
                         </CardContent>
                     </Card>
-                    <Card className="bg-background/80">
-                        <CardContent className="p-6">
-                            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><CheckoutIcon/></div>
-                            <h3 className="mt-4 font-bold text-lg">Checkout Ultra-rápido</h3>
-                            <p className="mt-2 text-muted-foreground">Pix, cartão e boleto com antifraude e split de pagamento automático.</p>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-background/80">
-                        <CardContent className="p-6">
-                            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center"><CatalogIcon/></div>
-                            <h3 className="mt-4 font-bold text-lg">Catálogo Inteligente</h3>
-                            <p className="mt-2 text-muted-foreground">Variações, kits, SEO automático e vitrines personalizáveis por seller.</p>
-                        </CardContent>
-                    </Card>
+                   ))}
                 </div>
             </div>
         </section>
@@ -182,25 +170,19 @@ export default function PublicPortfolioPage() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid lg:grid-cols-2 gap-10 items-center">
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-extrabold">Comece em 3 passos</h2>
-                        <p className="mt-3 text-muted-foreground">Um fluxo simples para tirar sua ideia do papel rapidamente.</p>
+                        <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.howItWorksTitle}</h2>
+                        <p className="mt-3 text-muted-foreground">{portfolio.howItWorksDescription}</p>
                         <ol className="mt-6 space-y-4">
-                            <li className="flex gap-4">
-                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>1</div>
-                                <div><h3 className="font-bold">Crie sua Conta</h3><p className="text-muted-foreground">Personalize sua marca e detalhes.</p></div>
-                            </li>
-                            <li className="flex gap-4">
-                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>2</div>
-                                <div><h3 className="font-bold">Adicione seu Conteúdo</h3><p className="text-muted-foreground">Faça upload de projetos, links e informações.</p></div>
-                            </li>
-                            <li className="flex gap-4">
-                                <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>3</div>
-                                <div><h3 className="font-bold">Publique e Divulgue</h3><p className="text-muted-foreground">Compartilhe sua nova página com o mundo.</p></div>
-                            </li>
+                            {portfolio.steps.map((step, index) => (
+                                <li key={index} className="flex gap-4">
+                                    <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>{index + 1}</div>
+                                    <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
+                                </li>
+                            ))}
                         </ol>
                     </div>
                     <div className="relative">
-                        <Image src="https://picsum.photos/seed/workflow/1200/1000" width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />
+                        <Image src={portfolio.howItWorksImageUrl} width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />
                     </div>
                 </div>
             </div>
@@ -211,10 +193,10 @@ export default function PublicPortfolioPage() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}>
                     <div>
-                        <h3 className="text-2xl md:text-3xl font-extrabold">Pronto para criar seu espaço?</h3>
-                        <p className="mt-2 text-white/90">Crie sua conta em menos de 2 minutos e comece a divulgar.</p>
+                        <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
+                        <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
                     </div>
-                     <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 font-semibold flex-shrink-0"><a href="#">Começar agora <ArrowRight className="ml-2"/></a></Button>
+                     <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 font-semibold flex-shrink-0"><a href="#">{portfolio.ctaBannerButtonText} <ArrowRight className="ml-2"/></a></Button>
                 </div>
             </div>
         </section>
