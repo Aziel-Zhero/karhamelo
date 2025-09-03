@@ -38,6 +38,9 @@ export interface PortfolioProject {
 }
 
 export interface Portfolio {
+  logoType: 'text' | 'image';
+  logoText?: string;
+  logoImageUrl?: string;
   title: string;
   description: string;
   imageUrl: string;

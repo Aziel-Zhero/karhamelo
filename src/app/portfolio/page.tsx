@@ -87,8 +87,14 @@ export default function PublicPortfolioPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
                 <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>K</span>
-                    <span>Karhamelo</span>
+                    {portfolio.logoType === 'image' && portfolio.logoImageUrl ? (
+                      <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={40} height={40} className="h-8 w-auto" />
+                    ) : (
+                      <>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>{(portfolio.logoText || 'K').charAt(0)}</span>
+                        <span>{portfolio.logoText || 'Karhamelo'}</span>
+                      </>
+                    )}
                 </a>
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
                     {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a>}
@@ -262,8 +268,14 @@ export default function PublicPortfolioPage() {
             <div className="grid md:grid-cols-4 gap-8">
                 <div>
                      <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>K</span>
-                        <span>Karhamelo</span>
+                        {portfolio.logoType === 'image' && portfolio.logoImageUrl ? (
+                          <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={40} height={40} className="h-8 w-auto" />
+                        ) : (
+                          <>
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>{(portfolio.logoText || 'K').charAt(0)}</span>
+                            <span>{portfolio.logoText || 'Karhamelo'}</span>
+                          </>
+                        )}
                     </a>
                     <p className="mt-3 text-sm text-muted-foreground">A forma mais doce de criar seu espaço na web. Simples, seguro e escalável.</p>
                 </div>

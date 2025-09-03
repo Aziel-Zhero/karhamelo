@@ -47,6 +47,8 @@ export default function Home() {
   });
 
   const [portfolio, setPortfolio] = useState<Portfolio>({
+    logoType: 'text',
+    logoText: 'Karhamelo',
     title: 'Venda tudo em um só lugar',
     description: 'Lance seu marketplace com checkout rápido, gestão de sellers, vitrine moderna e integração simples.',
     imageUrl: 'https://picsum.photos/1200/800',
@@ -76,6 +78,7 @@ export default function Home() {
       { id: 'proj3', title: 'Plataforma de Cursos Online', imageUrl: 'https://picsum.photos/seed/proj3/800/600' },
       { id: 'proj4', title: 'Brechó de Luxo Colaborativo', imageUrl: 'https://picsum.photos/seed/proj4/800/600' },
     ],
+    isCtaBannerEnabled: true,
     ctaBannerTitle: 'Pronto para criar seu espaço?',
     ctaBannerDescription: 'Crie sua conta em menos de 2 minutos e comece a divulgar.',
     ctaBannerButtonText: 'Começar agora',

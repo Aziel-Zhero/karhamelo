@@ -12,6 +12,7 @@ import { Separator } from './ui/separator';
 import { Switch } from './ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 interface PortfolioEditorProps {
   portfolio: Portfolio;
@@ -31,6 +32,10 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
   
   const handleSwitchChange = (name: keyof Portfolio, checked: boolean) => {
     onPortfolioChange({ ...portfolio, [name]: checked });
+  }
+
+  const handleRadioChange = (name: keyof Portfolio, value: string) => {
+    onPortfolioChange({ ...portfolio, [name]: value });
   }
 
   const handleSelectChange = (name: keyof Portfolio | `features.${number}.icon`, value: string) => {
@@ -106,6 +111,33 @@ export default function PortfolioEditor({ portfolio, onPortfolioChange }: Portfo
         </CardHeader>
         <CardContent className="space-y-8">
             
+             {/* Seção Logo */}
+            <div className='space-y-4 p-4 border rounded-lg'>
+               <h3 className="font-semibold text-lg">Logo do Cabeçalho</h3>
+                <RadioGroup value={portfolio.logoType} onValueChange={(value) => handleRadioChange('logoType', value)} className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="text" id="logo-text" />
+                    <Label htmlFor="logo-text">Texto</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="image" id="logo-image" />
+                    <Label htmlFor="logo-image">Imagem</Label>
+                  </div>
+                </RadioGroup>
+                {portfolio.logoType === 'text' ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="logoText">Texto da Logo</Label>
+                    <Input id="logoText" name="logoText" placeholder="Sua Marca" value={portfolio.logoText || ''} onChange={handleInputChange} />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="logoImageUrl">Imagem da Logo</Label>
+                    <p className="text-xs text-muted-foreground">Recomendado: 40x40 pixels.</p>
+                    <Input id="logoImageUrl" name="logoImageUrl" type="file" accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                  </div>
+                )}
+            </div>
+
             {/* Seção Hero */}
             <div className='space-y-4 p-4 border rounded-lg'>
                <h3 className="font-semibold text-lg">Seção Principal (Hero)</h3>

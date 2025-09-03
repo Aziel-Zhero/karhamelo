@@ -94,8 +94,14 @@ export default function PortfolioPreview({
         <header className="sticky top-0 z-10 bg-[var(--preview-bg)]/80 backdrop-blur-sm border-b border-slate-200">
             <div className="flex h-8 items-center justify-between px-2">
                 <div className="flex items-center gap-1 font-extrabold text-[8px]">
-                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-md text-white" style={{backgroundColor: 'var(--preview-primary)'}}>K</span>
-                    <span className="hidden sm:inline">Karhamelo</span>
+                    {portfolio.logoType === 'image' && portfolio.logoImageUrl ? (
+                       <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={20} height={20} className="h-5 w-auto" />
+                    ) : (
+                      <>
+                        <span className="inline-flex h-4 w-4 items-center justify-center rounded-md text-white" style={{backgroundColor: 'var(--preview-primary)'}}>{(portfolio.logoText || 'K').charAt(0)}</span>
+                        <span className="hidden sm:inline">{portfolio.logoText || 'Karhamelo'}</span>
+                      </>
+                    )}
                 </div>
                 <div className="flex items-center gap-1">
                      <Button asChild size="sm" className="h-5 px-1.5 text-[6px] rounded-md" style={{ backgroundColor: 'var(--preview-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
@@ -214,7 +220,14 @@ export default function PortfolioPreview({
 
         {/* Footer */}
         <footer className="border-t border-slate-200 bg-background py-4 px-2 text-center">
-            <p className="text-[6px] text-slate-500">© {new Date().getFullYear()} Karhamelo — Todos os direitos reservados.</p>
+             <div className="flex justify-center items-center gap-1 font-extrabold text-[8px]">
+                  {portfolio.logoType === 'image' && portfolio.logoImageUrl ? (
+                    <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={16} height={16} className="h-4 w-auto" />
+                  ) : (
+                     <span>{portfolio.logoText || 'Karhamelo'}</span>
+                  )}
+              </div>
+            <p className="text-[6px] text-slate-500 mt-1">© {new Date().getFullYear()} {portfolio.logoText || 'Karhamelo'} — Todos os direitos reservados.</p>
         </footer>
       </div>
     </div>
