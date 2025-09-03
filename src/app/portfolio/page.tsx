@@ -21,7 +21,7 @@ import {
 
 // Icons for feature cards (as inline SVGs for simplicity)
 const SellerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
-const CheckoutIcon = () => <svg xmlns="http://www_w3_org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
+const CheckoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
 const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path><path d="M15 2v20"></path><path d="M15 7h-5"></path></svg>;
 
 const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
@@ -95,8 +95,8 @@ export default function PublicPortfolioPage() {
                     <span>Karhamelo</span>
                 </a>
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                    <a href="#beneficios" className="hover:text-primary">Benefícios</a>
-                    <a href="#como-funciona" className="hover:text-primary">Como funciona</a>
+                    {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-primary">Benefícios</a>}
+                    {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-primary">Como funciona</a>}
                     <a href="#cta" className="hover:text-primary">Começar</a>
                 </nav>
                 <div className="hidden md:flex items-center gap-3">
@@ -110,8 +110,8 @@ export default function PublicPortfolioPage() {
              {isMenuOpen && (
                 <div className="md:hidden pb-4">
                     <nav className="flex flex-col gap-2 text-sm font-medium">
-                       <a href="#beneficios" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Benefícios</a>
-                        <a href="#como-funciona" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Como funciona</a>
+                       {portfolio.isFeaturesEnabled && <a href="#beneficios" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Benefícios</a>}
+                        {portfolio.isHowItWorksEnabled && <a href="#como-funciona" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Como funciona</a>}
                         <a href="#cta" onClick={()=>setIsMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted">Começar</a>
                     </nav>
                 </div>
@@ -153,51 +153,55 @@ export default function PublicPortfolioPage() {
         </section>
         
         {/* Benefícios / Cards */}
-        <section id="beneficios" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-extrabold">Tudo que você precisa</h2>
-                    <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
+        {portfolio.isFeaturesEnabled && (
+            <section id="beneficios" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center max-w-3xl mx-auto">
+                        <h2 className="text-3xl md:text-4xl font-extrabold">Tudo que você precisa</h2>
+                        <p className="mt-3 text-muted-foreground">Ferramentas poderosas e simples de usar para mostrar seu trabalho.</p>
+                    </div>
+                    <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
+                        <Card key={index} className="bg-background/80">
+                            <CardContent className="p-6">
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
+                                <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
+                                <p className="mt-2 text-muted-foreground">{feature.description}</p>
+                            </CardContent>
+                        </Card>
+                    ))}
+                    </div>
                 </div>
-                <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
-                     <Card key={index} className="bg-background/80">
-                        <CardContent className="p-6">
-                             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
-                            <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
-                            <p className="mt-2 text-muted-foreground">{feature.description}</p>
-                        </CardContent>
-                    </Card>
-                   ))}
-                </div>
-            </div>
-        </section>
+            </section>
+        )}
 
         {/* Como Funciona */}
-        <section id="como-funciona" className="py-16 lg:py-24 bg-background">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid lg:grid-cols-2 gap-10 items-center">
-                    <div>
-                        <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.howItWorksTitle}</h2>
-                        <p className="mt-3 text-muted-foreground">{portfolio.howItWorksDescription}</p>
-                        <ol className="mt-6 space-y-4">
-                            {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
-                                <li key={index} className="flex gap-4">
-                                    <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>{index + 1}</div>
-                                    <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
-                                </li>
-                            ))}
-                        </ol>
-                    </div>
-                    <div className="relative">
-                        {portfolio.howItWorksImageUrl && <Image src={portfolio.howItWorksImageUrl} width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />}
+        {portfolio.isHowItWorksEnabled && (
+            <section id="como-funciona" className="py-16 lg:py-24 bg-background">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.howItWorksTitle}</h2>
+                            <p className="mt-3 text-muted-foreground">{portfolio.howItWorksDescription}</p>
+                            <ol className="mt-6 space-y-4">
+                                {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
+                                    <li key={index} className="flex gap-4">
+                                        <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>{index + 1}</div>
+                                        <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        <div className="relative">
+                            {portfolio.howItWorksImageUrl && <Image src={portfolio.howItWorksImageUrl} width={1200} height={1000} alt="Fluxo de trabalho" className="rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="team workflow" />}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        )}
 
         {/* Gallery Carousel */}
-        {portfolio.projects && portfolio.projects.length > 0 && (
+        {portfolio.isGalleryEnabled && portfolio.projects && portfolio.projects.length > 0 && (
           <section id="gallery" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="text-center max-w-3xl mx-auto">

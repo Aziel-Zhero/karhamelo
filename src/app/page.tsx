@@ -53,11 +53,13 @@ export default function Home() {
     imageUrl: 'https://picsum.photos/1200/800',
     ctaButtonText: 'Criar minha conta',
     ctaButtonUrl: '#contact',
+    isFeaturesEnabled: true,
     features: [
       { title: 'Mostre seu Trabalho', description: 'Convide, aprove e gerencie lojistas com comissões, estoque e contratos.' },
       { title: 'Checkout Ultra-rápido', description: 'Pix, cartão e boleto com antifraude e split de pagamento automático.' },
       { title: 'Catálogo Inteligente', description: 'Variações, kits, SEO automático e vitrines personalizáveis por seller.' },
     ],
+    isHowItWorksEnabled: true,
     howItWorksTitle: 'Comece em 3 passos',
     howItWorksDescription: 'Um fluxo simples para tirar sua ideia do papel rapidamente.',
     steps: [
@@ -66,6 +68,7 @@ export default function Home() {
       { title: 'Publique e Divulgue', description: 'Compartilhe sua nova página com o mundo.' },
     ],
     howItWorksImageUrl: 'https://picsum.photos/seed/workflow/1200/1000',
+    isGalleryEnabled: true,
     galleryTitle: 'Conheça nossos projetos',
     galleryDescription: 'Veja alguns dos marketplaces incríveis que nossos clientes criaram com a Karhamelo.',
     projects: [

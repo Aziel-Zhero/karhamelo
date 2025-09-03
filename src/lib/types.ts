@@ -42,14 +42,21 @@ export interface Portfolio {
   imageUrl: string;
   ctaButtonText: string;
   ctaButtonUrl: string;
+  
+  isFeaturesEnabled: boolean;
   features: PortfolioFeature[];
+  
+  isHowItWorksEnabled: boolean;
   howItWorksTitle: string;
   howItWorksDescription: string;
   steps: PortfolioStep[];
   howItWorksImageUrl: string;
+  
+  isGalleryEnabled: boolean;
   galleryTitle?: string;
   galleryDescription?: string;
   projects?: PortfolioProject[];
+  
   ctaBannerTitle: string;
   ctaBannerDescription: string;
   ctaBannerButtonText: string;
