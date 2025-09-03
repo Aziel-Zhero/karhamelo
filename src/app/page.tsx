@@ -11,7 +11,6 @@ import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import ProfileEditor from '@/components/ProfileEditor';
 import Footer from '@/components/Footer';
-import { KLogo } from '@/components/KLogo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PortfolioEditor from '@/components/PortfolioEditor';
 import PortfolioPreview from '@/components/PortfolioPreview';
@@ -150,8 +149,14 @@ export default function Home() {
           </TabsContent>
           <TabsContent value="portfolio">
              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-4">
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-3 space-y-8">
                  <PortfolioEditor portfolio={portfolio} onPortfolioChange={setPortfolio} />
+                 <ThemeCustomizer
+                    currentTheme={theme}
+                    onThemeChange={setTheme}
+                    profile={profile} 
+                    links={links}
+                  />
               </div>
               <div className="lg:col-span-2">
                 <div className="lg:sticky lg:top-24">

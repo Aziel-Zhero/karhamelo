@@ -12,6 +12,11 @@ const CatalogIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" hei
 
 const featureIcons = [<SellerIcon key="1"/>, <CheckoutIcon key="2"/>, <CatalogIcon key="3"/>];
 
+interface PortfolioPreviewProps {
+  portfolio: Portfolio;
+  theme: PageTheme;
+}
+
 export default function PortfolioPreview({
   portfolio,
   theme,
@@ -38,25 +43,24 @@ export default function PortfolioPreview({
         <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-slate-200">
             <div className="flex h-8 items-center justify-between px-2">
                 <div className="flex items-center gap-1 font-extrabold text-[8px]">
-                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-md text-white" style={{backgroundColor: primaryColorForGradient}}>K</span>
+                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-md text-white" style={{backgroundColor: 'var(--preview-primary)'}}>K</span>
                     <span className="hidden sm:inline">Karhamelo</span>
                 </div>
                 <div className="flex items-center gap-1">
-                     <Button size="sm" className="h-5 px-1.5 text-[6px] rounded-md" style={{ backgroundColor: 'var(--preview-primary)', color: 'white' }}>{portfolio.ctaButtonText}</Button>
+                     <Button asChild size="sm" className="h-5 px-1.5 text-[6px] rounded-md" style={{ backgroundColor: 'var(--preview-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
                 </div>
             </div>
         </header>
 
         {/* Hero */}
         <section className="relative overflow-hidden py-6 px-2">
-           <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}/>
+           <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, var(--preview-accent), var(--preview-primary))`}}/>
            <div className="relative">
               <h1 className="text-xl sm:text-2xl font-extrabold leading-tight">{portfolio.title}</h1>
               <p className="mt-1 text-slate-600">{portfolio.description}</p>
               <div className="mt-2 flex gap-1">
-                <input readOnly placeholder="Seu melhor e-mail" className="w-full text-[7px] px-2 py-1 rounded-md border border-slate-300" />
-                <Button className="h-auto px-2 py-1 rounded-md text-white font-semibold" style={{ backgroundColor: 'var(--preview-primary)'}}>
-                    {portfolio.ctaButtonText}
+                <Button asChild className="h-auto px-2 py-1 rounded-md text-white font-semibold" style={{ backgroundColor: 'var(--preview-primary)'}}>
+                    <a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a>
                 </Button>
               </div>
               <div className="mt-2 flex items-center gap-2 text-[6px] text-slate-500">
@@ -68,46 +72,50 @@ export default function PortfolioPreview({
         </section>
 
         {/* Benefícios */}
-        <section className="py-6 px-2" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.05)`}}>
-             <div className="text-center max-w-3xl mx-auto">
-                <h2 className="text-lg sm:text-xl font-extrabold">Tudo que você precisa</h2>
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-1.5">
-               {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
-                 <Card key={index} className="bg-white/80 p-2 text-center">
-                     <div className="h-6 w-6 mx-auto rounded-md bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
-                    <h3 className="mt-1 font-bold text-[7px]">{feature.title}</h3>
-                    <p className="mt-1 text-slate-600 text-[6px] leading-tight">{feature.description}</p>
-                </Card>
-               ))}
-            </div>
-        </section>
+        {portfolio.isFeaturesEnabled && 
+          <section className="py-6 px-2" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.05)`}}>
+              <div className="text-center max-w-3xl mx-auto">
+                  <h2 className="text-lg sm:text-xl font-extrabold">Tudo que você precisa</h2>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-1.5">
+                {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
+                  <Card key={index} className="bg-white/80 p-2 text-center">
+                      <div className="h-6 w-6 mx-auto rounded-md bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.1)`}}>{featureIcons[index % featureIcons.length]}</div>
+                      <h3 className="mt-1 font-bold text-[7px]">{feature.title}</h3>
+                      <p className="mt-1 text-slate-600 text-[6px] leading-tight">{feature.description}</p>
+                  </Card>
+                ))}
+              </div>
+          </section>
+        }
 
          {/* Como Funciona */}
-        <section className="py-6 px-2 bg-white">
-            <div className="grid grid-cols-2 gap-2 items-center">
-                <div>
-                    <h2 className="text-lg font-extrabold">{portfolio.howItWorksTitle}</h2>
-                    <ol className="mt-2 space-y-1.5">
-                        {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
-                            <li key={index} className="flex gap-1.5">
-                                <div className="h-4 w-4 rounded-sm text-[6px] text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--preview-primary)'}}>{index + 1}</div>
-                                <div>
-                                  <h3 className="font-bold text-[7px]">{step.title}</h3>
-                                  <p className="text-slate-600 text-[6px] leading-tight">{step.description}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ol>
-                </div>
-                <div className="relative">
-                    {portfolio.howItWorksImageUrl && <Image src={portfolio.howItWorksImageUrl} width={400} height={300} alt="Fluxo de trabalho" className="rounded-lg shadow-md" data-ai-hint="team workflow" />}
-                </div>
-            </div>
-        </section>
+        {portfolio.isHowItWorksEnabled &&
+          <section className="py-6 px-2 bg-white">
+              <div className="grid grid-cols-2 gap-2 items-center">
+                  <div>
+                      <h2 className="text-lg font-extrabold">{portfolio.howItWorksTitle}</h2>
+                      <ol className="mt-2 space-y-1.5">
+                          {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
+                              <li key={index} className="flex gap-1.5">
+                                  <div className="h-4 w-4 rounded-sm text-[6px] text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--preview-primary)'}}>{index + 1}</div>
+                                  <div>
+                                    <h3 className="font-bold text-[7px]">{step.title}</h3>
+                                    <p className="text-slate-600 text-[6px] leading-tight">{step.description}</p>
+                                  </div>
+                              </li>
+                          ))}
+                      </ol>
+                  </div>
+                  <div className="relative">
+                      {portfolio.howItWorksImageUrl && <Image src={portfolio.howItWorksImageUrl} width={400} height={300} alt="Fluxo de trabalho" className="rounded-lg shadow-md" data-ai-hint="team workflow" />}
+                  </div>
+              </div>
+          </section>
+        }
 
         {/* Gallery */}
-         {portfolio.projects && portfolio.projects.length > 0 && (
+         {portfolio.isGalleryEnabled && portfolio.projects && portfolio.projects.length > 0 && (
           <section className="py-6 px-2" style={{backgroundColor: `hsl(var(--preview-primary-hsl) / 0.05)`}}>
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="text-lg font-extrabold">{portfolio.galleryTitle}</h2>
@@ -126,7 +134,7 @@ export default function PortfolioPreview({
 
          {/* CTA Banner */}
          <section className="p-2">
-            <div className="rounded-lg p-3 text-white flex flex-col items-center text-center gap-2" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}>
+            <div className="rounded-lg p-3 text-white flex flex-col items-center text-center gap-2" style={{background: `linear-gradient(135deg, var(--preview-accent), var(--preview-primary))`}}>
                 <h3 className="text-md font-extrabold">{portfolio.ctaBannerTitle}</h3>
                 <Button size="sm" className="h-5 px-1.5 text-[6px] rounded-md bg-white text-black hover:bg-white/90 font-semibold">
                   {portfolio.ctaBannerButtonText} <ArrowRight className="ml-1 h-2 w-2"/>
@@ -142,5 +150,3 @@ export default function PortfolioPreview({
     </div>
   );
 }
-
-    

@@ -80,24 +80,25 @@ export default function PublicPortfolioPage() {
     '--custom-primary-hsl': theme.primaryColor.startsWith('hsl') ? theme.primaryColor.replace('hsl(','').replace(')','') : '199 76% 52%',
     '--custom-primary': theme.primaryColor,
     '--custom-bg': theme.backgroundColor,
+    '--custom-accent': theme.accentColor,
   } as React.CSSProperties;
 
   const primaryColorForGradient = `hsl(var(--custom-primary-hsl))`;
 
   return (
-    <div style={customStyle} className="bg-background text-foreground antialiased">
+    <div style={customStyle} className="bg-[var(--custom-bg)] text-foreground antialiased">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
                 <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: primaryColorForGradient}}>K</span>
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>K</span>
                     <span>Karhamelo</span>
                 </a>
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                    {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-primary">Benefícios</a>}
-                    {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-primary">Como funciona</a>}
-                    <a href="#cta" className="hover:text-primary">Começar</a>
+                    {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a>}
+                    {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a>}
+                    <a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a>
                 </nav>
                 <div className="hidden md:flex items-center gap-3">
                      <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
@@ -122,7 +123,7 @@ export default function PublicPortfolioPage() {
       <main>
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background/50">
-            <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}/>
+            <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}/>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
@@ -132,12 +133,11 @@ export default function PublicPortfolioPage() {
                         <p className="mt-4 text-muted-foreground text-lg">
                            {portfolio.description}
                         </p>
-                        <form onSubmit={handleContactSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">
-                            <Input required type="email" name="email" placeholder="Seu melhor e-mail" className="w-full sm:w-80 px-4 py-3 rounded-xl border-border focus:outline-none focus:ring-2 focus:ring-ring" />
-                            <Button type="submit" className="px-6 py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: 'var(--custom-primary)'}}>
-                                {portfolio.ctaButtonText}
+                        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                            <Button asChild size="lg" className="px-6 py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: 'var(--custom-primary)'}}>
+                                <a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a>
                             </Button>
-                        </form>
+                        </div>
                         <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
                             <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> Checkout Rápido</div>
                             <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> 100% Customizável</div>
@@ -145,7 +145,7 @@ export default function PublicPortfolioPage() {
                         </div>
                     </div>
                      <div className="relative">
-                        <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30" style={{background: `radial-gradient(600px 200px at 70% 10%, ${theme.accentColor}, transparent), radial-gradient(400px 120px at 10% 80%, ${theme.primaryColor}, transparent)`}}></div>
+                        <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30" style={{background: `radial-gradient(600px 200px at 70% 10%, var(--custom-accent), transparent), radial-gradient(400px 120px at 10% 80%, var(--custom-primary), transparent)`}}></div>
                          {portfolio.imageUrl && <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />}
                     </div>
                 </div>
@@ -164,7 +164,7 @@ export default function PublicPortfolioPage() {
                     {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => (
                         <Card key={index} className="bg-background/80">
                             <CardContent className="p-6">
-                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">{featureIcons[index % featureIcons.length]}</div>
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.1)`, color: `hsl(var(--custom-primary-hsl))`}}>{featureIcons[index % featureIcons.length]}</div>
                                 <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
                                 <p className="mt-2 text-muted-foreground">{feature.description}</p>
                             </CardContent>
@@ -243,7 +243,7 @@ export default function PublicPortfolioPage() {
         {/* CTA banner */}
         <section id="cta" className="py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.primaryColor})`}}>
+                <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}>
                     <div>
                         <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
                         <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
@@ -260,7 +260,7 @@ export default function PublicPortfolioPage() {
             <div className="grid md:grid-cols-4 gap-8">
                 <div>
                      <a href="#" className="flex items-center gap-2 font-extrabold text-xl">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: primaryColorForGradient}}>K</span>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>K</span>
                         <span>Karhamelo</span>
                     </a>
                     <p className="mt-3 text-sm text-muted-foreground">A forma mais doce de criar seu espaço na web. Simples, seguro e escalável.</p>
@@ -268,30 +268,30 @@ export default function PublicPortfolioPage() {
                 <div>
                     <div className="font-semibold">Produto</div>
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="#beneficios" className="hover:text-primary">Funcionalidades</a></li>
-                        <li><a href="#como-funciona" className="hover:text-primary">Como funciona</a></li>
-                        <li><a href="#cta" className="hover:text-primary">Começar</a></li>
+                        <li><a href="#beneficios" className="hover:text-[var(--custom-primary)]">Funcionalidades</a></li>
+                        <li><a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a></li>
+                        <li><a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a></li>
                     </ul>
                 </div>
                  <div>
                     <div className="font-semibold">Recursos</div>
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="#" className="hover:text-primary">Documentação</a></li>
-                        <li><a href="#" className="hover:text-primary">Status</a></li>
+                        <li><a href="#" className="hover:text-[var(--custom-primary)]">Documentação</a></li>
+                        <li><a href="#" className="hover:text-[var(--custom-primary)]">Status</a></li>
                     </ul>
                 </div>
                 <div>
                     <div className="font-semibold">Fale conosco</div>
                      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="mailto:contato@karhamelo.app" className="hover:text-primary">contato@karhamelo.app</a></li>
+                        <li><a href="mailto:contato@karhamelo.app" className="hover:text-[var(--custom-primary)]">contato@karhamelo.app</a></li>
                     </ul>
                 </div>
             </div>
             <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
                 <p>© {new Date().getFullYear()} Karhamelo — Todos os direitos reservados.</p>
                 <div className="flex items-center gap-4">
-                    <a href="#" className="hover:text-primary">Termos</a>
-                    <a href="#" className="hover:text-primary">Privacidade</a>
+                    <a href="#" className="hover:text-[var(--custom-primary)]">Termos</a>
+                    <a href="#" className="hover:text-[var(--custom-primary)]">Privacidade</a>
                 </div>
             </div>
         </div>
