@@ -41,8 +41,22 @@ export default function Chatbot() {
   }
 
   return (
+    <>
+    <style jsx>{`
+        @keyframes gentle-bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        .animate-gentle-bounce {
+          animation: gentle-bounce 2s ease-in-out infinite;
+        }
+      `}</style>
     <div
-      className={`fixed bottom-5 right-5 z-50 transition-opacity duration-500 ease-in-out ${
+      className={`fixed bottom-5 right-1 z-50 transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -50,8 +64,8 @@ export default function Chatbot() {
         {/* Speech Bubble */}
         <div className="absolute bottom-full right-14 mb-1 w-52">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
-             <button 
-                onClick={handleDismiss} 
+             <button
+                onClick={handleDismiss}
                 className="absolute top-1 right-1 p-1 text-primary-foreground/70 hover:text-primary-foreground"
                 aria-label="Fechar"
             >
@@ -65,11 +79,12 @@ export default function Chatbot() {
 
         {/* Logo Mascot */}
         <div className="group">
-            <div className="w-24 h-24 transition-transform duration-300 group-hover:scale-110">
+            <div className="w-28 h-28 animate-gentle-bounce">
                  <KLogo />
             </div>
         </div>
       </div>
     </div>
+    </>
   );
 }
