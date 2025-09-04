@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
 import { ArrowRight, CheckCircle, Star, BarChart2 } from 'lucide-react';
+import Chatbot from '@/components/Chatbot';
 
 export default function LandingPage() {
   return (
@@ -111,6 +112,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      <Chatbot />
     </div>
   );
 }
