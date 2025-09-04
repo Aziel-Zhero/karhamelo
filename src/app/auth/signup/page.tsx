@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+<<<<<<< HEAD
 import Chatbot from '@/components/Chatbot';
 
 const GoogleIcon = () => (
@@ -17,13 +18,27 @@ const GoogleIcon = () => (
     <path fill="none" d="M0 0h48v48H0z"></path>
   </svg>
 );
+=======
+import { Separator } from '@/components/ui/separator';
+import Chatbot from '@/components/Chatbot';
+
+const GoogleIcon = () => (
+    <svg className="mr-3 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+        <path fill="currentColor" d="M488 261.8C488 403.3 381.5 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 21.2 173.4 54.7l-73.4 69.4C322.2 100.9 288.4 88 248 88c-88.3 0-160 71.7-160 160s71.7 160 160 160c97.2 0 132.8-62.4 137.9-92.4H248v-72h239.5c1.4 9.3 2.5 19.1 2.5 29.8z"></path>
+  </svg>
+)
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
 
 export default function SignupPage() {
     const router = useRouter();
 
     const handleGoogleSignup = () => {
+<<<<<<< HEAD
         // Em uma aplicação real, aqui você iniciaria o fluxo de cadastro do Google.
         // Para o protótipo, vamos apenas redirecionar para o dashboard.
+=======
+        // Futuramente, aqui será a lógica de auth com Supabase
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
         router.push('/dashboard');
     };
 
@@ -39,6 +54,7 @@ export default function SignupPage() {
             <CardTitle>Crie sua Conta</CardTitle>
             <CardDescription>Comece em segundos usando sua conta do Google.</CardDescription>
           </CardHeader>
+<<<<<<< HEAD
           <CardContent>
             <Button onClick={handleGoogleSignup} className="w-full" variant="outline">
                 <GoogleIcon />
@@ -47,15 +63,37 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter className="text-center text-sm">
              <p className="w-full">
+=======
+          <CardContent className="space-y-6">
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignup}>
+                <GoogleIcon />
+                Criar conta com o Google
+            </Button>
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                    Ou continue com
+                    </span>
+                </div>
+            </div>
+             <p className="text-center text-sm text-muted-foreground">
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
               Já tem uma conta?{' '}
               <Link href="/auth/login" className="font-semibold text-primary hover:underline">
                 Faça login
               </Link>
             </p>
-          </CardFooter>
+          </CardContent>
         </Card>
       </div>
+<<<<<<< HEAD
       <Chatbot messages={['Vamos começar?', 'É super rápido, eu prometo!']} />
+=======
+      <Chatbot messages={['Au au!']} />
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
     </div>
   );
 }

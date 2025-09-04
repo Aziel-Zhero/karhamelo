@@ -23,16 +23,26 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
       }
     }, 1500);
 
-    // Loop through messages
-    const messageTimer = setInterval(() => {
-      setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }, 4000); // Change message every 4 seconds
+    // Loop through messages only if there's more than one
+    if (messages.length > 1) {
+      const messageTimer = setInterval(() => {
+        setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+      }, 4000); // Change message every 4 seconds
+       return () => {
+        clearTimeout(visibleTimer);
+        clearInterval(messageTimer);
+      };
+    }
+
 
     return () => {
       clearTimeout(visibleTimer);
-      clearInterval(messageTimer);
     };
+<<<<<<< HEAD
   }, [messages, isDismissed]);
+=======
+  }, [isDismissed, messages]);
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -65,7 +75,11 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
     >
       <div className="relative">
         {/* Speech Bubble */}
+<<<<<<< HEAD
         <div className="absolute bottom-full mb-2 w-64 right-5">
+=======
+        <div className="absolute bottom-full right-[55px] mb-1 w-52">
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
@@ -81,8 +95,13 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         </div>
 
         {/* Logo Mascot */}
+<<<<<<< HEAD
         <div className="group w-48 h-48 flex justify-end">
             <div className="animate-gentle-bounce">
+=======
+        <div className="group">
+            <div className="w-32 h-32 animate-gentle-bounce">
+>>>>>>> fe864381fed728603e6109ec0f0569508c66464f
                  <KLogo />
             </div>
         </div>
