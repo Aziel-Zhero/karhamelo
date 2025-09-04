@@ -56,7 +56,7 @@ export default function Chatbot() {
         }
       `}</style>
     <div
-      className={`fixed bottom-5 right-1 z-50 transition-opacity duration-500 ease-in-out ${
+      className={`fixed bottom-5 right-[-25px] z-50 transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
