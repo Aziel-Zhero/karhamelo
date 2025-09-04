@@ -32,7 +32,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
       clearTimeout(visibleTimer);
       clearInterval(messageTimer);
     };
-  }, [isDismissed, messages.length]);
+  }, [messages, isDismissed]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -65,7 +65,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full mb-2 w-64 right-0">
+        <div className="absolute bottom-full mb-2 w-64 right-5">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
