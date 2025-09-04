@@ -1,4 +1,3 @@
-
 'use client';
 
 import { KLogo } from './KLogo';
@@ -82,7 +81,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         </div>
 
         {/* Logo Mascot */}
-        <div className="group flex justify-end w-full">
+        <div className="group flex justify-end">
             <div className="w-48 h-48 animate-gentle-bounce">
                  <KLogo />
             </div>
