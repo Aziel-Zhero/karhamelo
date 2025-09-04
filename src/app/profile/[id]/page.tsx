@@ -95,18 +95,22 @@ export default function PublicProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedData = localStorage.getItem('karhamelo-page-data');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        // We need to re-hydrate the links to convert icon names back to components
-        const hydratedLinks = hydrateLinks(parsedData.links);
-        setData({ ...parsedData, links: hydratedLinks });
-      } catch (error) {
-        console.error("Falha ao analisar dados da página do localStorage", error);
+    // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
+    // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
+    setTimeout(() => {
+      const storedData = localStorage.getItem('karhamelo-page-data');
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          // We need to re-hydrate the links to convert icon names back to components
+          const hydratedLinks = hydrateLinks(parsedData.links);
+          setData({ ...parsedData, links: hydratedLinks });
+        } catch (error) {
+          console.error("Falha ao analisar dados da página do localStorage", error);
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    }, 100);
   }, []);
 
   if (isLoading) {

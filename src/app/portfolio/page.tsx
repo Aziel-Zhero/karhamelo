@@ -27,16 +27,20 @@ export default function PublicPortfolioPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedData = localStorage.getItem('karhamelo-portfolio-data');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setData(parsedData);
-      } catch (error) {
-        console.error("Failed to parse portfolio data from localStorage", error);
+    // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
+    // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
+    setTimeout(() => {
+      const storedData = localStorage.getItem('karhamelo-portfolio-data');
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          setData(parsedData);
+        } catch (error) {
+          console.error("Failed to parse portfolio data from localStorage", error);
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    }, 100); // 100ms de delay é geralmente suficiente
   }, []);
 
   const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -309,3 +313,5 @@ export default function PublicPortfolioPage() {
     </div>
   );
 }
+
+    
