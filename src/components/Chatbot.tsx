@@ -33,7 +33,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
       clearTimeout(visibleTimer);
       clearInterval(messageTimer);
     };
-  }, [isDismissed, messages]);
+  }, [isDismissed, messages.length]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -82,7 +82,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         </div>
 
         {/* Logo Mascot */}
-        <div className="group flex justify-end">
+        <div className="group flex justify-end w-full">
             <div className="w-48 h-48 animate-gentle-bounce">
                  <KLogo />
             </div>
