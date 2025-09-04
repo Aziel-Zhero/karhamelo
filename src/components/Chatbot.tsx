@@ -66,7 +66,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-[115px] mb-3 w-52 transform -translate-x-1/2">
+        <div className="absolute bottom-full right-[95px] mb-3 w-52 transform -translate-x-1/2">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
