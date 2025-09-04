@@ -4,11 +4,12 @@
 import { useState, useEffect } from 'react';
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import LinkEditor from '@/components/LinkEditor';
-import { Link as LinkIcon } from 'lucide-react';
+import { Eye, Link as LinkIcon } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import ProfileEditor from '@/components/ProfileEditor';
+import { Button } from '@/components/ui/button';
 
 export default function LinksPage() {
   const [profile, setProfile] = useState<Profile>({
@@ -88,29 +89,49 @@ export default function LinksPage() {
     setLinks((prev) => prev.filter((link) => link.id !== id));
   };
   
+  const handleViewLinksPage = () => {
+    const pageData = localStorage.getItem('karhamelo-page-data');
+    if (pageData) {
+      window.open('/profile/preview', '_blank');
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-4">
-      <div className="lg:col-span-3 space-y-8">
-        <ProfileEditor profile={profile} onProfileChange={setProfile} />
-        <LinkEditor onAddLink={addLink} />
-        <LinkList
-          links={links}
-          onUpdateLink={updateLink}
-          onDeleteLink={deleteLink}
-        />
-        <ThemeCustomizer
-          currentTheme={theme}
-          onThemeChange={setTheme}
-          profile={profile}
-          links={links}
-        />
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl lg:text-3xl font-bold">Editor de Links</h1>
+          <p className="text-sm text-muted-foreground">Adicione e gerencie os links da sua página principal.</p>
+        </div>
+        <Button variant="outline" onClick={handleViewLinksPage}>
+          <Eye className="mr-2 h-4 w-4" />
+          Ver Página de Links
+        </Button>
       </div>
-      <div className="lg:col-span-2">
-        <div className="lg:sticky lg:top-24">
-          <h2 className="text-2xl font-bold mb-6 text-center lg:text-left">
-            Pré-visualização Ao Vivo
-          </h2>
-          <ProfilePreview profile={profile} links={links} theme={theme} onLinkClick={onLinkClick} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3 space-y-8">
+          <ProfileEditor profile={profile} onProfileChange={setProfile} />
+          <LinkEditor onAddLink={addLink} />
+          <LinkList
+            links={links}
+            onUpdateLink={updateLink}
+            onDeleteLink={deleteLink}
+          />
+          <ThemeCustomizer
+            currentTheme={theme}
+            onThemeChange={setTheme}
+            profile={profile}
+            links={links}
+          />
+        </div>
+        <div className="lg:col-span-2">
+          <div className="lg:sticky lg:top-24">
+            <h2 className="text-xl font-bold mb-4 text-center lg:text-left">
+              Pré-visualização
+            </h2>
+            <ProfilePreview profile={profile} links={links} theme={theme} onLinkClick={onLinkClick} />
+          </div>
         </div>
       </div>
     </div>

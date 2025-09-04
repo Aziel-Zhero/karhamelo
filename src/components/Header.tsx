@@ -11,14 +11,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
-import { Eye, Briefcase, Link as LinkIcon, Home, BookCopy, LayoutDashboard } from 'lucide-react';
+import { Briefcase, Link as LinkIcon, BookCopy, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-interface HeaderProps {
-  onViewPage: (page: 'links' | 'portfolio') => void;
-}
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -26,7 +22,7 @@ const navLinks = [
   { href: '/portfolio/editor', label: 'Portfólio', icon: BookCopy },
 ];
 
-export default function Header({ onViewPage }: HeaderProps) {
+export default function Header() {
   const pathname = usePathname();
 
   return (
@@ -57,25 +53,6 @@ export default function Header({ onViewPage }: HeaderProps) {
           </nav>
         </div>
         <div className="flex items-center gap-2">
-           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Eye className="mr-2 h-4 w-4" />
-                Ver Página
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => onViewPage('links')}>
-                <LinkIcon className="mr-2 h-4 w-4" />
-                Links
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onViewPage('portfolio')}>
-                <Briefcase className="mr-2 h-4 w-4" />
-                Portfólio
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

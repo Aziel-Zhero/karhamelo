@@ -6,6 +6,8 @@ import type { Link, Profile, PageTheme, Portfolio } from '@/lib/types';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import PortfolioEditor from '@/components/PortfolioEditor';
 import PortfolioPreview from '@/components/PortfolioPreview';
+import { Button } from '@/components/ui/button';
+import { Eye } from 'lucide-react';
 
 export default function PortfolioEditorPage() {
   const [theme, setTheme] = useState<PageTheme>({
@@ -80,23 +82,42 @@ export default function PortfolioEditorPage() {
     localStorage.setItem('karhamelo-portfolio-data', JSON.stringify(portfolioData));
   }, [portfolio, theme]);
 
+  const handleViewPortfolioPage = () => {
+    const portfolioData = localStorage.getItem('karhamelo-portfolio-data');
+    if(portfolioData) {
+      window.open('/portfolio/preview', '_blank');
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-4">
-      <div className="lg:col-span-3 space-y-8">
-          <PortfolioEditor portfolio={portfolio} onPortfolioChange={setPortfolio} />
-          <ThemeCustomizer
-            currentTheme={theme}
-            onThemeChange={setTheme}
-            profile={profile} 
-            links={links}
-          />
+     <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl lg:text-3xl font-bold">Editor de Portfólio (LP)</h1>
+          <p className="text-sm text-muted-foreground">Personalize o conteúdo e a aparência da sua Landing Page.</p>
+        </div>
+        <Button variant="outline" onClick={handleViewPortfolioPage}>
+          <Eye className="mr-2 h-4 w-4" />
+          Ver Portfólio
+        </Button>
       </div>
-      <div className="lg:col-span-2">
-        <div className="lg:sticky lg:top-24">
-          <h2 className="text-2xl font-bold mb-6 text-center lg:text-left">
-            Pré-visualização Ao Vivo
-          </h2>
-          <PortfolioPreview portfolio={portfolio} theme={theme} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3 space-y-8">
+            <PortfolioEditor portfolio={portfolio} onPortfolioChange={setPortfolio} />
+            <ThemeCustomizer
+              currentTheme={theme}
+              onThemeChange={setTheme}
+              profile={profile} 
+              links={links}
+            />
+        </div>
+        <div className="lg:col-span-2">
+          <div className="lg:sticky lg:top-24">
+            <h2 className="text-xl font-bold mb-4 text-center lg:text-left">
+              Pré-visualização
+            </h2>
+            <PortfolioPreview portfolio={portfolio} theme={theme} />
+          </div>
         </div>
       </div>
     </div>
