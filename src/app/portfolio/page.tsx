@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
+import { ThemeInjector } from '@/components/ThemeInjector';
 
 
 export default function PublicPortfolioPage() {
@@ -70,18 +71,13 @@ export default function PublicPortfolioPage() {
   const { portfolio, theme } = data;
   const CtaIcon = ctaIconsMap[portfolio.ctaButtonIcon || 'arrowRight'].component;
 
-
-  const customStyle = {
-    '--custom-primary-hsl': theme.primaryColor.startsWith('hsl') ? theme.primaryColor.replace('hsl(','').replace(')','') : '199 76% 52%',
-    '--custom-primary': theme.primaryColor,
-    '--custom-bg': theme.backgroundColor,
-    '--custom-accent': theme.accentColor,
-  } as React.CSSProperties;
-
-  const primaryColorForGradient = `hsl(var(--custom-primary-hsl))`;
-
   return (
-    <div style={customStyle} className="bg-[var(--custom-bg)] text-foreground antialiased">
+    <div className="bg-background text-foreground antialiased">
+      <ThemeInjector 
+        primaryColor={theme.primaryColor}
+        backgroundColor={theme.backgroundColor}
+        accentColor={theme.accentColor}
+      />
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,18 +87,18 @@ export default function PublicPortfolioPage() {
                       <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={40} height={40} className="h-8 w-auto" />
                     ) : (
                       <>
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>{(portfolio.logoText || 'K').charAt(0)}</span>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white bg-primary">{(portfolio.logoText || 'K').charAt(0)}</span>
                         <span>{portfolio.logoText || 'Karhamelo'}</span>
                       </>
                     )}
                 </a>
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-                    {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a>}
-                    {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a>}
-                    {portfolio.isCtaBannerEnabled && <a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a>}
+                    {portfolio.isFeaturesEnabled && <a href="#beneficios" className="hover:text-primary">Benefícios</a>}
+                    {portfolio.isHowItWorksEnabled && <a href="#como-funciona" className="hover:text-primary">Como funciona</a>}
+                    {portfolio.isCtaBannerEnabled && <a href="#cta" className="hover:text-primary">Começar</a>}
                 </nav>
                 <div className="hidden md:flex items-center gap-3">
-                     <Button asChild style={{ backgroundColor: 'var(--custom-primary)', color: 'white' }}><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
+                     <Button asChild className="bg-primary text-primary-foreground"><a href={portfolio.ctaButtonUrl}>{portfolio.ctaButtonText}</a></Button>
                 </div>
                  <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="ghost" size="icon" className="md:hidden">
                     {isMenuOpen ? <X /> : <Menu />}
@@ -124,7 +120,7 @@ export default function PublicPortfolioPage() {
       <main>
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background/50">
-            <div className="absolute inset-0 opacity-20" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}/>
+            <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-accent to-primary"/>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
@@ -135,7 +131,7 @@ export default function PublicPortfolioPage() {
                            {portfolio.description}
                         </p>
                         <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                            <Button asChild size="lg" className="px-6 py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: 'var(--custom-primary)'}}>
+                            <Button asChild size="lg" className="px-6 py-3 rounded-xl text-primary-foreground font-semibold bg-primary">
                                 <a href={portfolio.ctaButtonUrl}>
                                   {portfolio.ctaButtonText}
                                   <CtaIcon className="ml-2 h-5 w-5" />
@@ -149,7 +145,7 @@ export default function PublicPortfolioPage() {
                         </div>
                     </div>
                      <div className="relative">
-                        <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30" style={{background: `radial-gradient(600px 200px at 70% 10%, var(--custom-accent), transparent), radial-gradient(400px 120px at 10% 80%, var(--custom-primary), transparent)`}}></div>
+                        <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30 bg-gradient-to-br from-accent to-primary"></div>
                          {portfolio.imageUrl && <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />}
                     </div>
                 </div>
@@ -158,7 +154,7 @@ export default function PublicPortfolioPage() {
         
         {/* Benefícios / Cards */}
         {portfolio.isFeaturesEnabled && (
-            <section id="beneficios" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+            <section id="beneficios" className="py-16 lg:py-24 bg-primary/5">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center max-w-3xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-extrabold">Tudo que você precisa</h2>
@@ -166,11 +162,11 @@ export default function PublicPortfolioPage() {
                     </div>
                     <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => {
-                        const Icon = featureIconsMap[feature.icon || 'seller']?.component || featureIconsMap['seller'].component;
+                        const Icon = featureIconsMap[feature.icon || 'zap']?.component || featureIconsMap['zap'].component;
                         return (
                         <Card key={index} className="bg-background/80">
                             <CardContent className="p-6">
-                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.1)`, color: `hsl(var(--custom-primary-hsl))`}}><Icon /></div>
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"><Icon /></div>
                                 <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
                                 <p className="mt-2 text-muted-foreground">{feature.description}</p>
                             </CardContent>
@@ -192,7 +188,7 @@ export default function PublicPortfolioPage() {
                             <ol className="mt-6 space-y-4">
                                 {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
                                     <li key={index} className="flex gap-4">
-                                        <div className="h-8 w-8 rounded-lg text-white flex-shrink-0 flex items-center justify-center font-bold" style={{backgroundColor: 'var(--custom-primary)'}}>{index + 1}</div>
+                                        <div className="h-8 w-8 rounded-lg text-primary-foreground bg-primary flex-shrink-0 flex items-center justify-center font-bold">{index + 1}</div>
                                         <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
                                     </li>
                                 ))}
@@ -208,7 +204,7 @@ export default function PublicPortfolioPage() {
 
         {/* Gallery Carousel */}
         {portfolio.isGalleryEnabled && portfolio.projects && portfolio.projects.length > 0 && (
-          <section id="gallery" className="py-16 lg:py-24" style={{backgroundColor: `hsl(var(--custom-primary-hsl) / 0.05)`}}>
+          <section id="gallery" className="py-16 lg:py-24 bg-primary/5">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="text-center max-w-3xl mx-auto">
                       <h2 className="text-3xl md:text-4xl font-extrabold">{portfolio.galleryTitle}</h2>
@@ -250,7 +246,7 @@ export default function PublicPortfolioPage() {
         {portfolio.isCtaBannerEnabled && (
             <section id="cta" className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6" style={{background: `linear-gradient(135deg, var(--custom-accent), var(--custom-primary))`}}>
+                    <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-accent to-primary">
                         <div>
                             <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
                             <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
@@ -272,7 +268,7 @@ export default function PublicPortfolioPage() {
                           <Image src={portfolio.logoImageUrl} alt={portfolio.logoText || 'Logo'} width={40} height={40} className="h-8 w-auto" />
                         ) : (
                           <>
-                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white" style={{backgroundColor: 'var(--custom-primary)'}}>{(portfolio.logoText || 'K').charAt(0)}</span>
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-primary-foreground bg-primary">{(portfolio.logoText || 'K').charAt(0)}</span>
                             <span>{portfolio.logoText || 'Karhamelo'}</span>
                           </>
                         )}
@@ -282,30 +278,30 @@ export default function PublicPortfolioPage() {
                 <div>
                     <div className="font-semibold">Produto</div>
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        {portfolio.isFeaturesEnabled && <li><a href="#beneficios" className="hover:text-[var(--custom-primary)]">Benefícios</a></li>}
-                        {portfolio.isHowItWorksEnabled && <li><a href="#como-funciona" className="hover:text-[var(--custom-primary)]">Como funciona</a></li>}
-                        {portfolio.isCtaBannerEnabled && <li><a href="#cta" className="hover:text-[var(--custom-primary)]">Começar</a></li>}
+                        {portfolio.isFeaturesEnabled && <li><a href="#beneficios" className="hover:text-primary">Benefícios</a></li>}
+                        {portfolio.isHowItWorksEnabled && <li><a href="#como-funciona" className="hover:text-primary">Como funciona</a></li>}
+                        {portfolio.isCtaBannerEnabled && <li><a href="#cta" className="hover:text-primary">Começar</a></li>}
                     </ul>
                 </div>
                  <div>
                     <div className="font-semibold">Recursos</div>
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="#" className="hover:text-[var(--custom-primary)]">Documentação</a></li>
-                        <li><a href="#" className="hover:text-[var(--custom-primary)]">Status</a></li>
+                        <li><a href="#" className="hover:text-primary">Documentação</a></li>
+                        <li><a href="#" className="hover:text-primary">Status</a></li>
                     </ul>
                 </div>
                 <div>
                     <div className="font-semibold">Fale conosco</div>
                      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        <li><a href="mailto:contato@karhamelo.app" className="hover:text-[var(--custom-primary)]">contato@karhamelo.app</a></li>
+                        <li><a href="mailto:contato@karhamelo.app" className="hover:text-primary">contato@karhamelo.app</a></li>
                     </ul>
                 </div>
             </div>
             <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
                 <p>© {new Date().getFullYear()} Karhamelo — Todos os direitos reservados.</p>
                 <div className="flex items-center gap-4">
-                    <a href="#" className="hover:text-[var(--custom-primary)]">Termos</a>
-                    <a href="#" className="hover:text-[var(--custom-primary)]">Privacidade</a>
+                    <a href="#" className="hover:text-primary">Termos</a>
+                    <a href="#" className="hover:text-primary">Privacidade</a>
                 </div>
             </div>
         </div>
