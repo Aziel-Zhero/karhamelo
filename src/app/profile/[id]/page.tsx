@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import type { Link, Profile, PageTheme } from '@/lib/types';
-import { Github, Linkedin, Link2, Twitter } from 'lucide-react';
+import { Github, Linkedin, Link2, Twitter, Instagram, Youtube, Facebook } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
@@ -14,6 +14,9 @@ const iconMap: { [key: string]: React.ElementType } = {
   Github,
   Linkedin,
   Twitter,
+  Instagram,
+  Youtube,
+  Facebook,
   Link2,
 };
 
@@ -21,6 +24,9 @@ const socialIconsMap: { [key: string]: React.ElementType } = {
   github: Github,
   linkedin: Linkedin,
   twitter: Twitter,
+  instagram: Instagram,
+  youtube: Youtube,
+  facebook: Facebook,
 };
 
 const getPatternStyle = (pattern: string | undefined, color: string) => {
@@ -151,19 +157,6 @@ export default function PublicProfilePage() {
     ...patternStyle
   } as React.CSSProperties;
 
-  const socialLinks = links.filter((link) =>
-    Object.keys(socialIconsMap).some((social) =>
-      link.url.toLowerCase().includes(social)
-    )
-  );
-  
-  const regularLinks = links.filter(
-    (link) =>
-      !Object.keys(socialIconsMap).some((social) =>
-        link.url.toLowerCase().includes(social)
-      )
-  );
-  
   const buttonRadiusClass = radiusClasses[theme.buttonRadius || 'full'];
 
   const buttonStyle = {
@@ -195,20 +188,19 @@ export default function PublicProfilePage() {
                 </h1>
                 <p className="text-sm text-muted-foreground">{profile.bio}</p>
               </div>
-              <div className="flex items-center gap-4 pt-2">
-                {socialLinks.map((link) => {
-                  const socialName = Object.keys(socialIconsMap).find((social) =>
-                    link.url.toLowerCase().includes(social)
-                  );
-                  if (!socialName) return null;
-                  const Icon = socialIconsMap[socialName];
+              <div className="flex items-center justify-center gap-4 pt-2">
+                {profile.socialLinks && Object.entries(profile.socialLinks).map(([key, url]) => {
+                  if (!url) return null;
+                  const Icon = socialIconsMap[key];
+                  if (!Icon) return null;
                   return (
                     <a
-                      key={link.id}
-                      href={link.url}
+                      key={key}
+                      href={url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-foreground transition-colors"
+                      title={key.charAt(0).toUpperCase() + key.slice(1)}
                     >
                       <Icon className="h-6 w-6" />
                     </a>
@@ -216,7 +208,7 @@ export default function PublicProfilePage() {
                 })}
               </div>
               <div className="w-full space-y-3 pt-4">
-                {regularLinks.map((link) => {
+                {links.map((link) => {
                   const Icon = link.icon;
                   return (
                     <Button

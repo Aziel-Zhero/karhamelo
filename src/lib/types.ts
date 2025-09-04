@@ -11,6 +11,14 @@ export interface Profile {
   name: string;
   bio: string;
   avatarUrl:string;
+  socialLinks?: {
+    github?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+    facebook?: string;
+  };
 }
 
 export interface PageTheme {

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import type { Link, Profile, PageTheme, Portfolio } from '@/lib/types';
 import Header from '@/components/Header';
 import LinkEditor from '@/components/LinkEditor';
-import { Github, Linkedin, Link2 as LinkIcon, Twitter } from 'lucide-react';
+import { Github, Linkedin, Link as LinkIcon, Twitter } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
@@ -20,6 +20,11 @@ export default function Home() {
     name: 'Karhamelo',
     bio: 'Seu hub de links em uma única página, lindamente personalizado. Construído com Next.js e ❤️.',
     avatarUrl: 'https://picsum.photos/128/128',
+    socialLinks: {
+      github: 'https://github.com/karhamelo',
+      twitter: 'https://twitter.com/karhamelo',
+      linkedin: 'https://linkedin.com/in/karhamelo',
+    },
   });
 
   const [links, setLinks] = useState<Link[]>([
@@ -29,14 +34,7 @@ export default function Home() {
       url: 'https://example.com',
       icon: LinkIcon,
     },
-    { id: '2', title: 'GitHub', url: 'https://github.com', icon: Github },
-    { id: '3', title: 'Twitter', url: 'https://twitter.com', icon: Twitter },
-    {
-      id: '4',
-      title: 'LinkedIn',
-      url: 'https://linkedin.com',
-      icon: Linkedin,
-    },
+    { id: '2', title: 'Meu Blog', url: 'https://example.com/blog', icon: LinkIcon },
   ]);
 
   const [theme, setTheme] = useState<PageTheme>({
@@ -44,6 +42,9 @@ export default function Home() {
     backgroundColor: 'hsl(216 28% 95%)',
     accentColor: 'hsl(207 88% 68%)',
     backgroundPattern: 'none',
+    buttonStyle: 'filled',
+    buttonRadius: 'full',
+    buttonShadow: true,
   });
 
   const [portfolio, setPortfolio] = useState<Portfolio>({
