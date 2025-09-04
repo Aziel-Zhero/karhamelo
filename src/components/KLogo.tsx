@@ -1,6 +1,5 @@
+import Image from 'next/image';
+
 export const KLogo = () => (
-    <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-      <span className="font-bold text-xl text-primary-foreground">K</span>
-    </div>
-  );
-  
+  <Image src="/logo.png" alt="Karhamelo Logo" width={32} height={32} />
+);
