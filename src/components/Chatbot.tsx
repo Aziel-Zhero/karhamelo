@@ -1,3 +1,4 @@
+
 'use client';
 
 import { KLogo } from './KLogo';
@@ -34,7 +35,7 @@ export default function Chatbot() {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-0 mb-3 w-64">
+        <div className="absolute bottom-full right-0 mb-3 w-56">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button 
                 onClick={handleDismiss} 
@@ -52,7 +53,7 @@ export default function Chatbot() {
 
         {/* Logo Mascot */}
         <div className="group animate-bounce">
-            <div className="w-16 h-16 transition-transform duration-300 group-hover:scale-110">
+            <div className="w-20 h-20 transition-transform duration-300 group-hover:scale-110">
                  <KLogo />
             </div>
         </div>
