@@ -27,9 +27,9 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="text-center py-20 lg:py-32 container mx-auto px-6">
+        <section className="text-center py-20 lg:py-32 container mx-auto px-6" aria-labelledby="main-heading">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl lg:text-6xl font-extrabold tracking-tight">
+            <h1 id="main-heading" className="text-4xl lg:text-6xl font-extrabold tracking-tight">
               Seu universo de links em um só lugar.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -47,24 +47,25 @@ export default function LandingPage() {
         </section>
 
         {/* Image Preview Section */}
-        <section className="container mx-auto px-6">
+        <section className="container mx-auto px-6" aria-label="Pré-visualização da plataforma">
            <div className="relative">
               <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-20 bg-gradient-to-br from-accent to-primary"></div>
               <Image 
                 src="https://picsum.photos/seed/landing-hero/1200/600" 
-                alt="Karhamelo Preview" 
+                alt="Pré-visualização de uma página de links criada com Karhamelo" 
                 width={1200} 
                 height={600} 
                 className="relative rounded-2xl shadow-2xl ring-1 ring-black/5 mx-auto"
                 data-ai-hint="link in bio screenshot"
+                priority
               />
            </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-20 lg:py-28 container mx-auto px-6">
+        <section className="py-20 lg:py-28 container mx-auto px-6" aria-labelledby="features-heading">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold">Tudo que você precisa para crescer</h2>
+            <h2 id="features-heading" className="text-3xl lg:text-4xl font-bold">Tudo que você precisa para crescer</h2>
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
               Ferramentas intuitivas para você criar, personalizar e analisar sua presença online sem complicações.
             </p>
@@ -103,10 +104,10 @@ export default function LandingPage() {
 
       <footer className="container mx-auto px-6 py-8 border-t">
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Karhamelo. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Karhamelo. Todos os direitos reservados.</p>
            <div className="flex items-center gap-4 mt-4 md:mt-0">
-              <Link href="#" className="hover:text-primary">Termos</Link>
-              <Link href="#" className="hover:text-primary">Privacidade</Link>
+              <Link href="/termos" className="hover:text-primary">Termos</Link>
+              <Link href="/privacidade" className="hover:text-primary">Privacidade</Link>
           </div>
         </div>
       </footer>
