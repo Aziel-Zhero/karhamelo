@@ -5,9 +5,13 @@ import { KLogo } from './KLogo';
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-const messages = ['Au au!', 'Bem-vindo ao Karhameloooo!'];
+interface ChatbotProps {
+  messages?: string[];
+}
 
-export default function Chatbot() {
+const defaultMessages = ['Au au!', 'Bem-vindo ao Karhameloooo!'];
+
+export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -29,7 +33,7 @@ export default function Chatbot() {
       clearTimeout(visibleTimer);
       clearInterval(messageTimer);
     };
-  }, [isDismissed]);
+  }, [isDismissed, messages]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -62,7 +66,7 @@ export default function Chatbot() {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-[111px] mb-1 w-52 transform -translate-x-[55px]">
+        <div className="absolute bottom-full right-[115px] mb-3 w-52 transform -translate-x-1/2">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
@@ -79,7 +83,7 @@ export default function Chatbot() {
 
         {/* Logo Mascot */}
         <div className="group">
-            <div className="w-32 h-32 animate-gentle-bounce">
+            <div className="w-36 h-36 animate-gentle-bounce">
                  <KLogo />
             </div>
         </div>
