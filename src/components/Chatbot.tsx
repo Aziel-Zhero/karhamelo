@@ -33,7 +33,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
       clearTimeout(visibleTimer);
       clearInterval(messageTimer);
     };
-  }, [isDismissed, messages.length]);
+  }, [isDismissed, messages]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -60,13 +60,13 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         }
       `}</style>
     <div
-      className={`fixed bottom-5 right-[-45px] z-50 transition-opacity duration-500 ease-in-out ${
+      className={`fixed bottom-2 right-2 z-50 transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-[55px] mb-[3px] w-64 transform -translate-x-1/2">
+        <div className="absolute bottom-full right-[55px] mb-2 w-64 transform -translate-x-1/2">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
@@ -83,7 +83,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
 
         {/* Logo Mascot */}
         <div className="group">
-            <div className="w-52 h-52 animate-gentle-bounce">
+            <div className="w-48 h-48 animate-gentle-bounce">
                  <KLogo />
             </div>
         </div>
