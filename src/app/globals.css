@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 216 28% 95%; /* Light Gray */
-    --foreground: 0 0% 3.9%;
+    --background: 30 75% 96%; /* Caramel White */
+    --foreground: 24 9.8% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 24 9.8% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 199 76% 52%; /* Vibrant Blue */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 207 88% 68%; /* Soft Teal */
-    --accent-foreground: 0 0% 9%;
+    --popover-foreground: 24 9.8% 10%;
+    --primary: 31 56% 52%; /* Caramel Brown */
+    --primary-foreground: 30 9.1% 98%;
+    --secondary: 30 5.9% 90%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 30 5.9% 90%;
+    --muted-foreground: 24 9.8% 10%;
+    --accent: 30 84% 68%; /* Light Caramel */
+    --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 199 76% 52%;
-    --radius: 0.5rem;
+    --border: 30 5.9% 90%;
+    --input: 30 5.9% 90%;
+    --ring: 31 56% 52%;
+    --radius: 0.8rem;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 24 9.8% 10%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 24 9.8% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 24 9.8% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 199 76% 52%;
+    --primary: 31 56% 52%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 207 88% 68%;
+    --accent: 30 84% 68%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 199 76% 52%;
+    --ring: 31 56% 52%;
   }
 }
 
