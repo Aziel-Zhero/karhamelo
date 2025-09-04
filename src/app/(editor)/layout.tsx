@@ -4,21 +4,36 @@ import React from 'react';
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
-// Mock authentication check
 const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
-    // In a real app, you'd verify a token here.
-    // For this prototype, we'll simulate a logged-in user.
-    const mockAuthCheck = true; 
-    setIsAuthenticated(mockAuthCheck);
-    setIsLoading(false);
-  }, []);
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    };
 
-  return { isAuthenticated, isLoading };
+    checkUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+       if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+          setIsLoading(false);
+       }
+    });
+    
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
+
+  return { user, isLoading };
 };
 
 export default function EditorLayout({
@@ -27,15 +42,15 @@ export default function EditorLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !user) {
       router.replace('/auth/login');
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, user, router]);
   
-  if (isLoading || !isAuthenticated) {
+  if (isLoading || !user) {
     return (
        <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="animate-pulse font-bold text-primary text-xl">Carregando...</div>

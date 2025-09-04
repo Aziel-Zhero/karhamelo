@@ -7,6 +7,7 @@ import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Chatbot from '@/components/Chatbot';
+import { createClient } from '@/lib/supabase/client';
 
 const GoogleIcon = () => (
   <svg className="mr-2 h-4 w-4" viewBox="0 0 48 48" width="48px" height="48px">
@@ -21,11 +22,15 @@ const GoogleIcon = () => (
 
 export default function LoginPage() {
   const router = useRouter();
+  const supabase = createClient();
 
-  const handleGoogleLogin = () => {
-    // Em uma aplicação real, aqui você iniciaria o fluxo de login do Google.
-    // Para o protótipo, vamos apenas redirecionar para o dashboard.
-    router.push('/dashboard');
+  const handleGoogleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    })
   };
 
   return (
