@@ -5,18 +5,31 @@ import { KLogo } from './KLogo';
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
+const messages = ['Au au!', 'Bem-vindo ao Karhameloooo!'];
+
 export default function Chatbot() {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   useEffect(() => {
-    // Show the chatbot after a short delay to not be too intrusive
-    const timer = setTimeout(() => {
-      setIsVisible(true);
+    // Show the chatbot after a short delay
+    const visibleTimer = setTimeout(() => {
+      if (!isDismissed) {
+        setIsVisible(true);
+      }
     }, 1500);
 
-    return () => clearTimeout(timer);
-  }, []);
+    // Loop through messages
+    const messageTimer = setInterval(() => {
+      setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    }, 4000); // Change message every 4 seconds
+
+    return () => {
+      clearTimeout(visibleTimer);
+      clearInterval(messageTimer);
+    };
+  }, [isDismissed]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -35,7 +48,7 @@ export default function Chatbot() {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-0 mb-3 w-56">
+        <div className="absolute bottom-full right-0 mb-3 w-52">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button 
                 onClick={handleDismiss} 
@@ -44,8 +57,7 @@ export default function Chatbot() {
             >
                 <X size={16} />
             </button>
-            <p className="font-semibold">Au au!</p>
-            <p>Bem-vindo ao Karhameloooo!</p>
+            <p className="font-semibold text-center">{messages[currentMessageIndex]}</p>
              {/* Bubble tail */}
             <div className="absolute bottom-0 right-0 h-0 w-0 border-l-[15px] border-l-transparent border-t-[15px] border-t-primary"></div>
           </div>
@@ -53,7 +65,7 @@ export default function Chatbot() {
 
         {/* Logo Mascot */}
         <div className="group animate-bounce">
-            <div className="w-20 h-20 transition-transform duration-300 group-hover:scale-110">
+            <div className="w-24 h-24 transition-transform duration-300 group-hover:scale-110">
                  <KLogo />
             </div>
         </div>
