@@ -18,7 +18,7 @@ import type { Area, Point } from 'react-easy-crop/types';
 import { getCroppedImg } from '@/lib/canvasUtils';
 import { useToast } from '@/hooks/use-toast';
 import { RotateCcw, Upload } from 'lucide-react';
-import { AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 interface AvatarEditorDialogProps {
   open: boolean;
@@ -115,7 +115,10 @@ export default function AvatarEditorDialog({
               />
             ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center">
-                    <AvatarImage src={currentAvatar} alt="Avatar atual" className="h-32 w-32 rounded-full ring-2 ring-muted-foreground/20" />
+                    <Avatar className="h-32 w-32 rounded-full ring-2 ring-muted-foreground/20">
+                      <AvatarImage src={currentAvatar} alt="Avatar atual" />
+                      <AvatarFallback>AV</AvatarFallback>
+                    </Avatar>
                     <p className="text-sm text-muted-foreground mt-4">Nenhuma imagem nova selecionada.</p>
                 </div>
             )}
