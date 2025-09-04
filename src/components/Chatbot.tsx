@@ -48,7 +48,7 @@ export default function Chatbot() {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-0 mb-3 w-52">
+        <div className="absolute bottom-full right-4 mb-3 w-52">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button 
                 onClick={handleDismiss} 
@@ -64,7 +64,7 @@ export default function Chatbot() {
         </div>
 
         {/* Logo Mascot */}
-        <div className="group animate-bounce">
+        <div className="group">
             <div className="w-24 h-24 transition-transform duration-300 group-hover:scale-110">
                  <KLogo />
             </div>
