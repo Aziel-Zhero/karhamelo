@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Chatbot from '@/components/Chatbot';
 
 export default function SignupPage() {
     const router = useRouter();
@@ -59,6 +60,7 @@ export default function SignupPage() {
           </CardFooter>
         </Card>
       </div>
+      <Chatbot messages={['Vamos criar algo incrível!', 'Preencha tudo direitinho!']} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Chatbot from '@/components/Chatbot';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
       </div>
+      <Chatbot messages={['Estou de olho em você!', 'Lembre-se da sua senha...']} />
     </div>
   );
 }
