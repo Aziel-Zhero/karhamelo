@@ -20,6 +20,7 @@ export default function Home() {
     name: 'Karhamelo',
     bio: 'Seu hub de links em uma única página, lindamente personalizado. Construído com Next.js e ❤️.',
     avatarUrl: 'https://picsum.photos/128/128',
+    isPortfolioLinkEnabled: true,
     socialLinks: {
       github: 'https://github.com/karhamelo',
       twitter: 'https://twitter.com/karhamelo',
@@ -111,7 +112,7 @@ export default function Home() {
       window.open('/profile/preview', '_blank');
     } else {
       localStorage.setItem('karhamelo-portfolio-data', JSON.stringify({portfolio, theme}));
-      window.open('/portfolio', '_blank');
+      window.open('/portfolio/preview', '_blank');
     }
   };
 

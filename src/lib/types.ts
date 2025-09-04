@@ -11,6 +11,7 @@ export interface Profile {
   name: string;
   bio: string;
   avatarUrl:string;
+  isPortfolioLinkEnabled?: boolean;
   socialLinks?: {
     github?: string;
     twitter?: string;

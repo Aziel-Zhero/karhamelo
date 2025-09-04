@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Save, Github, Twitter, Linkedin, Instagram, Youtube, Facebook } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from './ui/switch';
 
 interface ProfileEditorProps {
   profile: Profile;
@@ -34,6 +35,10 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
     const { name, value } = e.target;
     setEditedProfile(prev => ({ ...prev, [name]: value }));
   };
+
+  const handleSwitchChange = (name: keyof Profile, checked: boolean) => {
+    setEditedProfile(prev => ({ ...prev, [name]: checked }));
+  }
   
   const handleSocialLinkChange = (key: keyof NonNullable<Profile['socialLinks']>, value: string) => {
     setEditedProfile(prev => ({
@@ -119,6 +124,23 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
                         />
                     </div>
                 ))}
+            </div>
+          </div>
+
+          <Separator />
+
+           <div className="space-y-4">
+            <h4 className="text-sm font-medium">Configurações da Página</h4>
+            <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+                <div>
+                  <Label htmlFor="isPortfolioLinkEnabled">Link para Portfólio</Label>
+                  <p className="text-xs text-muted-foreground">Exibe um botão para seu portfólio na página de links.</p>
+                </div>
+                <Switch
+                  id="isPortfolioLinkEnabled"
+                  checked={editedProfile.isPortfolioLinkEnabled}
+                  onCheckedChange={(checked) => handleSwitchChange('isPortfolioLinkEnabled', checked)}
+                />
             </div>
           </div>
           
