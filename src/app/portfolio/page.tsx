@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Portfolio, PageTheme } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -18,13 +18,19 @@ import {
 } from "@/components/ui/carousel"
 import { ctaIconsMap, featureIconsMap } from '@/lib/icon-map';
 import { ThemeInjector } from '@/components/ThemeInjector';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PublicPortfolioPage() {
   const [data, setData] = useState<{ portfolio: Portfolio; theme: PageTheme } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { toast } = useToast();
+
+  const mainContainerRef = useRef(null);
 
   useEffect(() => {
     // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
@@ -42,6 +48,48 @@ export default function PublicPortfolioPage() {
       setIsLoading(false);
     }, 100); // 100ms de delay é geralmente suficiente
   }, []);
+
+  useGSAP(() => {
+    if (!data || isLoading) return;
+
+    gsap.from(".hero-element", {
+        duration: 0.8,
+        y: 30,
+        opacity: 0,
+        stagger: 0.2,
+        ease: "power3.out"
+    });
+    
+    gsap.from(".hero-image", {
+        duration: 1,
+        scale: 1.1,
+        opacity: 0,
+        ease: "power3.out",
+        delay: 0.4
+    });
+
+    const animateSections = (selector: string, trigger: string) => {
+      gsap.from(selector, {
+        scrollTrigger: {
+          trigger: trigger,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        duration: 0.8,
+        y: 50,
+        opacity: 0,
+        stagger: 0.15,
+        ease: "power3.out"
+      });
+    };
+    
+    animateSections('.feature-card', '#beneficios');
+    animateSections('.step-item', '#como-funciona');
+    animateSections('.gallery-item', '#gallery');
+    animateSections('.cta-banner-content', '#cta');
+
+  }, { dependencies: [data, isLoading], scope: mainContainerRef });
+
 
   const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +124,7 @@ export default function PublicPortfolioPage() {
   const CtaIcon = ctaIconsMap[portfolio.ctaButtonIcon || 'arrowRight'].component;
 
   return (
-    <div className="bg-background text-foreground antialiased">
+    <div className="bg-background text-foreground antialiased" ref={mainContainerRef}>
       <ThemeInjector 
         primaryColor={theme.primaryColor}
         backgroundColor={theme.backgroundColor}
@@ -128,13 +176,13 @@ export default function PublicPortfolioPage() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
-                         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight hero-element">
                             {portfolio.title}
                         </h1>
-                        <p className="mt-4 text-muted-foreground text-lg">
+                        <p className="mt-4 text-muted-foreground text-lg hero-element">
                            {portfolio.description}
                         </p>
-                        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                        <div className="mt-6 flex flex-col sm:flex-row gap-3 hero-element">
                             <Button asChild size="lg" className="px-6 py-3 rounded-xl text-primary-foreground font-semibold bg-primary">
                                 <a href={portfolio.ctaButtonUrl}>
                                   {portfolio.ctaButtonText}
@@ -142,13 +190,13 @@ export default function PublicPortfolioPage() {
                                 </a>
                             </Button>
                         </div>
-                        <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
+                        <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground hero-element">
                             <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> Checkout Rápido</div>
                             <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> 100% Customizável</div>
                             <div className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500"/> Analytics</div>
                         </div>
                     </div>
-                     <div className="relative">
+                     <div className="relative hero-image">
                         <div className="absolute -inset-6 rounded-3xl blur-2xl opacity-30 bg-gradient-to-br from-accent to-primary"></div>
                          {portfolio.imageUrl && <Image src={portfolio.imageUrl} alt={portfolio.title} width={1200} height={800} className="relative rounded-3xl shadow-2xl ring-1 ring-black/5" data-ai-hint="website product screenshot" />}
                     </div>
@@ -168,7 +216,7 @@ export default function PublicPortfolioPage() {
                     {Array.isArray(portfolio.features) && portfolio.features.map((feature, index) => {
                         const Icon = featureIconsMap[feature.icon || 'zap']?.component || featureIconsMap['zap'].component;
                         return (
-                        <Card key={index} className="bg-background/80">
+                        <Card key={index} className="bg-background/80 feature-card">
                             <CardContent className="p-6">
                                 <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"><Icon /></div>
                                 <h3 className="mt-4 font-bold text-lg">{feature.title}</h3>
@@ -191,7 +239,7 @@ export default function PublicPortfolioPage() {
                             <p className="mt-3 text-muted-foreground">{portfolio.howItWorksDescription}</p>
                             <ol className="mt-6 space-y-4">
                                 {Array.isArray(portfolio.steps) && portfolio.steps.map((step, index) => (
-                                    <li key={index} className="flex gap-4">
+                                    <li key={index} className="flex gap-4 step-item">
                                         <div className="h-8 w-8 rounded-lg text-primary-foreground bg-primary flex-shrink-0 flex items-center justify-center font-bold">{index + 1}</div>
                                         <div><h3 className="font-bold">{step.title}</h3><p className="text-muted-foreground">{step.description}</p></div>
                                     </li>
@@ -224,7 +272,7 @@ export default function PublicPortfolioPage() {
                       >
                         <CarouselContent>
                           {portfolio.projects.map((project) => (
-                            <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
+                            <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3 gallery-item">
                               <div className="p-1">
                                 <Card>
                                   <CardContent className="flex flex-col aspect-square items-center justify-center p-0 rounded-lg overflow-hidden">
@@ -250,7 +298,7 @@ export default function PublicPortfolioPage() {
         {portfolio.isCtaBannerEnabled && (
             <section id="cta" className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-accent to-primary">
+                    <div className="rounded-3xl p-8 md:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-accent to-primary cta-banner-content">
                         <div>
                             <h3 className="text-2xl md:text-3xl font-extrabold">{portfolio.ctaBannerTitle}</h3>
                             <p className="mt-2 text-white/90">{portfolio.ctaBannerDescription}</p>
