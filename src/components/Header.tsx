@@ -15,19 +15,27 @@ import { BookCopy, LayoutDashboard, Link as LinkIcon, LogOut } from 'lucide-reac
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-const navLinks = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/links', label: 'Links', icon: LinkIcon },
-  { href: '/portfolio/editor', label: 'Portfólio', icon: BookCopy },
-];
+import { createClient } from '@/lib/supabase/client';
+import { useEffect, useState } from 'react';
+import type { User } from '@supabase/supabase-js';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
 
-  const handleLogout = () => {
-    // Em um app real, aqui você limparia o token de autenticação
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    fetchUser();
+  }, [supabase]);
+
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     router.push('/auth/login');
   };
 
@@ -67,20 +75,20 @@ export default function Header() {
               >
                 <Avatar className="h-9 w-9">
                   <AvatarImage
-                    src="https://picsum.photos/100/100"
+                    src={user?.user_metadata.avatar_url || ''}
                     data-ai-hint="person"
-                    alt="@karhamelo"
+                    alt={user?.user_metadata.full_name || 'Usuário'}
                   />
-                  <AvatarFallback>KH</AvatarFallback>
+                  <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'K'}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Karhamelo</p>
+                  <p className="text-sm font-medium leading-none">{user?.user_metadata.full_name || 'Karhamelo'}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    karhamelo@example.com
+                    {user?.email || 'karhamelo@example.com'}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -100,3 +108,9 @@ export default function Header() {
     </header>
   );
 }
+
+const navLinks = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/links', label: 'Links', icon: LinkIcon },
+  { href: '/portfolio/editor', label: 'Portfólio', icon: BookCopy },
+];

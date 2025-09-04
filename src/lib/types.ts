@@ -1,4 +1,137 @@
+
 import type { LucideIcon } from 'lucide-react';
+
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      users: {
+        Row: {
+          id: string
+          google_id: string | null
+          email: string | null
+          name: string | null
+          avatar_url: string | null
+          subscription_plan: string | null
+          created_at: string
+          updated_at: string | null
+        }
+        Insert: {
+          id: string
+          google_id?: string | null
+          email?: string | null
+          name?: string | null
+          avatar_url?: string | null
+          subscription_plan?: string | null
+          created_at?: string
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          google_id?: string | null
+          email?: string | null
+          name?: string | null
+          avatar_url?: string | null
+          subscription_plan?: string | null
+          created_at?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      links: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          url: string
+          icon: string | null
+          order: number | null
+          click_count: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          url: string
+          icon?: string | null
+          order?: number | null
+          click_count?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          url?: string
+          icon?: string | null
+          order?: number | null
+          click_count?: number | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      pages: {
+        Row: {
+          id: string
+          user_id: string
+          profile_bio: string | null
+          social_links: Json | null
+          theme: Json | null
+          portfolio: Json | null
+          created_at: string
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          profile_bio?: string | null
+          social_links?: Json | null
+          theme?: Json | null
+          portfolio?: Json | null
+          created_at?: string
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          profile_bio?: string | null
+          social_links?: Json | null
+          theme?: Json | null
+          portfolio?: Json | null
+          created_at?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pages_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
+    Views: { [_ in never]: never }
+    Functions: { [_ in never]: never }
+    Enums: { [_ in never]: never }
+    CompositeTypes: { [_ in never]: never }
+  }
+}
 
 export interface Link {
   id: string;
