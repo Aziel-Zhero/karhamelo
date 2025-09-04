@@ -1,6 +1,7 @@
 
+'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,24 +11,50 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
-import { Eye, Briefcase, Link as LinkIcon, Menu } from 'lucide-react';
-import { SidebarTrigger } from './ui/sidebar';
+import { Eye, Briefcase, Link as LinkIcon, Home, BookCopy, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   onViewPage: (page: 'links' | 'portfolio') => void;
 }
 
+const navLinks = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/links', label: 'Links', icon: LinkIcon },
+  { href: '/portfolio/editor', label: 'Portfólio', icon: BookCopy },
+];
+
 export default function Header({ onViewPage }: HeaderProps) {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
-        <div className="flex items-center gap-3">
-          <div className="md:hidden">
-            <SidebarTrigger />
-          </div>
-          <KLogo />
-          <span className="font-bold text-xl tracking-tight hidden md:inline">Karhamelo</span>
+        <div className="flex items-center gap-6">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <KLogo />
+            <span className="font-bold text-xl tracking-tight hidden md:inline">Karhamelo</span>
+          </Link>
+           <nav className="hidden md:flex items-center gap-4">
+            {navLinks.map((navLink) => (
+              <Link
+                key={navLink.href}
+                href={navLink.href}
+                className={cn(
+                  buttonVariants({ variant: 'ghost' }),
+                  'font-semibold',
+                  pathname === navLink.href
+                    ? 'bg-muted text-primary hover:bg-muted'
+                    : 'text-muted-foreground'
+                )}
+              >
+                <navLink.icon className="mr-2 h-4 w-4" />
+                {navLink.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         <div className="flex items-center gap-2">
            <DropdownMenu>
