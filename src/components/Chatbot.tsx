@@ -59,7 +59,7 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         }
       `}</style>
     <div
-      className={`fixed bottom-2 right-2 z-50 transition-opacity duration-500 ease-in-out ${
+      className={`fixed top-[240px] right-4 z-50 transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -81,8 +81,8 @@ export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
         </div>
 
         {/* Logo Mascot */}
-        <div className="group flex justify-end">
-            <div className="w-48 h-48 animate-gentle-bounce">
+        <div className="group w-48 h-48 flex justify-end">
+            <div className="animate-gentle-bounce">
                  <KLogo />
             </div>
         </div>
