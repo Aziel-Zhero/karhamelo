@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Chatbot from '@/components/Chatbot';
 
 const GoogleIcon = () => (
     <svg className="mr-3 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
@@ -77,6 +78,7 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
       </div>
+      <Chatbot messages={['Au au! Vamos logar!']} />
     </div>
   );
 }

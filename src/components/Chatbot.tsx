@@ -5,9 +5,13 @@ import { KLogo } from './KLogo';
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-const messages = ['Au au!', 'Bem-vindo ao Karhameloooo!'];
+interface ChatbotProps {
+  messages?: string[];
+}
 
-export default function Chatbot() {
+const defaultMessages = ['Au au!', 'Bem-vindo ao Karhameloooo!'];
+
+export default function Chatbot({ messages = defaultMessages }: ChatbotProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -20,16 +24,22 @@ export default function Chatbot() {
       }
     }, 1500);
 
-    // Loop through messages
-    const messageTimer = setInterval(() => {
-      setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }, 4000); // Change message every 4 seconds
+    // Loop through messages only if there's more than one
+    if (messages.length > 1) {
+      const messageTimer = setInterval(() => {
+        setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+      }, 4000); // Change message every 4 seconds
+       return () => {
+        clearTimeout(visibleTimer);
+        clearInterval(messageTimer);
+      };
+    }
+
 
     return () => {
       clearTimeout(visibleTimer);
-      clearInterval(messageTimer);
     };
-  }, [isDismissed]);
+  }, [isDismissed, messages]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -62,7 +72,7 @@ export default function Chatbot() {
     >
       <div className="relative">
         {/* Speech Bubble */}
-        <div className="absolute bottom-full right-[111px] mb-1 w-52">
+        <div className="absolute bottom-full right-[55px] mb-1 w-52">
           <div className="relative bg-primary text-primary-foreground rounded-xl rounded-br-none py-3 px-4 shadow-lg">
              <button
                 onClick={handleDismiss}
@@ -79,7 +89,7 @@ export default function Chatbot() {
 
         {/* Logo Mascot */}
         <div className="group">
-            <div className="w-28 h-28 animate-gentle-bounce">
+            <div className="w-32 h-32 animate-gentle-bounce">
                  <KLogo />
             </div>
         </div>
