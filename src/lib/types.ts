@@ -18,6 +18,9 @@ export interface PageTheme {
   backgroundColor: string;
   accentColor: string;
   backgroundPattern?: string;
+  buttonStyle?: 'filled' | 'outline';
+  buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  buttonShadow?: boolean;
 }
 
 export interface PortfolioFeature {

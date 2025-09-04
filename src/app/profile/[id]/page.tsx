@@ -7,6 +7,7 @@ import { Github, Linkedin, Link2, Twitter } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
+import { cn } from '@/lib/utils';
 
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -70,6 +71,15 @@ const getPatternStyle = (pattern: string | undefined, color: string) => {
     backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(svg)}")`,
   };
 };
+
+const radiusClasses = {
+  none: 'rounded-none',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  full: 'rounded-full',
+};
+
 
 // A helper function to reconstruct the icon components from strings
 const hydrateLinks = (links: any[]): Link[] => {
@@ -153,6 +163,15 @@ export default function PublicProfilePage() {
         link.url.toLowerCase().includes(social)
       )
   );
+  
+  const buttonRadiusClass = radiusClasses[theme.buttonRadius || 'full'];
+
+  const buttonStyle = {
+    backgroundColor: theme.buttonStyle === 'filled' ? 'var(--page-primary)' : 'transparent',
+    color: theme.buttonStyle === 'filled' ? 'var(--page-primary-fg)' : 'var(--page-primary)',
+    borderColor: theme.buttonStyle === 'outline' ? 'var(--page-primary)' : 'transparent',
+    borderWidth: theme.buttonStyle === 'outline' ? '2px' : '0px',
+  };
 
 
   return (
@@ -202,11 +221,12 @@ export default function PublicProfilePage() {
                   return (
                     <Button
                       key={link.id}
-                      className="w-full h-14 text-base font-semibold transition-transform duration-200 hover:scale-105 active:scale-100"
-                      style={{
-                        backgroundColor: 'var(--page-primary)',
-                        color: 'var(--page-primary-fg)',
-                      }}
+                      className={cn(
+                          'w-full h-14 text-base font-semibold transition-transform duration-200 hover:scale-105 active:scale-100',
+                          buttonRadiusClass,
+                          theme.buttonShadow && 'shadow-lg'
+                      )}
+                      style={buttonStyle}
                       asChild
                     >
                       <a
@@ -243,5 +263,3 @@ export default function PublicProfilePage() {
     </div>
   );
 }
-
-    
