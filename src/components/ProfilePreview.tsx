@@ -10,6 +10,7 @@ interface ProfilePreviewProps {
   profile: Profile;
   links: Link[];
   theme: PageTheme;
+  onLinkClick?: (link: Link) => void;
 }
 
 const socialIconsMap: { [key: string]: React.ElementType } = {
@@ -83,6 +84,7 @@ export default function ProfilePreview({
   profile,
   links,
   theme,
+  onLinkClick = () => {}
 }: ProfilePreviewProps) {
 
   const patternStyle = getPatternStyle(theme.backgroundPattern, theme.backgroundColor);
@@ -167,6 +169,7 @@ export default function ProfilePreview({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2.5"
+                        onClick={() => onLinkClick(link)}
                       >
                         {Icon && <Icon className="h-4 w-4" />}
                         <span>{link.title}</span>

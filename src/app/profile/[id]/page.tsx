@@ -111,6 +111,20 @@ export default function PublicProfilePage() {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleLinkClick = (clickedLink: Link) => {
+    if (!data) return;
+
+    const updatedLinks = data.links.map(link => 
+      link.id === clickedLink.id 
+          ? { ...link, clickCount: (link.clickCount || 0) + 1 } 
+          : link
+    );
+    const updatedData = {...data, links: updatedLinks};
+    setData(updatedData);
+    localStorage.setItem('karhamelo-page-data', JSON.stringify(updatedData));
+  };
+
+
   useEffect(() => {
     // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
     // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
@@ -122,6 +136,9 @@ export default function PublicProfilePage() {
           // We need to re-hydrate the links to convert icon names back to components
           const hydratedLinks = hydrateLinks(parsedData.links);
           setData({ ...parsedData, links: hydratedLinks });
+          // Track profile view
+          const currentViews = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
+          localStorage.setItem('karhamelo-profile-views', (currentViews + 1).toString());
         } catch (error) {
           console.error("Falha ao analisar dados da página do localStorage", error);
         }
@@ -228,6 +245,7 @@ export default function PublicProfilePage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-3"
+                        onClick={() => handleLinkClick(link)}
                       >
                         {Icon && <Icon className="h-5 w-5" />}
                         <span>{link.title}</span>

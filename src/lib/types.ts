@@ -5,6 +5,7 @@ export interface Link {
   title: string;
   url: string;
   icon?: LucideIcon;
+  clickCount?: number;
 }
 
 export interface Profile {

@@ -11,6 +11,7 @@ import {
   Edit,
   Save,
   X,
+  MousePointerClick,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -76,9 +77,15 @@ export default function LinkList({
                 ) : (
                   <>
                     <p className="font-medium">{link.title}</p>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {link.url}
-                    </p>
+                    <div className="flex items-center gap-4">
+                        <p className="text-sm text-muted-foreground truncate">
+                          {link.url}
+                        </p>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <MousePointerClick className="h-3 w-3" />
+                            <span>{link.clickCount || 0}</span>
+                        </div>
+                    </div>
                   </>
                 )}
               </div>

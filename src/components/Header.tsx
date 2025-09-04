@@ -8,12 +8,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
-import { Eye, Briefcase, Link as LinkIcon } from 'lucide-react';
+import { Eye, Briefcase, Link as LinkIcon, Menu } from 'lucide-react';
+import { SidebarTrigger } from './ui/sidebar';
+import Link from 'next/link';
 
 interface HeaderProps {
   onViewPage: (page: 'links' | 'portfolio') => void;
@@ -24,8 +23,11 @@ export default function Header({ onViewPage }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <SidebarTrigger />
+          </div>
           <KLogo />
-          <span className="font-bold text-xl tracking-tight">Editor de Links</span>
+          <span className="font-bold text-xl tracking-tight hidden md:inline">Karhamelo</span>
         </div>
         <div className="flex items-center gap-2">
            <DropdownMenu>
@@ -38,11 +40,11 @@ export default function Header({ onViewPage }: HeaderProps) {
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => onViewPage('links')}>
                 <LinkIcon className="mr-2 h-4 w-4" />
-                Página de Links
+                Links
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onViewPage('portfolio')}>
                 <Briefcase className="mr-2 h-4 w-4" />
-                LP de Portfólio
+                Portfólio
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -73,9 +75,9 @@ export default function Header({ onViewPage }: HeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Perfil</DropdownMenuItem>
-              <DropdownMenuItem>Faturamento</DropdownMenuItem>
-              <DropdownMenuItem>Configurações</DropdownMenuItem>
+              <DropdownMenuItem asChild><Link href="/user-profile">Perfil</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link href="/billing">Faturamento</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link href="/settings">Configurações</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Sair</DropdownMenuItem>
             </DropdownMenuContent>
