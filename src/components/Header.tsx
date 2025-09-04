@@ -11,9 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { KLogo } from './KLogo';
-import { Briefcase, Link as LinkIcon, BookCopy, LayoutDashboard } from 'lucide-react';
+import { BookCopy, LayoutDashboard, Link as LinkIcon, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
@@ -24,6 +24,12 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Em um app real, aqui você limparia o token de autenticação
+    router.push('/auth/login');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -41,7 +47,7 @@ export default function Header() {
                 className={cn(
                   buttonVariants({ variant: 'ghost' }),
                   'font-semibold',
-                  pathname === navLink.href
+                  pathname.startsWith(navLink.href)
                     ? 'bg-muted text-primary hover:bg-muted'
                     : 'text-muted-foreground'
                 )}
@@ -83,7 +89,10 @@ export default function Header() {
               <DropdownMenuItem asChild><Link href="/billing">Faturamento</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link href="/settings">Configurações</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Sair</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sair</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
