@@ -131,6 +131,7 @@ export default function LinksPage() {
   const handleViewLinksPage = () => {
     const pageData = localStorage.getItem('karhamelo-page-data');
     if (pageData) {
+      // O ID "preview" é um marcador para carregar os dados do localStorage na página pública
       window.open('/profile/preview', '_blank');
     }
   };

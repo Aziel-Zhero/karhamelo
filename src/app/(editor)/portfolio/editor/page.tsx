@@ -85,6 +85,7 @@ export default function PortfolioEditorPage() {
   const handleViewPortfolioPage = () => {
     const portfolioData = localStorage.getItem('karhamelo-portfolio-data');
     if(portfolioData) {
+      // O ID "preview" é um marcador para carregar os dados do localStorage na página pública
       window.open('/portfolio/preview', '_blank');
     }
   };
