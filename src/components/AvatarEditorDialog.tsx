@@ -18,6 +18,7 @@ import type { Area, Point } from 'react-easy-crop/types';
 import { getCroppedImg } from '@/lib/canvasUtils';
 import { useToast } from '@/hooks/use-toast';
 import { RotateCcw, Upload } from 'lucide-react';
+import { AvatarImage } from './ui/avatar';
 
 interface AvatarEditorDialogProps {
   open: boolean;
