@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AvatarEditorDialog from '@/components/AvatarEditorDialog';
-import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function UserProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState('https://picsum.photos/100/100');
@@ -96,7 +95,9 @@ export default function UserProfilePage() {
                     <div>
                         <p className="font-semibold">Você está no <span className="text-primary">{user.subscription}</span>.</p>
                     </div>
-                    <Button variant="outline">Gerenciar Plano</Button>
+                    <Button variant="outline" asChild>
+                      <Link href="/billing">Gerenciar Plano</Link>
+                    </Button>
                 </div>
             </CardContent>
         </Card>
