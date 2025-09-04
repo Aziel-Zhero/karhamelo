@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Github, Linkedin, Twitter, Instagram, Youtube, Facebook, Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { PortfolioGlowButton } from './PortfolioGlowButton';
 
 interface ProfilePreviewProps {
   profile: Profile;
@@ -148,24 +149,6 @@ export default function ProfilePreview({
                 })}
               </div>
               <div className="w-full space-y-2 pt-2">
-                 {profile.isPortfolioLinkEnabled && (
-                   <Button
-                      className={cn(
-                        'w-full h-12 text-sm font-semibold transition-transform duration-200 hover:scale-[1.02] active:scale-100',
-                        buttonRadiusClass
-                      )}
-                      style={{
-                        backgroundColor: 'var(--preview-accent)',
-                        color: 'var(--preview-primary-fg)',
-                      }}
-                      asChild
-                    >
-                      <a href="/portfolio/preview" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2.5">
-                         <Briefcase className="h-4 w-4" />
-                        <span>Ver Portfólio</span>
-                      </a>
-                    </Button>
-                )}
                 {links.map((link) => {
                   const Icon = link.icon;
                   return (
@@ -191,6 +174,9 @@ export default function ProfilePreview({
                     </Button>
                   );
                 })}
+                {profile.isPortfolioLinkEnabled && (
+                  <PortfolioGlowButton href="/portfolio/preview" text="Ver Portfólio"/>
+                )}
               </div>
             </div>
         </div>

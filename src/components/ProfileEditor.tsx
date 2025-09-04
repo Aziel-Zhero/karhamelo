@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Github, Twitter, Linkedin, Instagram, Youtube, Facebook } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -30,6 +30,12 @@ const socialPlatforms = [
 export default function ProfileEditor({ profile, onProfileChange }: ProfileEditorProps) {
   const { toast } = useToast();
   const [editedProfile, setEditedProfile] = useState<Profile>(profile);
+  
+  // Sincroniza o estado interno se o prop externo mudar
+  useEffect(() => {
+    setEditedProfile(profile);
+  }, [profile]);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -37,7 +43,9 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
   };
 
   const handleSwitchChange = (name: keyof Profile, checked: boolean) => {
-    setEditedProfile(prev => ({ ...prev, [name]: checked }));
+    const newProfile = { ...editedProfile, [name]: checked };
+    setEditedProfile(newProfile);
+    onProfileChange(newProfile); // Atualiza o pai imediatamente
   }
   
   const handleSocialLinkChange = (key: keyof NonNullable<Profile['socialLinks']>, value: string) => {
