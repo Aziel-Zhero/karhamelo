@@ -61,10 +61,11 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
     }))
   };
 
-  const handleAvatarChange = (newAvatarUrl: string) => {
+  const handleAvatarSave = (newAvatarUrl: string) => {
     const newProfile = { ...editedProfile, avatarUrl: newAvatarUrl };
     setEditedProfile(newProfile);
     onProfileChange(newProfile); // Atualiza o pai imediatamente
+    setIsAvatarEditorOpen(false); // Fecha o dialog
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -159,7 +160,7 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
                   </div>
                   <Switch
                     id="isPortfolioLinkEnabled"
-                    checked={editedProfile.isPortfolioLinkEnabled}
+                    checked={!!editedProfile.isPortfolioLinkEnabled}
                     onCheckedChange={(checked) => handleSwitchChange('isPortfolioLinkEnabled', checked)}
                   />
               </div>
@@ -175,7 +176,7 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
         open={isAvatarEditorOpen}
         onOpenChange={setIsAvatarEditorOpen}
         currentAvatar={editedProfile.avatarUrl}
-        onAvatarSave={handleAvatarChange}
+        onAvatarSave={handleAvatarSave}
       />
     </>
   );
