@@ -175,7 +175,12 @@ export default function ProfilePreview({
                   );
                 })}
                 {profile.isPortfolioLinkEnabled && (
-                  <PortfolioGlowButton href="/portfolio/preview" text="Ver Portfólio"/>
+                  <PortfolioGlowButton 
+                    href="/portfolio/preview" 
+                    text="Ver Portfólio"
+                    primaryColor={theme.primaryColor}
+                    accentColor={theme.accentColor}
+                  />
                 )}
               </div>
             </div>
