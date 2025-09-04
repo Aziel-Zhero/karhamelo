@@ -66,7 +66,7 @@ const getPatternStyle = (pattern: string | undefined, color: string) => {
     'endless-clouds': `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 20c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm0 10c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm-10-5c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z" fill="${patternColor}"/></svg>`,
     wiggle: `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20s2-4 4-4 4 4 4 4-2 4-4 4-4-4-4-4zm10 0s2-4 4-4 4 4 4 4-2 4-4 4-4-4-4-4zm10 0s2-4 4-4 4 4 4 4-2 4-4 4-4-4-4-4zm10 0s2-4 4-4 4 4 4 4-2 4-4 4-4-4-4-4z" fill="${patternColor}" /></svg>`,
     'diagonal-stripes': `<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="${patternColor}" fill-rule="evenodd"><path d="M-5 20l25-25" stroke-width="2" stroke="${patternColor}"/><path d="M-5 0l25 25" stroke-width="2" stroke="${patternColor}"/></g></svg>`,
-    rain: `<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="${patternColor}" fill-rule="evenodd"><path d="M5 15a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zM5 5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0_1 0 5z"/></g></svg>`,
+    rain: `<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="${patternColor}" fill-rule="evenodd"><path d="M5 15a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zM5 5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></g></svg>`,
     'polka-dots': `<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="${patternColor}" fill-rule="evenodd"><circle cx="5" cy="5" r="3"/><circle cx="15" cy="15" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="5" r="3"/></g></svg>`,
   }
 
@@ -88,10 +88,8 @@ const radiusClasses = {
 };
 
 
-// A helper function to reconstruct the icon components from strings
 const hydrateLinks = (links: any[]): Link[] => {
   return links.map(link => {
-    // Find the icon in the map based on its name if it exists
     const iconName = typeof link.icon === 'string' ? link.icon : 'Link2';
     const IconComponent = iconMap[iconName] || Link2;
     return {
@@ -99,16 +97,6 @@ const hydrateLinks = (links: any[]): Link[] => {
       icon: IconComponent,
     };
   });
-};
-
-const serializeLinks = (links: Link[]): any[] => {
-    return links.map(link => {
-        const iconName = Object.keys(iconMap).find(key => iconMap[key] === link.icon) || 'Link2';
-        return {
-            ...link,
-            icon: iconName
-        };
-    });
 };
 
 
@@ -120,39 +108,13 @@ export default function PublicProfilePage() {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleLinkClick = (clickedLink: Link) => {
-    if (!data) return;
-
-    const updatedLinks = data.links.map(link => 
-      link.id === clickedLink.id 
-          ? { ...link, clickCount: (link.clickCount || 0) + 1 } 
-          : link
-    );
-
-    const updatedData = {
-        ...data, 
-        links: updatedLinks
-    };
-    
-    setData(updatedData);
-
-    const serializedData = {
-      ...updatedData,
-      links: serializeLinks(updatedLinks)
-    };
-
-    localStorage.setItem('karhamelo-page-data', JSON.stringify(serializedData));
-  };
-
   useEffect(() => {
-    // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
-    // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
     setTimeout(() => {
+      // THIS IS THE PREVIEW PAGE, so it should load from "draft" data
       const storedData = localStorage.getItem('karhamelo-page-data');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
-          // We need to re-hydrate the links to convert icon names back to components
           const hydratedLinks = hydrateLinks(parsedData.links);
           setData({ ...parsedData, links: hydratedLinks });
         } catch (error) {
@@ -176,7 +138,7 @@ export default function PublicProfilePage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center p-4">
         <KLogo />
         <h1 className="mt-8 text-2xl font-bold">Página não encontrada</h1>
-        <p className="text-muted-foreground">Não foi possível carregar os dados do perfil.</p>
+        <p className="text-muted-foreground">Não foi possível carregar os dados do perfil para preview.</p>
       </div>
     );
   }
@@ -260,7 +222,6 @@ export default function PublicProfilePage() {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => handleLinkClick(link)}
                         className="flex items-center justify-center gap-3"
                       >
                         {Icon && <Icon className="h-5 w-5" />}

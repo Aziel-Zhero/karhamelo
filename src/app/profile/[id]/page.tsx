@@ -120,6 +120,7 @@ export default function PublicProfilePage() {
   const handleLinkClick = (clickedLink: Link) => {
     if (!data) return;
 
+    // This is the public page, so we update the "published" data
     const updatedLinks = data.links.map(link => 
       link.id === clickedLink.id 
           ? { ...link, clickCount: (link.clickCount || 0) + 1 } 
@@ -138,13 +139,14 @@ export default function PublicProfilePage() {
       links: serializeLinks(updatedLinks)
     };
 
-    localStorage.setItem('karhamelo-page-data', JSON.stringify(serializedData));
+    localStorage.setItem('karhamelo-published-data', JSON.stringify(serializedData));
   };
 
 
   useEffect(() => {
     setTimeout(() => {
-      const storedData = localStorage.getItem('karhamelo-page-data');
+      // THIS IS THE PUBLIC PAGE, so it should load from "published" data
+      const storedData = localStorage.getItem('karhamelo-published-data');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
@@ -154,7 +156,7 @@ export default function PublicProfilePage() {
           const currentViews = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
           localStorage.setItem('karhamelo-profile-views', (currentViews + 1).toString());
         } catch (error) {
-          console.error("Falha ao analisar dados da página do localStorage", error);
+          console.error("Falha ao analisar dados publicados do localStorage", error);
         }
       }
       setIsLoading(false);
@@ -174,7 +176,7 @@ export default function PublicProfilePage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center p-4">
         <KLogo />
         <h1 className="mt-8 text-2xl font-bold">Página não encontrada</h1>
-        <p className="text-muted-foreground">Não foi possível carregar os dados do perfil.</p>
+        <p className="text-muted-foreground">Esta página ainda não foi publicada.</p>
       </div>
     );
   }
