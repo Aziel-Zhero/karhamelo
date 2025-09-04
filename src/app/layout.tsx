@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://karhamelo.app'),
   title: {
     default: 'Karhamelo | Crie sua Página de Links e Portfólio',
     template: '%s | Karhamelo',
