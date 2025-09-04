@@ -9,15 +9,24 @@ import { KLogo } from '@/components/KLogo';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+const GoogleIcon = () => (
+    <svg className="mr-3 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+        <path fill="currentColor" d="M488 261.8C488 403.3 381.5 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 21.2 173.4 54.7l-73.4 69.4C322.2 100.9 288.4 88 248 88c-88.3 0-160 71.7-160 160s71.7 160 160 160c97.2 0 132.8-62.4 137.9-92.4H248v-72h239.5c1.4 9.3 2.5 19.1 2.5 29.8z"></path>
+  </svg>
+)
+
 export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Em uma aplicação real, aqui você faria a chamada de autenticação.
-    // Para o protótipo, vamos apenas redirecionar para o dashboard.
     router.push('/dashboard');
   };
+
+  const handleGoogleLogin = () => {
+    // Futuramente, aqui será a lógica de auth com Supabase
+    router.push('/dashboard');
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -31,7 +40,21 @@ export default function LoginPage() {
             <CardTitle>Bem-vindo de volta!</CardTitle>
             <CardDescription>Faça login para continuar.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+             <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+                <GoogleIcon />
+                Entrar com o Google
+            </Button>
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                    Ou continue com seu e-mail
+                    </span>
+                </div>
+            </div>
             <form className="space-y-4" onSubmit={handleLogin}>
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail</Label>
@@ -41,7 +64,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Senha</Label>
                 <Input id="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">Entrar</Button>
+              <Button type="submit" className="w-full">Entrar com E-mail</Button>
             </form>
           </CardContent>
           <CardFooter className="text-center text-sm">
