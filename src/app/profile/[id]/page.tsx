@@ -88,20 +88,26 @@ const radiusClasses = {
 };
 
 
-// A helper function to reconstruct the icon components from strings
+const serializeLinks = (links: Link[]): any[] => {
+    return links.map(link => {
+        const iconName = Object.keys(iconMap).find(key => iconMap[key] === link.icon) || 'Link2';
+        return {
+            ...link,
+            icon: iconName
+        };
+    });
+};
+
 const hydrateLinks = (links: any[]): Link[] => {
   return links.map(link => {
-    // Find the icon in the map based on its name if it exists
-    const linkIconName = (link.icon as any)?.displayName?.replace('LucideIcon', '');
-    const foundIcon = linkIconName ? iconMap[linkIconName] : Link2;
-
+    const iconName = typeof link.icon === 'string' ? link.icon : 'Link2';
+    const IconComponent = iconMap[iconName] || Link2;
     return {
       ...link,
-      icon: foundIcon || Link2,
+      icon: IconComponent,
     };
   });
 };
-
 
 export default function PublicProfilePage() {
   const [data, setData] = useState<{
@@ -119,24 +125,32 @@ export default function PublicProfilePage() {
           ? { ...link, clickCount: (link.clickCount || 0) + 1 } 
           : link
     );
-    const updatedData = {...data, links: updatedLinks};
+
+    const updatedData = {
+        ...data, 
+        links: updatedLinks
+    };
+    
     setData(updatedData);
-    localStorage.setItem('karhamelo-page-data', JSON.stringify(updatedData));
+
+    const serializedData = {
+      ...updatedData,
+      links: serializeLinks(updatedLinks)
+    };
+
+    localStorage.setItem('karhamelo-page-data', JSON.stringify(serializedData));
   };
 
 
   useEffect(() => {
-    // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
-    // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
     setTimeout(() => {
       const storedData = localStorage.getItem('karhamelo-page-data');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
-          // We need to re-hydrate the links to convert icon names back to components
           const hydratedLinks = hydrateLinks(parsedData.links);
           setData({ ...parsedData, links: hydratedLinks });
-          // Track profile view
+          
           const currentViews = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
           localStorage.setItem('karhamelo-profile-views', (currentViews + 1).toString());
         } catch (error) {
@@ -172,7 +186,7 @@ export default function PublicProfilePage() {
   const customStyle = {
     '--page-primary': theme.primaryColor,
     '--page-accent': theme.accentColor,
-    '--page-primary-fg': '#ffffff', // Assuming primary is dark enough for white text
+    '--page-primary-fg': '#ffffff', 
     ...patternStyle
   } as React.CSSProperties;
 
