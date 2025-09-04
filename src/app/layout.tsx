@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   metadataBase: new URL('https://karhamelo.app'),
   title: {
-    default: 'Karhamelo | Crie sua Página de Links e Portfólio',
+    default: 'Karhamelo',
     template: '%s | Karhamelo',
   },
   description: 'Crie uma página de links personalizada, um portfólio profissional e gerencie tudo em uma plataforma simples e poderosa. Ideal para criadores, freelancers e negócios.',
@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Karhamelo | Seu universo de links em um só lugar',
     description: 'Crie uma página de links e portfólio personalizados de forma rápida e intuitiva.',
-    url: 'https://karhamelo.app', // Substituir pela URL real
+    url: 'https://karhamelo.app',
     siteName: 'Karhamelo',
     images: [
       {
-        url: '/og-image.png', // Criar e adicionar uma imagem OG
+        url: '/og-image.png', 
         width: 1200,
         height: 630,
         alt: 'Karhamelo - Crie sua Página de Links',
@@ -34,8 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Karhamelo | Seu universo de links em um só lugar',
     description: 'Crie uma página de links e portfólio personalizados de forma rápida e intuitiva.',
-    // creator: '@karhamelo', // Adicionar o handle do Twitter
-    images: ['/twitter-image.png'], // Criar e adicionar uma imagem para o Twitter
+    images: ['/twitter-image.png'],
   },
   robots: {
     index: true,
