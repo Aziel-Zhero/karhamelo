@@ -4,12 +4,47 @@
 import { useState, useEffect } from 'react';
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import LinkEditor from '@/components/LinkEditor';
-import { Eye, Link as LinkIcon } from 'lucide-react';
+import { Eye, Link as LinkIcon, Briefcase, Github, Linkedin, Twitter, Instagram, Youtube, Facebook, Link2 } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import ProfileEditor from '@/components/ProfileEditor';
 import { Button } from '@/components/ui/button';
+import { allIconsMap } from '@/lib/icon-map';
+
+const iconMap: { [key: string]: React.ElementType } = {
+  Github,
+  Linkedin,
+  Twitter,
+  Instagram,
+  Youtube,
+  Facebook,
+  Link2,
+};
+
+// A helper function to reconstruct the icon components from strings
+const hydrateLinks = (links: any[]): Link[] => {
+  return links.map(link => {
+    const iconName = typeof link.icon === 'string' ? link.icon : 'Link2';
+    const IconComponent = allIconsMap[iconName]?.component || Link2;
+    return {
+      ...link,
+      icon: IconComponent,
+    };
+  });
+};
+
+// A helper function to serialize links for localStorage
+const serializeLinks = (links: Link[]): any[] => {
+    return links.map(link => {
+        const iconName = Object.keys(allIconsMap).find(key => allIconsMap[key].component === link.icon) || 'link';
+        return {
+            ...link,
+            icon: iconName
+        };
+    });
+};
+
 
 export default function LinksPage() {
   const [profile, setProfile] = useState<Profile>({
@@ -52,7 +87,7 @@ export default function LinksPage() {
       try {
         const parsedData = JSON.parse(storedData);
         setProfile(parsedData.profile);
-        setLinks(parsedData.links);
+        setLinks(hydrateLinks(parsedData.links));
         setTheme(parsedData.theme);
       } catch (e) {
         console.error("Failed to parse page data from localStorage", e);
@@ -62,7 +97,11 @@ export default function LinksPage() {
 
   // Save data to localStorage whenever it changes
   useEffect(() => {
-    const pageData = { profile, links, theme };
+    const pageData = { 
+        profile, 
+        links: serializeLinks(links), 
+        theme 
+    };
     localStorage.setItem('karhamelo-page-data', JSON.stringify(pageData));
   }, [profile, links, theme]);
 
