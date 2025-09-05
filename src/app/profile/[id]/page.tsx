@@ -1,15 +1,15 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Link, Profile, PageTheme } from '@/lib/types';
-import { Github, Linkedin, Link2, Twitter, Instagram, Youtube, Facebook, Briefcase } from 'lucide-react';
+import type { Link, Profile, PageTheme, PageData } from '@/lib/types';
+import { Github, Linkedin, Link2, Twitter, Instagram, Youtube, Facebook, Briefcase, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
 import { cn } from '@/lib/utils';
 import { PortfolioGlowButton } from '@/components/PortfolioGlowButton';
 import { allIconsMap } from '@/lib/icon-map';
+import { incrementLinkClick, loadPageData } from '@/lib/data-services';
 
 
 const socialIconsMap: { [key: string]: React.ElementType } = {
@@ -79,58 +79,38 @@ const radiusClasses = {
 };
 
 
-export default function PublicProfilePage() {
-  const [data, setData] = useState<{
-    profile: Profile;
-    links: Link[];
-    theme: PageTheme;
-  } | null>(null);
+export default function PublicProfilePage({ params }: { params: { id: string } }) {
+  const [data, setData] = useState<PageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const userId = params.id;
 
   const handleLinkClick = (clickedLink: Link) => {
     if (!data) return;
-
-    // This is the public page, so we update the "published" data
-    const updatedLinks = data.links.map(link => 
-      link.id === clickedLink.id 
-          ? { ...link, clickCount: (link.clickCount || 0) + 1 } 
-          : link
-    );
-
-    const updatedData = {
-        ...data, 
-        links: updatedLinks
-    };
-    
-    setData(updatedData);
-
-    localStorage.setItem('karhamelo-published-data', JSON.stringify(updatedData));
+    incrementLinkClick(clickedLink.id);
   };
 
 
   useEffect(() => {
-    setTimeout(() => {
-      // THIS IS THE PUBLIC PAGE, so it should load from "published" data
-      const storedData = localStorage.getItem('karhamelo-published-data');
-      if (storedData) {
-        try {
-          const parsedData = JSON.parse(storedData);
-          setData(parsedData);
-          
-          const currentViews = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
-          localStorage.setItem('karhamelo-profile-views', (currentViews + 1).toString());
-        } catch (error) {
-          console.error("Falha ao analisar dados publicados do localStorage", error);
-        }
+    const fetchData = async () => {
+      if (!userId) return;
+      setIsLoading(true);
+      try {
+        const pageData = await loadPageData(userId);
+        setData(pageData);
+      } catch (error) {
+        console.error("Falha ao carregar dados da página", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    }, 100);
-  }, []);
+    };
+    
+    fetchData();
+  }, [userId]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <KLogo />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -140,7 +120,7 @@ export default function PublicProfilePage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center p-4">
         <KLogo />
         <h1 className="mt-8 text-2xl font-bold">Página não encontrada</h1>
-        <p className="text-muted-foreground">Esta página ainda não foi publicada.</p>
+        <p className="text-muted-foreground">Este usuário não publicou uma página ainda.</p>
       </div>
     );
   }
@@ -235,7 +215,7 @@ export default function PublicProfilePage() {
                 })}
                 {profile.isPortfolioLinkEnabled && (
                   <PortfolioGlowButton 
-                    href="/portfolio/preview" 
+                    href={`/portfolio/${userId}`} 
                     text="Ver Portfólio" 
                     primaryColor={theme.primaryColor}
                     accentColor={theme.accentColor}
@@ -250,7 +230,7 @@ export default function PublicProfilePage() {
           <p>
             Desenvolvido por{' '}
             <a
-              href="#"
+              href="https://karhamelo.app"
               target="_blank"
               rel="noopener noreferrer"
               className="font-bold text-primary/80 hover:underline"

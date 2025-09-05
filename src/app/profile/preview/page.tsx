@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import type { Link, Profile, PageTheme } from '@/lib/types';
-import { Github, Linkedin, Link2, Twitter, Instagram, Youtube, Facebook, Briefcase } from 'lucide-react';
+import { Github, Linkedin, Link2, Twitter, Instagram, Youtube, Facebook, Briefcase, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
@@ -89,8 +88,8 @@ export default function PublicProfilePage() {
 
   useEffect(() => {
     setTimeout(() => {
-      // THIS IS THE PREVIEW PAGE, so it should load from "draft" data
-      const storedData = localStorage.getItem('karhamelo-page-data');
+      // THIS IS THE PREVIEW PAGE, so it should load from "draft" data from the main editor
+      const storedData = localStorage.getItem('karhamelo-preview-data');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
@@ -106,7 +105,7 @@ export default function PublicProfilePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <KLogo />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -225,7 +224,7 @@ export default function PublicProfilePage() {
           <p>
             Desenvolvido por{' '}
             <a
-              href="#"
+              href="https://karhamelo.app"
               target="_blank"
               rel="noopener noreferrer"
               className="font-bold text-primary/80 hover:underline"

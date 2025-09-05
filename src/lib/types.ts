@@ -1,4 +1,3 @@
-
 import type { LucideIcon } from 'lucide-react';
 
 export type Json =
@@ -127,7 +126,14 @@ export interface Database {
       }
     }
     Views: { [_ in never]: never }
-    Functions: { [_ in never]: never }
+    Functions: {
+      increment_click_count: {
+        Args: {
+          link_id_param: string
+        }
+        Returns: undefined
+      }
+    }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }
   }
@@ -138,7 +144,10 @@ export interface Link {
   title: string;
   url: string;
   icon: string;
-  clickCount?: number;
+  click_count?: number;
+  user_id?: string;
+  created_at?: string;
+  order?: number;
 }
 
 export interface Profile {
@@ -212,4 +221,11 @@ export interface Portfolio {
   ctaBannerTitle: string;
   ctaBannerDescription: string;
   ctaBannerButtonText: string;
+}
+
+export interface PageData {
+  profile: Profile;
+  links: Link[];
+  theme: PageTheme;
+  portfolio: Portfolio;
 }

@@ -1,10 +1,9 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Link, Profile, PageTheme } from '@/lib/types';
+import type { Link, Profile, PageTheme, PageData, Portfolio } from '@/lib/types';
 import LinkEditor from '@/components/LinkEditor';
-import { Eye, UploadCloud, Copy } from 'lucide-react';
+import { Eye, UploadCloud, Copy, Loader2 } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
@@ -14,9 +13,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@/lib/supabase/client';
+import { loadPageData, savePageData } from '@/lib/data-services';
+
 
 export default function LinksPage() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [isPublished, setIsPublished] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const supabase = createClient();
@@ -24,28 +27,12 @@ export default function LinksPage() {
   const publicUrl = typeof window !== 'undefined' && userId ? `${window.location.origin}/profile/${userId}` : '';
 
   const [profile, setProfile] = useState<Profile>({
-    name: 'Karhamelo',
-    bio: 'Seu hub de links em uma única página, lindamente personalizado. Construído com Next.js e ❤️.',
-    avatarUrl: 'https://picsum.photos/128/128',
-    isPortfolioLinkEnabled: true,
-    socialLinks: {
-      github: 'https://github.com/karhamelo',
-      twitter: 'https://twitter.com/karhamelo',
-      linkedin: 'https://linkedin.com/in/karhamelo',
-    },
+    name: '',
+    bio: '',
+    avatarUrl: '',
   });
 
-  const [links, setLinks] = useState<Link[]>([
-    {
-      id: '1',
-      title: 'Meu Website',
-      url: 'https://example.com',
-      icon: 'link',
-      clickCount: 0,
-    },
-    { id: '2', title: 'Meu Blog', url: 'https://example.com/blog', icon: 'book', clickCount: 0 },
-  ]);
-
+  const [links, setLinks] = useState<Link[]>([]);
   const [theme, setTheme] = useState<PageTheme>({
     primaryColor: 'hsl(199 76% 52%)',
     backgroundColor: 'hsl(216 28% 95%)',
@@ -55,51 +42,55 @@ export default function LinksPage() {
     buttonRadius: 'full',
     buttonShadow: true,
   });
+  
+  // Dummy state needed for ThemeCustomizer
+  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
+
 
   useEffect(() => {
     const fetchUserAndData = async () => {
+        setIsLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
             setUserId(user.id);
-        }
+            const pageData = await loadPageData(user.id);
+            if(pageData) {
+                setProfile(pageData.profile);
+                setLinks(pageData.links);
+                setTheme(pageData.theme);
+                setPortfolio(pageData.portfolio);
 
-        const storedData = localStorage.getItem('karhamelo-page-data');
-        if (storedData) {
-          try {
-            const parsedData = JSON.parse(storedData);
-            setProfile(parsedData.profile);
-            setLinks(parsedData.links); // No hydration needed as icon is a string
-            setTheme(parsedData.theme);
-          } catch (e) {
-            console.error("Failed to parse page data from localStorage", e);
-          }
+                // Heuristic to check if it has been published before
+                if (pageData.links.length > 0 || pageData.profile.bio) {
+                  setIsPublished(true);
+                }
+            }
         }
-        
-        const publishedData = localStorage.getItem('karhamelo-published-data');
-        if (publishedData) {
-          setIsPublished(true);
-        }
+        setIsLoading(false);
     };
     fetchUserAndData();
   }, [supabase]);
-
-  useEffect(() => {
-    const pageData = { 
-        profile, 
-        links, 
-        theme 
-    };
-    localStorage.setItem('karhamelo-page-data', JSON.stringify(pageData));
-  }, [profile, links, theme]);
   
-  const handlePublish = () => {
-    const pageData = { profile, links, theme };
-    localStorage.setItem('karhamelo-published-data', JSON.stringify(pageData));
-    setIsPublished(true);
-    toast({
-      title: 'Página Publicada!',
-      description: 'Sua página de links está no ar e o link pode ser compartilhado.',
-    });
+  const handlePublish = async () => {
+    if (!userId || !portfolio) return;
+    setIsSaving(true);
+    try {
+      const pageData: PageData = { profile, links, theme, portfolio };
+      await savePageData(userId, pageData);
+      setIsPublished(true);
+      toast({
+        title: 'Página Publicada!',
+        description: 'Sua página de links está no ar e o link pode ser compartilhado.',
+      });
+    } catch (error) {
+       toast({
+        variant: 'destructive',
+        title: 'Erro ao publicar!',
+        description: error instanceof Error ? error.message : 'Não foi possível salvar os dados.',
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCopyLink = () => {
@@ -111,8 +102,8 @@ export default function LinksPage() {
     });
   };
 
-  const addLink = (link: Omit<Link, 'id' | 'clickCount'>) => {
-    setLinks((prev) => [...prev, { ...link, id: crypto.randomUUID(), clickCount: 0 }]);
+  const addLink = (link: Omit<Link, 'id' | 'click_count'>) => {
+    setLinks((prev) => [...prev, { ...link, id: crypto.randomUUID(), click_count: 0 }]);
   };
 
   const updateLink = (updatedLink: Link) => {
@@ -131,9 +122,27 @@ export default function LinksPage() {
   
   const handleViewPreview = () => {
     if (!userId) return;
-    // Uses the draft data for previewing
-    window.open(`/profile/${userId}`, '_blank');
+    // We need to save draft data to localStorage for the preview page to access it
+    const pageData = { profile, links, theme };
+    localStorage.setItem('karhamelo-preview-data', JSON.stringify(pageData));
+    window.open(`/profile/preview`, '_blank');
   };
+  
+  const updateFullProfile = (newProfile: Profile) => {
+    setProfile(newProfile);
+  };
+
+  const updateTheme = (newTheme: PageTheme) => {
+    setTheme(newTheme);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -147,9 +156,13 @@ export default function LinksPage() {
               <Eye className="mr-2 h-4 w-4" />
               Ver Preview
             </Button>
-            <Button onClick={handlePublish} disabled={!userId}>
-              <UploadCloud className="mr-2 h-4 w-4" />
-              Publicar
+            <Button onClick={handlePublish} disabled={!userId || isSaving}>
+              {isSaving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <UploadCloud className="mr-2 h-4 w-4" />
+              )}
+              {isSaving ? 'Publicando...' : 'Publicar'}
             </Button>
         </div>
       </div>
@@ -173,7 +186,7 @@ export default function LinksPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3 space-y-8">
-          <ProfileEditor profile={profile} onProfileChange={setProfile} />
+          <ProfileEditor profile={profile} onProfileChange={updateFullProfile} />
           <LinkEditor onAddLink={addLink} />
           <LinkList
             links={links}
@@ -182,7 +195,7 @@ export default function LinksPage() {
           />
           <ThemeCustomizer
             currentTheme={theme}
-            onThemeChange={setTheme}
+            onThemeChange={updateTheme}
             profile={profile}
             links={links}
           />

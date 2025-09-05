@@ -1,37 +1,49 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Link, Profile } from '@/lib/types';
+import type { Link } from '@/lib/types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Link as LinkIcon, MousePointerClick, Users } from 'lucide-react';
+import { Link as LinkIcon, MousePointerClick, Users, Loader2 } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
+import { loadPageData } from '@/lib/data-services';
 
 export default function DashboardPage() {
   const [totalLinks, setTotalLinks] = useState(0);
   const [totalClicks, setTotalClicks] = useState(0);
   const [profileViews, setProfileViews] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
-    const storedData = localStorage.getItem('karhamelo-page-data');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData) as { links: Link[], profile: Profile };
-        const links = parsedData.links || [];
-        setTotalLinks(links.length);
-
-        const clicks = links.reduce((acc, link) => acc + (link.clickCount || 0), 0);
-        setTotalClicks(clicks);
-
-      } catch (error) {
-        console.error("Failed to parse page data from localStorage", error);
+    const fetchStats = async () => {
+      setIsLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if(user) {
+        const pageData = await loadPageData(user.id);
+        if (pageData) {
+            const links = pageData.links || [];
+            setTotalLinks(links.length);
+            const clicks = links.reduce((acc, link) => acc + (link.click_count || 0), 0);
+            setTotalClicks(clicks);
+        }
       }
-    }
-    
-    // Simulating profile views
-    const views = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
-    setProfileViews(views);
+      
+      // Simulating profile views - this would ideally come from the backend
+      const views = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
+      setProfileViews(views);
+      setIsLoading(false);
+    };
 
-  }, []);
+    fetchStats();
+  }, [supabase]);
+
+  if (isLoading) {
+    return (
+       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-8">
