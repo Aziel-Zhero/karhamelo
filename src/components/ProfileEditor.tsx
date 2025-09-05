@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { useState, useEffect } from 'react';
-import { Save, Github, Twitter, Linkedin, Instagram, Youtube, Facebook, Pencil } from 'lucide-react';
+import { useState } from 'react';
+import { Github, Twitter, Linkedin, Instagram, Youtube, Facebook, Pencil } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from './ui/switch';
@@ -31,51 +31,32 @@ const socialPlatforms = [
 
 export default function ProfileEditor({ profile, onProfileChange }: ProfileEditorProps) {
   const { toast } = useToast();
-  const [editedProfile, setEditedProfile] = useState<Profile>(profile);
   const [isAvatarEditorOpen, setIsAvatarEditorOpen] = useState(false);
-  
-  // Sincroniza o estado interno se o prop externo mudar
-  useEffect(() => {
-    setEditedProfile(profile);
-  }, [profile]);
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setEditedProfile(prev => ({ ...prev, [name]: value }));
+    onProfileChange({ ...profile, [name]: value });
   };
 
   const handleSwitchChange = (name: keyof Profile, checked: boolean) => {
-    const newProfile = { ...editedProfile, [name]: checked };
-    setEditedProfile(newProfile);
-    onProfileChange(newProfile); // Atualiza o pai imediatamente
-  }
+    onProfileChange({ ...profile, [name]: checked });
+  };
   
   const handleSocialLinkChange = (key: keyof NonNullable<Profile['socialLinks']>, value: string) => {
-    setEditedProfile(prev => ({
-        ...prev,
-        socialLinks: {
-            ...prev.socialLinks,
-            [key]: value
-        }
-    }))
+    onProfileChange({
+      ...profile,
+      socialLinks: {
+        ...profile.socialLinks,
+        [key]: value,
+      },
+    });
   };
 
   const handleAvatarSave = (newAvatarUrl: string) => {
-    const newProfile = { ...editedProfile, avatarUrl: newAvatarUrl };
-    setEditedProfile(newProfile);
-    onProfileChange(newProfile); // Atualiza o pai imediatamente
-    setIsAvatarEditorOpen(false); // Fecha o dialog
+    onProfileChange({ ...profile, avatarUrl: newAvatarUrl });
+    setIsAvatarEditorOpen(false); 
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onProfileChange(editedProfile);
-    toast({
-      title: 'Perfil Atualizado!',
-      description: 'Os detalhes do seu perfil foram salvos.',
-    });
-  };
 
   return (
     <>
@@ -83,48 +64,47 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
         <CardHeader>
           <CardTitle>Edite seu Perfil</CardTitle>
           <CardDescription>
-            Atualize seus dados pessoais e links de redes sociais.
+            Atualize seus dados pessoais e links de redes sociais. As alterações são salvas automaticamente.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-6">
             <div className="space-y-4">
-
               <div className="space-y-2">
-                  <Label>Foto de Perfil</Label>
-                  <div className="flex items-center gap-4">
-                      <Avatar className="h-16 w-16">
-                          <AvatarImage src={editedProfile.avatarUrl} alt={editedProfile.name} />
-                          <AvatarFallback>{editedProfile.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <Button type="button" variant="outline" onClick={() => setIsAvatarEditorOpen(true)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Alterar Foto
-                      </Button>
-                  </div>
+                <Label>Foto de Perfil</Label>
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={profile.avatarUrl} alt={profile.name} />
+                    <AvatarFallback>{profile.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <Button type="button" variant="outline" onClick={() => setIsAvatarEditorOpen(true)}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Alterar Foto
+                  </Button>
+                </div>
               </div>
 
-               <div className='space-y-2'>
-                  <Label htmlFor="name">Nome</Label>
-                  <Input
-                      id="name"
-                      name="name"
-                      placeholder="Seu Nome"
-                      value={editedProfile.name}
-                      onChange={handleInputChange}
-                      required
-                  />
-               </div>
-               <div className='space-y-2'>
-                  <Label htmlFor="bio">Biografia</Label>
-                  <Textarea
-                      id="bio"
-                      name="bio"
-                      placeholder="Sua Biografia (opcional)"
-                      value={editedProfile.bio}
-                      onChange={handleInputChange}
-                  />
-               </div>
+              <div className='space-y-2'>
+                <Label htmlFor="name">Nome</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="Seu Nome"
+                  value={profile.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor="bio">Biografia</Label>
+                <Textarea
+                  id="bio"
+                  name="bio"
+                  placeholder="Sua Biografia (opcional)"
+                  value={profile.bio}
+                  onChange={handleInputChange}
+                />
+              </div>
             </div>
             
             <Separator />
@@ -132,50 +112,46 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
             <div className="space-y-4">
               <h4 className="text-sm font-medium">Redes Sociais</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {socialPlatforms.map(({ key, label, icon: Icon }) => (
-                      <div key={key} className="space-y-2">
-                          <Label htmlFor={`social-${key}`} className="flex items-center gap-2">
-                             <Icon className="h-4 w-4" /> {label}
-                          </Label>
-                          <Input
-                              id={`social-${key}`}
-                              name={`socialLinks.${key}`}
-                              placeholder={`https://...`}
-                              value={editedProfile.socialLinks?.[key] || ''}
-                              onChange={(e) => handleSocialLinkChange(key, e.target.value)}
-                          />
-                      </div>
-                  ))}
+                {socialPlatforms.map(({ key, label, icon: Icon }) => (
+                  <div key={key} className="space-y-2">
+                    <Label htmlFor={`social-${key}`} className="flex items-center gap-2">
+                      <Icon className="h-4 w-4" /> {label}
+                    </Label>
+                    <Input
+                      id={`social-${key}`}
+                      name={`socialLinks.${key}`}
+                      placeholder={`https://...`}
+                      value={profile.socialLinks?.[key] || ''}
+                      onChange={(e) => handleSocialLinkChange(key, e.target.value)}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
             <Separator />
 
-             <div className="space-y-4">
+            <div className="space-y-4">
               <h4 className="text-sm font-medium">Configurações da Página</h4>
               <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
-                  <div>
-                    <Label htmlFor="isPortfolioLinkEnabled">Link para Portfólio</Label>
-                    <p className="text-xs text-muted-foreground">Exibe um botão para seu portfólio na página de links.</p>
-                  </div>
-                  <Switch
-                    id="isPortfolioLinkEnabled"
-                    checked={!!editedProfile.isPortfolioLinkEnabled}
-                    onCheckedChange={(checked) => handleSwitchChange('isPortfolioLinkEnabled', checked)}
-                  />
+                <div>
+                  <Label htmlFor="isPortfolioLinkEnabled">Link para Portfólio</Label>
+                  <p className="text-xs text-muted-foreground">Exibe um botão para seu portfólio na página de links.</p>
+                </div>
+                <Switch
+                  id="isPortfolioLinkEnabled"
+                  checked={!!profile.isPortfolioLinkEnabled}
+                  onCheckedChange={(checked) => handleSwitchChange('isPortfolioLinkEnabled', checked)}
+                />
               </div>
             </div>
-            
-            <Button type="submit" className="w-full">
-              <Save className="mr-2" /> Salvar Perfil
-            </Button>
-          </form>
+          </div>
         </CardContent>
       </Card>
       <AvatarEditorDialog
         open={isAvatarEditorOpen}
         onOpenChange={setIsAvatarEditorOpen}
-        currentAvatar={editedProfile.avatarUrl}
+        currentAvatar={profile.avatarUrl}
         onAvatarSave={handleAvatarSave}
       />
     </>
