@@ -2,9 +2,11 @@
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Twitter, Instagram, Youtube, Facebook, Briefcase } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Youtube, Facebook } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PortfolioGlowButton } from './PortfolioGlowButton';
+import { allIconsMap } from '@/lib/icon-map';
+
 
 interface ProfilePreviewProps {
   profile: Profile;
@@ -152,7 +154,7 @@ export default function ProfilePreview({
               </div>
               <div className="w-full space-y-2 pt-2">
                 {links.map((link) => {
-                  const Icon = link.icon;
+                  const Icon = allIconsMap[link.icon]?.component || allIconsMap['link'].component;
                   return (
                     <Button
                       key={link.id}

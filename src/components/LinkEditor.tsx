@@ -5,12 +5,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link2 } from 'lucide-react';
 import type { Link } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface LinkEditorProps {
-  onAddLink: (link: Omit<Link, 'id'>) => void;
+  onAddLink: (link: Omit<Link, 'id' | 'clickCount'>) => void;
 }
 
 export default function LinkEditor({ onAddLink }: LinkEditorProps) {
@@ -21,7 +20,7 @@ export default function LinkEditor({ onAddLink }: LinkEditorProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title && url) {
-      onAddLink({ title, url, icon: Link2 });
+      onAddLink({ title, url, icon: 'link' }); // Default icon is 'link'
       setTitle('');
       setUrl('');
       toast({

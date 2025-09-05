@@ -9,17 +9,8 @@ import { Button } from '@/components/ui/button';
 import { KLogo } from '@/components/KLogo';
 import { cn } from '@/lib/utils';
 import { PortfolioGlowButton } from '@/components/PortfolioGlowButton';
+import { allIconsMap } from '@/lib/icon-map';
 
-
-const iconMap: { [key: string]: React.ElementType } = {
-  Github,
-  Linkedin,
-  Twitter,
-  Instagram,
-  Youtube,
-  Facebook,
-  Link2,
-};
 
 const socialIconsMap: { [key: string]: React.ElementType } = {
   github: Github,
@@ -88,27 +79,6 @@ const radiusClasses = {
 };
 
 
-const serializeLinks = (links: Link[]): any[] => {
-    return links.map(link => {
-        const iconName = Object.keys(iconMap).find(key => iconMap[key] === link.icon) || 'Link2';
-        return {
-            ...link,
-            icon: iconName
-        };
-    });
-};
-
-const hydrateLinks = (links: any[]): Link[] => {
-  return links.map(link => {
-    const iconName = typeof link.icon === 'string' ? link.icon : 'Link2';
-    const IconComponent = iconMap[iconName] || Link2;
-    return {
-      ...link,
-      icon: IconComponent,
-    };
-  });
-};
-
 export default function PublicProfilePage() {
   const [data, setData] = useState<{
     profile: Profile;
@@ -134,12 +104,7 @@ export default function PublicProfilePage() {
     
     setData(updatedData);
 
-    const serializedData = {
-      ...updatedData,
-      links: serializeLinks(updatedLinks)
-    };
-
-    localStorage.setItem('karhamelo-published-data', JSON.stringify(serializedData));
+    localStorage.setItem('karhamelo-published-data', JSON.stringify(updatedData));
   };
 
 
@@ -150,8 +115,7 @@ export default function PublicProfilePage() {
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
-          const hydratedLinks = hydrateLinks(parsedData.links);
-          setData({ ...parsedData, links: hydratedLinks });
+          setData(parsedData);
           
           const currentViews = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
           localStorage.setItem('karhamelo-profile-views', (currentViews + 1).toString());
@@ -244,7 +208,7 @@ export default function PublicProfilePage() {
               </div>
               <div className="w-full space-y-3 pt-4">
                 {links.map((link) => {
-                  const Icon = link.icon;
+                  const Icon = allIconsMap[link.icon]?.component || allIconsMap['link'].component;
                   return (
                     <Button
                       key={link.id}

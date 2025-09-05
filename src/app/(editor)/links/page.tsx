@@ -4,49 +4,16 @@
 import { useState, useEffect } from 'react';
 import type { Link, Profile, PageTheme } from '@/lib/types';
 import LinkEditor from '@/components/LinkEditor';
-import { Eye, Link as LinkIcon, Briefcase, Github, Linkedin, Twitter, Instagram, Youtube, Facebook, Link2, UploadCloud, Copy } from 'lucide-react';
+import { Eye, UploadCloud, Copy } from 'lucide-react';
 import LinkList from '@/components/LinkList';
 import ProfilePreview from '@/components/ProfilePreview';
 import ThemeCustomizer from '@/components/ThemeCustomizer';
 import ProfileEditor from '@/components/ProfileEditor';
 import { Button } from '@/components/ui/button';
-import { allIconsMap } from '@/lib/icon-map';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@/lib/supabase/client';
-
-const iconMap: { [key: string]: React.ElementType } = {
-  Github,
-  Linkedin,
-  Twitter,
-  Instagram,
-  Youtube,
-  Facebook,
-  Link2,
-};
-
-const hydrateLinks = (links: any[]): Link[] => {
-  return links.map(link => {
-    const iconName = typeof link.icon === 'string' ? link.icon : 'Link2';
-    const IconComponent = allIconsMap[iconName]?.component || Link2;
-    return {
-      ...link,
-      icon: IconComponent,
-    };
-  });
-};
-
-const serializeLinks = (links: Link[]): any[] => {
-    return links.map(link => {
-        const iconName = Object.keys(allIconsMap).find(key => allIconsMap[key].component === link.icon) || 'link';
-        return {
-            ...link,
-            icon: iconName
-        };
-    });
-};
-
 
 export default function LinksPage() {
   const { toast } = useToast();
@@ -73,10 +40,10 @@ export default function LinksPage() {
       id: '1',
       title: 'Meu Website',
       url: 'https://example.com',
-      icon: LinkIcon,
+      icon: 'link',
       clickCount: 0,
     },
-    { id: '2', title: 'Meu Blog', url: 'https://example.com/blog', icon: LinkIcon, clickCount: 0 },
+    { id: '2', title: 'Meu Blog', url: 'https://example.com/blog', icon: 'book', clickCount: 0 },
   ]);
 
   const [theme, setTheme] = useState<PageTheme>({
@@ -101,7 +68,7 @@ export default function LinksPage() {
           try {
             const parsedData = JSON.parse(storedData);
             setProfile(parsedData.profile);
-            setLinks(hydrateLinks(parsedData.links));
+            setLinks(parsedData.links); // No hydration needed as icon is a string
             setTheme(parsedData.theme);
           } catch (e) {
             console.error("Failed to parse page data from localStorage", e);
@@ -119,14 +86,14 @@ export default function LinksPage() {
   useEffect(() => {
     const pageData = { 
         profile, 
-        links: serializeLinks(links), 
+        links, 
         theme 
     };
     localStorage.setItem('karhamelo-page-data', JSON.stringify(pageData));
   }, [profile, links, theme]);
   
   const handlePublish = () => {
-    const pageData = { profile, links: serializeLinks(links), theme };
+    const pageData = { profile, links, theme };
     localStorage.setItem('karhamelo-published-data', JSON.stringify(pageData));
     setIsPublished(true);
     toast({
