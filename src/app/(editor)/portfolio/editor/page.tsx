@@ -7,9 +7,20 @@ import ThemeCustomizer from '@/components/ThemeCustomizer';
 import PortfolioEditor from '@/components/PortfolioEditor';
 import PortfolioPreview from '@/components/PortfolioPreview';
 import { Button } from '@/components/ui/button';
-import { Eye } from 'lucide-react';
+import { Eye, UploadCloud, Copy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { createClient } from '@/lib/supabase/client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 export default function PortfolioEditorPage() {
+  const { toast } = useToast();
+  const [isPublished, setIsPublished] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const supabase = createClient();
+
+  const publicUrl = typeof window !== 'undefined' && userId ? `${window.location.origin}/portfolio/${userId}` : '';
+
   const [theme, setTheme] = useState<PageTheme>({
     primaryColor: 'hsl(199 76% 52%)',
     backgroundColor: 'hsl(216 28% 95%)',
@@ -64,30 +75,60 @@ export default function PortfolioEditorPage() {
 
   // Load data from localStorage on mount
   useEffect(() => {
-    const storedData = localStorage.getItem('karhamelo-portfolio-data');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setPortfolio(parsedData.portfolio);
-        setTheme(parsedData.theme);
-      } catch (e) {
-        console.error("Failed to parse portfolio data from localStorage", e);
-      }
-    }
-  }, []);
+     const fetchUserAndData = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            setUserId(user.id);
+        }
+
+        const storedData = localStorage.getItem('karhamelo-portfolio-data');
+        if (storedData) {
+          try {
+            const parsedData = JSON.parse(storedData);
+            setPortfolio(parsedData.portfolio);
+            setTheme(parsedData.theme);
+          } catch (e) {
+            console.error("Failed to parse portfolio data from localStorage", e);
+          }
+        }
+
+        const publishedData = localStorage.getItem('karhamelo-published-portfolio-data');
+        if(publishedData) {
+          setIsPublished(true);
+        }
+    };
+    fetchUserAndData();
+  }, [supabase]);
 
   // Save data to localStorage whenever it changes
   useEffect(() => {
     const portfolioData = { portfolio, theme };
     localStorage.setItem('karhamelo-portfolio-data', JSON.stringify(portfolioData));
   }, [portfolio, theme]);
+  
+  const handlePublish = () => {
+    const portfolioData = { portfolio, theme };
+    localStorage.setItem('karhamelo-published-portfolio-data', JSON.stringify(portfolioData));
+    setIsPublished(true);
+    toast({
+      title: 'Portfólio Publicado!',
+      description: 'Sua página de portfólio está no ar e o link pode ser compartilhado.',
+    });
+  };
 
-  const handleViewPortfolioPage = () => {
-    const portfolioData = localStorage.getItem('karhamelo-portfolio-data');
-    if(portfolioData) {
-      // O ID "preview" é um marcador para carregar os dados do localStorage na página pública
-      window.open('/portfolio/preview', '_blank');
-    }
+  const handleCopyLink = () => {
+    if (!publicUrl) return;
+    navigator.clipboard.writeText(publicUrl);
+    toast({
+      title: 'Link Copiado!',
+      description: 'O link para seu portfólio foi copiado para a área de transferência.',
+    });
+  };
+
+
+  const handleViewPreview = () => {
+    if (!userId) return;
+    window.open(`/portfolio/preview`, '_blank');
   };
 
   return (
@@ -97,11 +138,35 @@ export default function PortfolioEditorPage() {
           <h1 className="text-2xl lg:text-3xl font-bold">Editor de Portfólio (LP)</h1>
           <p className="text-sm text-muted-foreground">Personalize o conteúdo e a aparência da sua Landing Page.</p>
         </div>
-        <Button variant="outline" onClick={handleViewPortfolioPage}>
-          <Eye className="mr-2 h-4 w-4" />
-          Ver Portfólio
-        </Button>
+        <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleViewPreview} disabled={!userId}>
+              <Eye className="mr-2 h-4 w-4" />
+              Ver Preview
+            </Button>
+             <Button onClick={handlePublish} disabled={!userId}>
+              <UploadCloud className="mr-2 h-4 w-4" />
+              Publicar
+            </Button>
+        </div>
       </div>
+
+       {isPublished && (
+          <Card className="bg-primary/10 border-primary/20">
+              <CardHeader>
+                  <CardTitle className="text-lg">Seu portfólio está no ar!</CardTitle>
+                  <CardDescription>Compartilhe este link com seu público.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <div className="flex items-center space-x-2">
+                      <Input value={publicUrl} readOnly />
+                      <Button onClick={handleCopyLink} variant="outline" size="icon" disabled={!publicUrl}>
+                          <Copy className="h-4 w-4" />
+                      </Button>
+                  </div>
+              </CardContent>
+          </Card>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3 space-y-8">
             <PortfolioEditor portfolio={portfolio} onPortfolioChange={setPortfolio} />

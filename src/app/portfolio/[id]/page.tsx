@@ -37,7 +37,8 @@ export default function PublicPortfolioPage() {
     // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
     // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
     setTimeout(() => {
-      const storedData = localStorage.getItem('karhamelo-portfolio-data');
+      // THIS IS THE PUBLIC PAGE, so it should load from "published" data
+      const storedData = localStorage.getItem('karhamelo-published-portfolio-data');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
@@ -116,7 +117,7 @@ export default function PublicPortfolioPage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center p-4">
         <KLogo />
         <h1 className="mt-8 text-2xl font-bold">Página não encontrada</h1>
-        <p className="text-muted-foreground">Não foi possível carregar os dados do portfólio.</p>
+        <p className="text-muted-foreground">Não foi possível carregar os dados do portfólio. Verifique se ele já foi publicado.</p>
       </div>
     );
   }

@@ -37,6 +37,7 @@ export default function PublicPortfolioPage() {
     // Adiciona um pequeno timeout para garantir que o localStorage da aba anterior teve tempo de ser setado.
     // Isso evita uma condição de corrida ao abrir a página em uma nova aba.
     setTimeout(() => {
+      // THIS IS THE PREVIEW PAGE, so it should load from "draft" data
       const storedData = localStorage.getItem('karhamelo-portfolio-data');
       if (storedData) {
         try {
