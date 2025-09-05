@@ -6,9 +6,6 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   
-  // Use a URL base do seu site, ou uma URL relativa para o dashboard.
-  // Para funcionar tanto em localhost quanto em produção, vamos construir a URL final.
-  const baseUrl = origin.includes('localhost') ? 'http://localhost:9002' : 'https://karhamelo.netlify.app';
   const next = searchParams.get('next') ?? '/dashboard'
 
   if (code) {
@@ -31,14 +28,14 @@ export async function GET(request: Request) {
       if (upsertError) {
         console.error('Supabase upsert error:', upsertError)
         // Redirecionar para uma página de erro se não conseguir salvar o usuário
-        return NextResponse.redirect(`${baseUrl}/auth/auth-code-error`)
+        return NextResponse.redirect(`${origin}/auth/auth-code-error`)
       }
       
       // Redireciona para o dashboard na URL base correta
-      return NextResponse.redirect(`${baseUrl}${next}`)
+      return NextResponse.redirect(`${origin}${next}`)
     }
   }
 
   // Redirecionar para uma página de erro se o código não for trocado com sucesso
-  return NextResponse.redirect(`${baseUrl}/auth/auth-code-error`)
+  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
