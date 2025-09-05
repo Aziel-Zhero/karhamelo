@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { Github, Twitter, Linkedin, Instagram, Youtube, Facebook, Pencil } from 'lucide-react';
 import { Label } from '@/components/ui/label';
@@ -30,13 +29,7 @@ const socialPlatforms = [
 ] as const;
 
 export default function ProfileEditor({ profile, onProfileChange }: ProfileEditorProps) {
-  const { toast } = useToast();
   const [isAvatarEditorOpen, setIsAvatarEditorOpen] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    onProfileChange({ ...profile, [name]: value });
-  };
 
   const handleSwitchChange = (name: keyof Profile, checked: boolean) => {
     onProfileChange({ ...profile, [name]: checked });
@@ -64,7 +57,7 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
         <CardHeader>
           <CardTitle>Edite seu Perfil</CardTitle>
           <CardDescription>
-            Atualize seus dados pessoais e links de redes sociais. As alterações são salvas automaticamente.
+            Atualize seus dados pessoais e links de redes sociais. As alterações são refletidas em tempo real.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -91,7 +84,7 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
                   name="name"
                   placeholder="Seu Nome"
                   value={profile.name}
-                  onChange={handleInputChange}
+                  onChange={(e) => onProfileChange({ ...profile, name: e.target.value })}
                   required
                 />
               </div>
@@ -102,7 +95,7 @@ export default function ProfileEditor({ profile, onProfileChange }: ProfileEdito
                   name="bio"
                   placeholder="Sua Biografia (opcional)"
                   value={profile.bio}
-                  onChange={handleInputChange}
+                  onChange={(e) => onProfileChange({ ...profile, bio: e.target.value })}
                 />
               </div>
             </div>
