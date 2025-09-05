@@ -25,12 +25,13 @@ export default function DashboardPage() {
             setTotalLinks(links.length);
             const clicks = links.reduce((acc, link) => acc + (link.click_count || 0), 0);
             setTotalClicks(clicks);
+             // Since profile views are not stored in the DB for this prototype,
+             // we'll simulate it by reading from localStorage.
+             // In a real app, this would be a value from your database.
+            const views = parseInt(localStorage.getItem(`karhamelo-profile-views-${user.id}`) || '0', 10);
+            setProfileViews(views);
         }
       }
-      
-      // Simulating profile views - this would ideally come from the backend
-      const views = parseInt(localStorage.getItem('karhamelo-profile-views') || '0', 10);
-      setProfileViews(views);
       setIsLoading(false);
     };
 

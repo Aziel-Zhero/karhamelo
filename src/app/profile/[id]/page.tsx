@@ -85,18 +85,25 @@ export default function PublicProfilePage({ params }: { params: { id: string } }
   const userId = params.id;
 
   const handleLinkClick = (clickedLink: Link) => {
-    if (!data) return;
+    if (!data || !clickedLink.id) return;
     incrementLinkClick(clickedLink.id);
   };
 
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataAndTrackView = async () => {
       if (!userId) return;
       setIsLoading(true);
       try {
         const pageData = await loadPageData(userId);
         setData(pageData);
+        if (pageData) {
+          // This is a simplified client-side view counter.
+          // In a real-world scenario, you'd want a more robust, server-side solution.
+          const viewsKey = `karhamelo-profile-views-${userId}`;
+          const currentViews = parseInt(localStorage.getItem(viewsKey) || '0', 10);
+          localStorage.setItem(viewsKey, (currentViews + 1).toString());
+        }
       } catch (error) {
         console.error("Falha ao carregar dados da página", error);
       } finally {
@@ -104,7 +111,7 @@ export default function PublicProfilePage({ params }: { params: { id: string } }
       }
     };
     
-    fetchData();
+    fetchDataAndTrackView();
   }, [userId]);
 
   if (isLoading) {
