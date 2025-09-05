@@ -14,6 +14,7 @@ import { allIconsMap } from '@/lib/icon-map';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { createClient } from '@/lib/supabase/client';
 
 const iconMap: { [key: string]: React.ElementType } = {
   Github,
@@ -50,8 +51,10 @@ const serializeLinks = (links: Link[]): any[] => {
 export default function LinksPage() {
   const { toast } = useToast();
   const [isPublished, setIsPublished] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const supabase = createClient();
   
-  const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/karhamelo-user` : '';
+  const publicUrl = typeof window !== 'undefined' && userId ? `${window.location.origin}/profile/${userId}` : '';
 
   const [profile, setProfile] = useState<Profile>({
     name: 'Karhamelo',
@@ -87,22 +90,31 @@ export default function LinksPage() {
   });
 
   useEffect(() => {
-    const storedData = localStorage.getItem('karhamelo-page-data');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setProfile(parsedData.profile);
-        setLinks(hydrateLinks(parsedData.links));
-        setTheme(parsedData.theme);
-      } catch (e) {
-        console.error("Failed to parse page data from localStorage", e);
-      }
-    }
-    const publishedData = localStorage.getItem('karhamelo-published-data');
-    if (publishedData) {
-      setIsPublished(true);
-    }
-  }, []);
+    const fetchUserAndData = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            setUserId(user.id);
+        }
+
+        const storedData = localStorage.getItem('karhamelo-page-data');
+        if (storedData) {
+          try {
+            const parsedData = JSON.parse(storedData);
+            setProfile(parsedData.profile);
+            setLinks(hydrateLinks(parsedData.links));
+            setTheme(parsedData.theme);
+          } catch (e) {
+            console.error("Failed to parse page data from localStorage", e);
+          }
+        }
+        
+        const publishedData = localStorage.getItem('karhamelo-published-data');
+        if (publishedData) {
+          setIsPublished(true);
+        }
+    };
+    fetchUserAndData();
+  }, [supabase]);
 
   useEffect(() => {
     const pageData = { 
@@ -124,6 +136,7 @@ export default function LinksPage() {
   };
 
   const handleCopyLink = () => {
+    if (!publicUrl) return;
     navigator.clipboard.writeText(publicUrl);
     toast({
       title: 'Link Copiado!',
@@ -150,8 +163,9 @@ export default function LinksPage() {
   };
   
   const handleViewPreview = () => {
+    if (!userId) return;
     // Uses the draft data for previewing
-    window.open('/profile/preview', '_blank');
+    window.open(`/profile/${userId}`, '_blank');
   };
 
   return (
@@ -162,11 +176,11 @@ export default function LinksPage() {
           <p className="text-sm text-muted-foreground">Adicione e gerencie os links da sua página principal.</p>
         </div>
         <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleViewPreview}>
+            <Button variant="outline" onClick={handleViewPreview} disabled={!userId}>
               <Eye className="mr-2 h-4 w-4" />
               Ver Preview
             </Button>
-            <Button onClick={handlePublish}>
+            <Button onClick={handlePublish} disabled={!userId}>
               <UploadCloud className="mr-2 h-4 w-4" />
               Publicar
             </Button>
@@ -182,7 +196,7 @@ export default function LinksPage() {
               <CardContent>
                   <div className="flex items-center space-x-2">
                       <Input value={publicUrl} readOnly />
-                      <Button onClick={handleCopyLink} variant="outline" size="icon">
+                      <Button onClick={handleCopyLink} variant="outline" size="icon" disabled={!publicUrl}>
                           <Copy className="h-4 w-4" />
                       </Button>
                   </div>
